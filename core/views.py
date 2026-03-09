@@ -11,3 +11,6 @@ def esqueceu_senha_view(request):
 
 def esqueceu_senha_confirm_view(request):
     return render(request, 'esqueceu_senha_confirm.html')
+
+def dashboard_view(request):
+    return render(request, 'dashboard.html')

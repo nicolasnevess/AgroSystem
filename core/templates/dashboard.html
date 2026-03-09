@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSystem - Monitoramento</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-seedling"></i>
+                <span>AgroSystem</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
+                    <li><a href="#"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li><a href="#"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
+                    <li><a href="#"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'login' %}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h2>Painel de Controle Agro</h2>
+                <div class="user-profile">
+                    <span>Unidade: <strong>Fazenda Sol Nascente</strong></span>
+                </div>
+            </header>
+
+            <div class="content-grid">
+                
+                <div class="info-card wide">
+                    <h3>Distribuição e Status de Plantio</h3>
+                    <div class="chart-container">
+                        <div class="fake-chart">
+                            <div class="bar-group">
+                                <div class="bar soja" style="height: 85%;"><span>85%</span></div>
+                                <label>Soja</label>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar milho" style="height: 60%;"><span>60%</span></div>
+                                <label>Milho</label>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar cana" style="height: 45%;"><span>45%</span></div>
+                                <label>Cana</label>
+                            </div>
+                        </div>
+                        <div class="chart-info">
+                            <p><i class="fas fa-calendar-alt"></i> Próxima Colheita: <strong>12 dias (Soja)</strong></p>
+                            <p class="text-danger"><i class="fas fa-clock"></i> Atraso detectado: <strong>Gleba Sul (Milho)</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card weather-box">
+                    <h3>Clima em Tempo Real</h3>
+                    <div class="weather-content">
+                        <i class="fas fa-sun"></i>
+                        <div>
+                            <span class="temp">31°C</span>
+                            <span class="desc">Céu Limpo</span>
+                        </div>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Piracicaba, SP</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Status do Maquinário</h3>
+                    <ul class="item-list-clean">
+                        <li><i class="fas fa-check-circle text-success"></i> Trator John Deere 6115J</li>
+                        <li><i class="fas fa-check-circle text-success"></i> Colheitadeira S700</li>
+                        <li><i class="fas fa-tools text-warning"></i> Pulverizador 4030 (Em manutenção)</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>Estatísticas de Animais</h3>
+                    <div class="animal-display">
+                        <div class="animal-item">
+                            <i class="fas fa-cow"></i>
+                            <div class="animal-data">
+                                <span>Bovinos</span>
+                                <strong>250 cab.</strong>
+                            </div>
+                        </div>
+                        <div class="animal-item">
+                            <i class="fas fa-horse"></i>
+                            <div class="animal-data">
+                                <span>Equinos</span>
+                                <strong>12 cab.</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card alerts-box">
+                    <h3>Alertas do Sistema</h3>
+                    <ul class="alert-list-clean">
+                        <li class="alert-item alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> 
+                            Plantio de Milho ultrapassou data de colheita!
+                        </li>
+                        <li class="alert-item alert-warning">
+                            <i class="fas fa-tint-slash"></i> 
+                            Umidade crítica no Solo da Gleba B.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -6,4 +6,5 @@ urlpatterns = [
     path('cadastro/', views.cadastro_view, name='cadastro'),
     path('recuperar-senha/', views.esqueceu_senha_view, name='password_reset'),
     path('nova-senha/', views.esqueceu_senha_confirm_view, name='password_reset_confirm'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
 ]
