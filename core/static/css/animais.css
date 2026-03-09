@@ -1,0 +1,78 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.btn-add-animal {
+    background-color: #4b6630;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.btn-add-animal:hover {
+    background-color: #3a4d28;
+    transform: translateY(-2px);
+}
+
+.table-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.animals-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.animals-table th {
+    text-align: left;
+    padding: 15px;
+    color: #95a5a6;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid #f4f7f2;
+}
+
+.animals-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f2f6;
+    font-size: 0.95rem;
+}
+
+.animal-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: #2d3a1e;
+}
+
+.animal-info i {
+    color: #8dbb5e;
+    font-size: 1.3rem;
+}
+
+.text-center { text-align: center; }
+
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+    color: #bdc3c7;
+    transition: 0.2s;
+}
+
+.btn-action.edit:hover { color: #3498db; }
+.btn-action.delete:hover { color: #e74c3c; }

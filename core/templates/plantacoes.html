@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSystem - Gestão de Plantações</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/plantacoes.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-seedling"></i>
+                <span>AgroSystem</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
+                    <li><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li class="active"><a href="#"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
+                    <li><a href="{% url 'animais' %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="{% url 'login' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div>
+                    <h2>Gestão de Safra</h2>
+                    <p>Acompanhamento de ciclos, glebas e colheitas</p>
+                </div>
+                <a href="{% url 'config_areas' %}" class="btn-new-crop">
+                    <i class="fas fa-seedling"></i> NOVO PLANTIO
+                </a>
+            </header>
+
+            <section class="table-container">
+                <table class="crops-table">
+                    <thead>
+                        <tr>
+                            <th>Cultura</th>
+                            <th>Área / Gleba</th>
+                            <th>Início do Ciclo</th>
+                            <th>Dias Restantes</th>
+                            <th>Status</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="crop-name"><i class="fas fa-seedling soja-color"></i> Soja RR</div></td>
+                            <td>Gleba Norte (120ha)</td>
+                            <td>15/11/2025</td>
+                            <td><strong>45 dias</strong></td>
+                            <td><span class="status-badge on-track">No Prazo</span></td>
+                            <td class="text-center">
+                                <button class="btn-action edit"><i class="fas fa-pen"></i></button>
+                                <button class="btn-action delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="row-danger">
+                            <td><div class="crop-name"><i class="fas fa-seedling milho-color"></i> Milho Safrinha</div></td>
+                            <td>Gleba Sul (50ha)</td>
+                            <td>01/06/2025</td>
+                            <td class="text-danger"><strong>EXPIRADO</strong></td>
+                            <td><span class="status-badge alert">Atrasado!</span></td>
+                            <td class="text-center">
+                                <button class="btn-action edit"><i class="fas fa-pen"></i></button>
+                                <button class="btn-action delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

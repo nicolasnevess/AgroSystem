@@ -20,3 +20,15 @@ def maquinas_view(request):
 
 def config_propriedade_view(request):
     return render(request, 'config_propriedade.html')
+
+def config_areas_view(request):
+    return render(request, 'config_areas.html')
+
+def plantacoes_view(request):
+    return render(request, 'plantacoes.html')
+
+def animais_view(request):
+    return render(request, 'animais.html')
+
+def config_animais_view(request):
+    return render(request, 'config_animais.html')

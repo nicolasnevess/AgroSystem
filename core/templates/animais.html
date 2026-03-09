@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSystem - Gestão de Animais</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animais.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-seedling"></i>
+                <span>AgroSystem</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
+                    <li><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li><a href="{% url 'plantacoes' %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
+                    <li class="active"><a href="#"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="{% url 'login' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div>
+                    <h2>Gestão de Animais</h2>
+                    <p>Controle de rebanho, tipos e quantidades</p>
+                </div>
+                <a href="{% url 'config_animais' %}" class="btn-add-animal">
+                    <i class="fas fa-plus"></i> NOVO REGISTRO
+                </a>
+            </header>
+
+            <section class="table-container">
+                <table class="animals-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Animal</th>
+                            <th>Raça / Categoria</th>
+                            <th>Quantidade (Cab.)</th>
+                            <th>Localização / Pasto</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="animal-info">
+                                    <i class="fas fa-cow"></i>
+                                    <span>Bovinos</span>
+                                </div>
+                            </td>
+                            <td>Nelore</td>
+                            <td><strong>250</strong></td>
+                            <td>Piquete 04</td>
+                            <td class="text-center">
+                                <button class="btn-action edit"><i class="fas fa-pen"></i></button>
+                                <button class="btn-action delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="animal-info">
+                                    <i class="fas fa-horse"></i>
+                                    <span>Equinos</span>
+                                </div>
+                            </td>
+                            <td>Quarto de Milha</td>
+                            <td><strong>12</strong></td>
+                            <td>Cocheira Principal</td>
+                            <td class="text-center">
+                                <button class="btn-action edit"><i class="fas fa-pen"></i></button>
+                                <button class="btn-action delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

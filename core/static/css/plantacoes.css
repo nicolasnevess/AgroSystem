@@ -1,0 +1,92 @@
+/* Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* Estilo do link como botão */
+.btn-new-crop {
+    background-color: #4b6630;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none; /* Remove o sublinhado do link */
+    display: inline-flex; /* Mantém ícone e texto alinhados */
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+    border: none;
+}
+
+.btn-new-crop:hover {
+    background-color: #3a4d28;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Tabela e Status */
+.table-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.crops-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.crops-table th {
+    text-align: left;
+    padding: 15px;
+    color: #95a5a6;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid #f4f7f2;
+}
+
+.crops-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f2f6;
+    font-size: 0.95rem;
+}
+
+.crop-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.soja-color { color: #4b6630; }
+.milho-color { color: #f1c40f; }
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.on-track { background: #e8f5e9; color: #2e7d32; }
+.alert { background: #ffebee; color: #c62828; }
+
+.row-danger { background-color: #fffafa; }
+.text-danger { color: #c62828; }
+
+.text-center { text-align: center; }
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+    color: #bdc3c7;
+    transition: 0.2s;
+}
+
+.btn-action.edit:hover { color: #3498db; }
+.btn-action.delete:hover { color: #e74c3c; }

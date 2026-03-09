@@ -21,8 +21,8 @@
                 <ul>
                     <li class="active"><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
                     <li><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
-                    <li><a href="#"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
-                    <li><a href="#"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                    <li><a href="{% url 'plantacoes' %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
+                    <li><a href="{% url 'animais' %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
                 </ul>
             </nav>
 
@@ -37,46 +37,20 @@
             <header class="top-header">
                 <h2>Painel de Controle</h2>
                 <div class="user-profile">
-                    <span>Bem-vindo, <strong>Usuário Agro</strong></span>
+                    <span>Bem-vindo, <strong>Produtor Agro</strong></span>
                 </div>
             </header>
 
             <section class="welcome-banner">
                 <div class="welcome-text">
-                    <h2>🌱 Estamos quase lá!</h2>
-                    <p>Você ainda não possui uma propriedade cadastrada. Adicione sua fazenda para começar a monitorar.</p>
+                    <h2>🌱 Quase lá!</h2>
+                    <p>Você ainda não possui uma propriedade cadastrada. Adicione sua fazenda para começar.</p>
                 </div>
-                <a href="{% url 'config_propriedade' %}" class="btn-setup" style="text-decoration: none; display: inline-block;">
-                Configurar Propriedade
-                </a>
+                <a href="{% url 'config_propriedade' %}" class="btn-setup">Configurar Propriedade</a>
             </section>
 
             <div class="content-grid">
                 
-                <div class="info-card wide">
-                    <h3>Distribuição de Plantio</h3>
-                    <div class="chart-container">
-                        <div class="fake-chart">
-                            <div class="bar-group">
-                                <div class="bar soja" style="height: 85%;"><span>85%</span></div>
-                                <label>Soja</label>
-                            </div>
-                            <div class="bar-group">
-                                <div class="bar milho" style="height: 60%;"><span>60%</span></div>
-                                <label>Milho</label>
-                            </div>
-                            <div class="bar-group">
-                                <div class="bar cana" style="height: 45%;"><span>45%</span></div>
-                                <label>Cana</label>
-                            </div>
-                        </div>
-                        <div class="chart-info">
-                            <p><i class="fas fa-calendar-alt"></i> Próxima Colheita: <strong>12 dias</strong></p>
-                            <p class="text-danger"><i class="fas fa-clock"></i> Atraso: <strong>Gleba Sul</strong></p>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="info-card weather-box">
                     <h3>Clima em Tempo Real</h3>
                     <div class="weather-content">
@@ -87,6 +61,14 @@
                         </div>
                     </div>
                     <p class="location"><i class="fas fa-map-marker-alt"></i> Piracicaba, SP</p>
+                </div>
+
+                <div class="info-card alerts-box">
+                    <h3>Alertas do Sistema</h3>
+                    <ul class="alert-list-clean">
+                        <li class="alert-item alert-danger">Colheita de Milho atrasada!</li>
+                        <li class="alert-item alert-warning">Umidade crítica Solo B.</li>
+                    </ul>
                 </div>
 
                 <div class="info-card">
@@ -111,12 +93,30 @@
                     </div>
                 </div>
 
-                <div class="info-card alerts-box">
-                    <h3>Alertas</h3>
-                    <ul class="alert-list-clean">
-                        <li class="alert-item alert-danger">Colheita de Milho atrasada!</li>
-                        <li class="alert-item alert-warning">Umidade crítica Solo B.</li>
-                    </ul>
+                <div class="info-card chart-card-bottom">
+                    <h3>Ocupação do Solo (Hectares)</h3>
+                    <div class="chart-container-pizza">
+                        <div class="pizza-chart">
+                            <div class="hole"></div>
+                        </div>
+
+                        <div class="pizza-legend">
+                            <div class="legend-item">
+                                <span class="dot soja"></span>
+                                <p>Soja: <strong>120 ha (50%)</strong></p>
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot milho"></span>
+                                <p>Milho: <strong>72 ha (30%)</strong></p>
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot cana"></span>
+                                <p>Cana: <strong>48 ha (20%)</strong></p>
+                            </div>
+                            <hr>
+                            <p class="total-text">Área Total: <strong>240 Hectares</strong></p>
+                        </div>
+                    </div>
                 </div>
 
             </div>
