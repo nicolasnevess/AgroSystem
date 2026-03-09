@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agro Sistema - Recuperar Senha</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="side-panel">
+            <div class="brand-box">
+                <div class="logo-placeholder"><i class="fas fa-seedling"></i></div>
+                <h1>AgroSystem</h1>
+                <p>Gestão inteligente da sua propriedade</p>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="glass-card">
+                <h2 class="login-title">RECUPERAR</h2>
+                
+                <p class="info-text">Insira o e-mail cadastrado abaixo. Enviaremos um link para você redefinir sua senha.</p>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="Seu e-mail" class="agro-input" required>
+                    <button type="submit" class="btn-agro">Enviar Link</button>
+                    
+                    <p class="signup-wrapper">
+                        Lembrou a senha? <a href="{% url 'login' %}" class="signup-link">Voltar ao Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
