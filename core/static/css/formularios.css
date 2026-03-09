@@ -1,0 +1,93 @@
+/* Card do Formulário */
+.form-card {
+    background: white;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.form-header i {
+    font-size: 3rem;
+    color: #8dbb5e;
+    margin-bottom: 15px;
+}
+
+.form-header h3 {
+    color: #2d3a1e;
+    font-size: 1.5rem;
+}
+
+.form-header p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* Inputs */
+.agro-form .input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.agro-form label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #3a4d28;
+    margin-bottom: 8px;
+}
+
+.agro-form input, .agro-form select {
+    padding: 12px 15px;
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.agro-form input:focus {
+    border-color: #8dbb5e;
+    box-shadow: 0 0 0 3px rgba(141, 187, 94, 0.1);
+}
+
+.row-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Botão Salvar */
+.btn-save-agro {
+    width: 100%;
+    background: #3a4d28;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.btn-save-agro:hover {
+    background: #4b6630;
+    transform: translateY(-2px);
+}
+
+.btn-back {
+    text-decoration: none;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

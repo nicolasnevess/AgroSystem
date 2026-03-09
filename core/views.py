@@ -14,3 +14,9 @@ def esqueceu_senha_confirm_view(request):
 
 def dashboard_view(request):
     return render(request, 'dashboard.html')
+
+def maquinas_view(request):
+    return render(request, 'maquinas.html')
+
+def config_propriedade_view(request):
+    return render(request, 'config_propriedade.html')

@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSystem - Configurar Propriedade</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-seedling"></i>
+                <span>AgroSystem</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h2>Configuração Inicial</h2>
+                <a href="{% url 'dashboard' %}" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
+            </header>
+
+            <section class="form-card">
+                <div class="form-header">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Dados da Propriedade</h3>
+                    <p>Preencha as informações básicas para liberar o monitoramento.</p>
+                </div>
+
+                <form method="POST" class="agro-form">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label>Nome da Fazenda/Propriedade</label>
+                        <input type="text" name="nome_fazenda" placeholder="Ex: Fazenda Santa Maria" required>
+                    </div>
+
+                    <div class="row-inputs">
+                        <div class="input-group">
+                            <label>Área Total (Hectares)</label>
+                            <input type="number" name="area_total" placeholder="Ex: 500" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Tipo de Solo Predominante</label>
+                            <select name="tipo_solo">
+                                <option value="arenoso">Arenoso</option>
+                                <option value="argiloso">Argiloso</option>
+                                <option value="misto">Misto/Latossolo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row-inputs">
+                        <div class="input-group">
+                            <label>Cidade</label>
+                            <input type="text" name="cidade" placeholder="Piracicaba" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Estado (UF)</label>
+                            <input type="text" name="uf" placeholder="SP" maxlength="2" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-save-agro">Finalizar Cadastro</button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

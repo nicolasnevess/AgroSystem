@@ -1,0 +1,109 @@
+/* HEADER DA PÁGINA */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.page-header p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* BOTÃO CADASTRAR */
+.btn-add-primary {
+    background-color: #4b6630;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-add-primary:hover {
+    background-color: #3a4d28;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* TABELA DE MÁQUINAS */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.maquinas-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.maquinas-table th {
+    text-align: left;
+    padding: 15px;
+    color: #95a5a6;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid #f4f7f2;
+}
+
+.maquinas-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f2f6;
+    vertical-align: middle;
+}
+
+.machine-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: #2d3a1e;
+}
+
+.machine-info i {
+    color: #8dbb5e;
+    font-size: 1.2rem;
+}
+
+/* TAGS DE STATUS */
+.status-tag {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-tag.active { background: #e8f5e9; color: #2e7d32; }
+.status-tag.maintenance { background: #fff4e5; color: #d35400; }
+
+/* BOTÕES DE AÇÃO (EDITAR / EXCLUIR) */
+.actions-column {
+    text-align: right;
+    min-width: 120px;
+}
+
+.btn-action {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: 0.2s;
+    background: #f8f9fa;
+}
+
+.btn-action.edit { color: #3498db; }
+.btn-action.delete { color: #e74c3c; }
+
+.btn-action.edit:hover { background: #3498db; color: white; }
+.btn-action.delete:hover { background: #e74c3c; color: white; }
