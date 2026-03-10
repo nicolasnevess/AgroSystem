@@ -13,4 +13,5 @@ urlpatterns = [
     path('plantacoes/', views.plantacoes_view, name='plantacoes'),
     path('animais/', views.animais_view, name='animais'),
     path('cadastrar-animal/', views.config_animais_view, name='config_animais'),
+    path('cadastrar-maquina/', views.config_maquinas_view, name='config_maquinas'),
 ]

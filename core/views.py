@@ -32,3 +32,6 @@ def animais_view(request):
 
 def config_animais_view(request):
     return render(request, 'config_animais.html')
+
+def config_maquinas_view(request):
+    return render(request, 'config_maquinas.html')
