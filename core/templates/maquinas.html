@@ -36,60 +36,96 @@
             <header class="page-header">
                 <div>
                     <h2>Gestão de Maquinário</h2>
-                    <p>Controle total da sua frota mecanizada</p>
+                    <p>Controle de frota e organização de tarefas</p>
                 </div>
                 <a href="{% url 'config_maquinas' %}" class="btn-new-machine">
                     <i class="fas fa-plus"></i> NOVA MÁQUINA
                 </a>
             </header>
 
-            <section class="table-container">
-                <table class="maquinas-table">
-                    <thead>
-                        <tr>
-                            <th>Máquina</th>
-                            <th>Modelo/Série</th>
-                            <th>Status</th>
-                            <th>Última Revisão</th>
-                            <th class="actions-column">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="machine-info">
-                                    <i class="fas fa-tractor"></i>
-                                    <span>Trator John Deere 6115J</span>
-                                </div>
-                            </td>
-                            <td>JD-2024-X</td>
-                            <td><span class="status-tag active">Ativo</span></td>
-                            <td>12/02/2026</td>
-                            <td class="actions-column">
-                                <button class="btn-action edit" title="Editar"><i class="fas fa-pen"></i></button>
-                                <button class="btn-action delete" title="Excluir"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="machine-info">
-                                    <i class="fas fa-truck-pickup"></i>
-                                    <span>Pulverizador 4030</span>
-                                </div>
-                            </td>
-                            <td>PV-AGRO-01</td>
-                            <td><span class="status-tag maintenance">Manutenção</span></td>
-                            <td>01/03/2026</td>
-                            <td class="actions-column">
-                                <button class="btn-action edit" title="Editar"><i class="fas fa-pen"></i></button>
-                                <button class="btn-action delete" title="Excluir"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <section class="welcome-banner machine-setup-banner">
+                <div class="welcome-text">
+                    <h2>🚜 Gestão de Frota</h2>
+                    <p>Mantenha suas máquinas em dia. Adicione novos equipamentos ou registre manutenções preventivas para evitar paradas indesejadas.</p>
+                </div>
+                <a href="{% url 'config_maquinas' %}" class="btn-setup">Cadastrar Nova Máquina</a>
+            </section>
+
+            <section class="maquinas-split-layout">
+                <div class="maquinas-list-panel">
+                    <h3>Sua Frota</h3>
+                    <div class="list-scroll">
+                        <div class="machine-item active">
+                            <i class="fas fa-tractor"></i>
+                            <div class="m-details">
+                                <strong>Trator John Deere</strong>
+                                <span>JD-6115J</span>
+                            </div>
+                        </div>
+                        <div class="machine-item">
+                            <i class="fas fa-truck-pickup"></i>
+                            <div class="m-details">
+                                <strong>Pulverizador 4030</strong>
+                                <span>PV-AGRO-01</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="maquinas-details-panel">
+                    <div class="details-header">
+                        <div class="title-row">
+                            <i class="fas fa-tractor"></i>
+                            <h2>Trator John Deere 6115J</h2>
+                        </div>
+                        <span class="status-tag active">Ativo</span>
+                    </div>
+
+                    <div class="tasks-section">
+                        <label><i class="fas fa-tasks"></i> Lista de Afazeres:</label>
+                        <div class="add-task-row">
+                            <input type="text" id="new-task-input" placeholder="O que precisa ser feito hoje?">
+                            <button class="btn-add-task"><i class="fas fa-plus"></i></button>
+                        </div>
+
+                        <div class="checklist-container">
+                            <div class="task-item">
+                                <input type="checkbox" id="t1" onchange="toggleTask(this)">
+                                <label for="t1">Trocar óleo do motor (500h)</label>
+                            </div>
+                            <div class="task-item">
+                                <input type="checkbox" id="t2" onchange="toggleTask(this)">
+                                <label for="t2">Revisar dentes da grade</label>
+                            </div>
+                            <div class="task-item done">
+                                <input type="checkbox" id="t3" checked onchange="toggleTask(this)">
+                                <label for="t3">Limpeza interna da cabine</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-footer">
+                        <button class="btn-delete-machine">
+                            <i class="fas fa-trash"></i> Excluir Máquina
+                        </button>
+                        <button class="btn-save-notes">
+                            <i class="fas fa-save"></i> Salvar Checklist
+                        </button>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
-</body>
 
+    <script>
+        function toggleTask(checkbox) {
+            const item = checkbox.parentElement;
+            if (checkbox.checked) {
+                item.classList.add('done');
+            } else {
+                item.classList.remove('done');
+            }
+        }
+    </script>
+</body>
 </html>

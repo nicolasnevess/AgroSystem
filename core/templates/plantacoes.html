@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroSystem - Gestão de Plantações</title>
+    <title>AgroSystem - Adicionar Plantação</title>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/plantacoes.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -30,50 +30,110 @@
             </div>
         </aside>
 
-        <main class="main-content">
-            <header class="page-header">
-                <div>
-                    <h2>Gestão de Safra</h2>
-                    <p>Acompanhamento de ciclos, glebas e colheitas</p>
-                </div>
-                <a href="{% url 'config_areas' %}" class="btn-new-crop">
-                    <i class="fas fa-seedling"></i> NOVO PLANTIO
-                </a>
+        <main class="main-content plant-bg">
+            <header class="page-header-clean">
+                <h2>Adicionar Planta</h2>
+                <p>Gerencie sua lavoura de forma eficiente</p>
             </header>
 
-            <section class="table-container">
-                <table class="crops-table">
+            <section class="form-container-glass">
+                <form class="plant-form">
+                    <div class="form-section">
+                        <h3 class="section-title">Informações da Planta</h3>
+                        
+                        <div class="input-group full">
+                            <label>Nome da Planta</label>
+                            <div class="input-with-icon">
+                                <input type="text" placeholder="Ex: Milho Safrinha">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group">
+                                <br><label>Tipo de Planta</label>
+                                <select>
+                                    <option>Cereal</option>
+                                    <option>Oleaginosa</option>
+                                    <option>Leguminosa</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <br><label>Área Plantada (ha)</label>
+                                <input type="number" placeholder="0.0">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group">
+                                <label>Data de Plantio</label>
+                                <input type="date">
+                            </div>
+                            <div class="input-group">
+                                <label>Variedade (Opcional)</label>
+                                <input type="text" placeholder="Ex: Híbrido K9">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group">
+                                <label>Status Atual</label>
+                                <select>
+                                    <option>Plantado</option>
+                                    <option>Em Germinação</option>
+                                    <option>Desenvolvimento</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Tipo de Solo</label>
+                                <select>
+                                    <option>Argiloso</option>
+                                    <option>Arenoso</option>
+                                    <option>Misto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions-bar">
+                        <button type="submit" class="btn-save-plant">Salvar Planta</button>
+                        <button type="reset" class="btn-clear">Limpar</button>
+                        <button type="button" class="btn-cancel">Cancelar</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="table-list-section">
+                <div class="table-header">
+                    <h3>Plantas Cadastradas</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar...">
+                    </div>
+                </div>
+                <table class="custom-table">
                     <thead>
                         <tr>
-                            <th>Cultura</th>
-                            <th>Área / Gleba</th>
-                            <th>Início do Ciclo</th>
-                            <th>Dias Restantes</th>
+                            <th>ID</th>
+                            <th>Nome da Planta</th>
+                            <th>Tipo</th>
+                            <th>Área</th>
                             <th>Status</th>
-                            <th class="text-center">Ações</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><div class="crop-name"><i class="fas fa-seedling soja-color"></i> Soja RR</div></td>
-                            <td>Gleba Norte (120ha)</td>
-                            <td>15/11/2025</td>
-                            <td><strong>45 dias</strong></td>
-                            <td><span class="status-badge on-track">No Prazo</span></td>
-                            <td class="text-center">
-                                <button class="btn-action edit"><i class="fas fa-pen"></i></button>
-                                <button class="btn-action delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="row-danger">
-                            <td><div class="crop-name"><i class="fas fa-seedling milho-color"></i> Milho Safrinha</div></td>
-                            <td>Gleba Sul (50ha)</td>
-                            <td>01/06/2025</td>
-                            <td class="text-danger"><strong>EXPIRADO</strong></td>
-                            <td><span class="status-badge alert">Atrasado!</span></td>
-                            <td class="text-center">
-                                <button class="btn-action edit"><i class="fas fa-pen"></i></button>
-                                <button class="btn-action delete"><i class="fas fa-trash"></i></button>
+                            <td>001</td>
+                            <td>Milho</td>
+                            <td>Cereal</td>
+                            <td>15.0 ha</td>
+                            <td><span class="badge-status">Plantado</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-icon"><i class="fas fa-pen"></i></button>
+                                    <button class="delete-icon"><i class="fas fa-trash"></i></button>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
