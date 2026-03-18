@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos para as mensagens de alerta */
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+            list-style: none;
+        }
+        .alert-success {
+            background-color: rgba(127, 189, 66, 0.2);
+            color: #7fbd42;
+            border: 1px solid #7fbd42;
+        }
+        .alert-error {
+            background-color: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+        }
+    </style>
 </head>
 <body>
     <div class="main-wrapper">
@@ -22,10 +43,30 @@
         <div class="form-container">
             <div class="glass-card">
                 <h2 class="login-title">BEM-VINDO</h2>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if form.errors %}
+                    <div class="alert alert-error">
+                        Usuário ou senha incorretos.
+                    </div>
+                {% endif %}
+
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="text" name="username" placeholder="Usuário" class="agro-input" required>
-                    <input type="password" name="password" placeholder="Senha" class="agro-input" required>
+                    <div class="input-group">
+                        <input type="text" name="username" placeholder="Usuário" class="agro-input" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="password" placeholder="Senha" class="agro-input" required>
+                    </div>
+                    
                     <button type="submit" class="btn-agro">Logar</button>
                     
                     <a href="{% url 'password_reset' %}" class="forgot-password">Esqueceu sua senha?</a>

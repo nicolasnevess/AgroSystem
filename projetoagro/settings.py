@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#)br($u&5d$a@j+q*ht#ko^%ml-+8%3wldbb@!7#6x8e0%^r2l'
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG') == 'True'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -55,7 +60,7 @@ ROOT_URLCONF = 'projetoagro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -116,3 +121,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # Pasta onde estão seus CSS/Imagens
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ==============================================================================
+# CONFIGURAÇÕES DE LOGIN E E-MAIL (O QUE VOCÊ PRECISAVA ADICIONAR)
+# ==============================================================================
+
+# Onde o usuário vai após o login
+LOGIN_REDIRECT_URL = 'dashboard'
+
+# Onde o usuário cai se tentar acessar algo sem logar
+LOGIN_URL = 'login'
+
+# Onde o usuário cai após fazer logout
+LOGOUT_REDIRECT_URL = 'login'
+
+# CONFIGURAÇÃO DE E-MAIL (MODO CONSOLE)
+# O link de recuperação de senha aparecerá no TERMINAL do VS Code
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Se quiser usar o GMAIL depois, é só trocar as linhas acima por estas:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'nicaogamer098@gmail.com'
+EMAIL_HOST_PASSWORD = 'wadyohduwrlluhka'
+DEFAULT_FROM_EMAIL = 'AgroSystem <nicaogamer098@gmail.com>'

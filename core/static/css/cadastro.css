@@ -140,6 +140,29 @@ body {
     color: #8dbb5e; /* Muda para o verde agro no hover */
 }
 
+/* --- Estilo dos Alertas de Erro no Cadastro --- */
+
+.error-message {
+    background: rgba(255, 107, 107, 0.2); /* Fundo avermelhado transparente */
+    border-left: 4px solid #ff6b6b;      /* Barra lateral para destaque */
+    color: #fff;                         /* Texto branco para contrastar */
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    list-style: none;                    /* Remove as bolinhas da lista */
+    font-family: 'Poppins', sans-serif;
+}
+
+.error-message li {
+    margin-bottom: 5px;
+}
+
+/* Estilo para os campos quando houver erro (opcional, mas fica legal) */
+.input-group.has-error .agro-input {
+    border: 1px solid #ff6b6b;
+}
+
 /* Responsividade */
 @media (max-width: 1200px) {
     .glass-card { margin-right: 50px; }

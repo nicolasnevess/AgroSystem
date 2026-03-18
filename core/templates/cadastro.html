@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgroSystem - Cadastro</title>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -22,12 +22,36 @@
         <div class="form-container">
             <div class="glass-card">
                 <h2 class="login-title">CADASTRO</h2>
+
+                {% if form.errors %}
+                <ul class="error-message">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="text" name="first_name" placeholder="Nome" class="agro-input" required>
-                    <input type="email" name="email" placeholder="E-mail" class="agro-input" required>
-                    <input type="text" name="username" placeholder="Usuário" class="agro-input" required>
-                    <input type="password" name="password" placeholder="Senha" class="agro-input" required>
+                    
+                    <div class="input-group">
+                        <input type="text" name="nome_completo" placeholder="Nome Completo" class="agro-input" required value="{{ form.nome_completo.value|default:'' }}">
+                    </div>
+
+                    <div class="input-group">
+                        <input type="email" name="email" placeholder="E-mail" class="agro-input" required value="{{ form.email.value|default:'' }}">
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" name="username" placeholder="Usuário" class="agro-input" required value="{{ form.username.value|default:'' }}">
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" name="password" placeholder="Senha" class="agro-input" required>
+                    </div>
+
                     <button type="submit" class="btn-agro">Cadastrar</button>
                     
                     <p class="signup-wrapper">Já tem conta? <a href="{% url 'login' %}" class="signup-link">Faça Login</a></p>

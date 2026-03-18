@@ -122,5 +122,28 @@ body {
     text-decoration: underline;
 }
 
+/* Estilos para as mensagens de alerta (Sucesso e Erro) */
+.alert {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+    list-style: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+.alert-success {
+    background-color: rgba(127, 189, 66, 0.2);
+    color: #7fbd42;
+    border: 1px solid #7fbd42;
+}
+
+.alert-error {
+    background-color: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
 @media (max-width: 1200px) { .glass-card { margin-right: 0; } }
 @media (max-width: 900px) { .main-wrapper { flex-direction: column; } .side-panel { width: 100%; } }

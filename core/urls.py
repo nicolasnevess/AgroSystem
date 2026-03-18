@@ -1,11 +1,37 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
+    # Autenticação principal
     path('', views.login_view, name='login'),
+
     path('cadastro/', views.cadastro_view, name='cadastro'),
-    path('recuperar-senha/', views.esqueceu_senha_view, name='password_reset'),
-    path('nova-senha/', views.esqueceu_senha_confirm_view, name='password_reset_confirm'),
+
+    path('logout/', views.logout_view, name='logout'),
+
+    # Recuperação de senha
+    path('recuperar-senha/',
+        auth_views.PasswordResetView.as_view(template_name='password_reset.html',
+        email_template_name='password_reset_email.html',
+        subject_template_name='password_reset_subject.txt'
+    ),
+        name='password_reset'),
+
+    path('recuperar-senha/sucesso/',
+        auth_views.PasswordResetDoneView.as_view(template_name='password_reset_sent.html'),
+        name='password_reset_done'),
+
+    path('reset/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),
+        name='password_reset_confirm'),
+
+    path('reset/concluido/', 
+        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_done.html'), 
+        name='password_reset_complete'),
+
+
+    # Dashboard
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('maquinas/', views.maquinas_view, name='maquinas'),
     path('configurar-propriedade/', views.config_propriedade_view, name='config_propriedade'),
