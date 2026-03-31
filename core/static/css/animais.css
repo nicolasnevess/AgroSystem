@@ -1,35 +1,31 @@
-/* ============================================================
-   ESTILO GERAL E BACKGROUND
-   ============================================================ */
+/* BACKGROUND TEMÁTICO */
 .animal-bg {
-    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+    background: linear-gradient(rgba(244, 247, 246, 0.85), rgba(244, 247, 246, 0.85)),
         url('https://images.unsplash.com/photo-1548773003-34e5bd68b374?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-attachment: fixed;
-    min-height: 100vh;
 }
 
 .page-header-clean h2 {
-    color: #2d3a1e;
-    font-size: 2rem;
-    margin-bottom: 5px;
+    color: var(--primary-green);
+    font-size: 1.8rem;
 }
 
 .page-header-clean p {
-    color: #7f8c8d;
+    color: #666;
+    font-size: 0.9rem;
     margin-bottom: 30px;
 }
 
-/* ============================================================
-   CONTAINER DO FORMULÁRIO (GLASS)
-   ============================================================ */
+/* CONTAINER DO FORMULÁRIO */
 .form-container-glass {
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
     padding: 35px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     margin-bottom: 40px;
 }
 
@@ -40,18 +36,16 @@
 }
 
 .section-title {
-    color: #4b6630;
-    font-size: 1.1rem;
+    color: var(--primary-green);
+    font-size: 1rem;
     margin-bottom: 20px;
-    border-bottom: 2px solid #f0f2f0;
     padding-bottom: 8px;
+    border-bottom: 2px solid #f1f2f6;
     text-transform: uppercase;
     font-weight: 700;
 }
 
-/* ============================================================
-   INPUTS E BUSCA
-   ============================================================ */
+/* INPUTS */
 .row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -72,47 +66,20 @@
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
     outline: none;
     transition: 0.3s;
+    font-family: inherit;
 }
 
 .input-group input:focus {
-    border-color: #4b6630;
+    border-color: var(--secondary-green);
+    box-shadow: 0 0 0 3px rgba(75, 102, 48, 0.1);
 }
 
-.search-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.search-box i {
-    position: absolute;
-    left: 15px;
-    color: #4b6630;
-}
-
-.search-box input {
-    padding: 10px 15px 10px 40px !important;
-    border-radius: 25px !important;
-    border: 1px solid #e2e8f0 !important;
-    background: #f8fafc !important;
-    width: 250px;
-    transition: 0.3s;
-}
-
-.search-box input:focus {
-    width: 280px;
-    border-color: #4b6630;
-    background: #fff;
-}
-
-/* ============================================================
-   UPLOAD DE FOTO
-   ============================================================ */
+/* UPLOAD DE FOTO */
 .photo-upload-box {
-    background: #f8f9fa;
+    background: #f8fafc;
     border: 2px dashed #cbd5e0;
     border-radius: 15px;
     padding: 40px 20px;
@@ -122,106 +89,126 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: 0.3s;
+}
+
+.upload-placeholder i {
+    font-size: 3rem;
+    color: var(--light-green);
+    margin-bottom: 15px;
+}
+
+.upload-placeholder p {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.upload-placeholder span {
+    font-size: 0.75rem;
+    color: #777;
 }
 
 .btn-upload-trigger {
-    background: #4b6630;
+    margin-top: 20px;
+    background: var(--secondary-green);
     color: white;
-    padding: 12px 25px;
+    padding: 10px 20px;
     border-radius: 25px;
     font-weight: 700;
     cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.3s;
 }
 
-/* ============================================================
-   BOTÕES DE AÇÃO DO FORMULÁRIO (SALVAR/CANCELAR)
-   ============================================================ */
+.btn-upload-trigger:hover {
+    background: #000;
+}
+
+/* AÇÕES DO FORMULÁRIO */
 .form-actions-bar {
-    display: flex !important;
-    justify-content: flex-end !important;
-    gap: 15px !important;
-    margin-top: 35px !important;
-    padding-top: 25px !important;
-    border-top: 1px solid #eee !important;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
 }
 
 .btn-save-animal,
 .btn-clear,
 .btn-cancel {
-    padding: 12px 30px !important;
-    border-radius: 30px !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    min-width: 140px !important;
-    border: none !important;
+    padding: 12px 35px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+    font-size: 0.9rem;
+    text-decoration: none;
 }
 
 .btn-save-animal {
-    background: #4b6630 !important;
-    color: white !important;
+    background: var(--primary-green);
+    color: white;
 }
 
 .btn-save-animal:hover {
-    background: #000 !important;
+    background: #000;
+    transform: translateY(-2px);
+}
+
+.btn-clear {
+    background: #f1f2f6;
+    color: #555;
 }
 
 .btn-cancel {
-    background: #e74c3c !important;
-    color: white !important;
+    background: #fee2e2;
+    color: #991b1b;
 }
 
-/* ============================================================
-   BOTÕES DE ÍCONE NA TABELA (IGUAL PLANTAÇÕES) - CORRIGIDO
-   ============================================================ */
-.action-btns {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.action-btns button {
-    width: 38px !important;
-    height: 38px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 10px !important;
-    border: none !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-}
-
-/* Editar - Azul */
-.edit-icon {
-    background-color: #f0f9ff !important;
-    color: #0ea5e9 !important;
-}
-
-.edit-icon:hover {
-    background-color: #0ea5e9 !important;
-    color: #fff !important;
-    transform: translateY(-3px);
-}
-
-/* Excluir - Vermelho */
-.delete-icon {
-    background-color: #fff1f2 !important;
-    color: #f43f5e !important;
-}
-
-.delete-icon:hover {
-    background-color: #f43f5e !important;
-    color: #fff !important;
-    transform: translateY(-3px);
-}
-
-/* ============================================================
-   TABELA
-   ============================================================ */
+/* TABELA */
 .table-list-section {
     background: white;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 50px;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-green);
+}
+
+.search-box input {
+    padding: 10px 15px 10px 45px;
+    border-radius: 25px;
+    border: 1px solid #e1e1e1;
+    width: 280px;
+    outline: none;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.search-box input:focus {
+    border-color: var(--primary-green);
+    width: 320px;
 }
 
 .custom-table {
@@ -230,22 +217,80 @@
 }
 
 .custom-table th {
-    background: #4b6630;
-    color: white;
+    background: #f8fafc;
+    color: var(--primary-green);
     padding: 15px;
     text-align: left;
+    font-weight: 700;
+    border-bottom: 2px solid #eee;
 }
 
 .custom-table td {
     padding: 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f1f2f6;
+    font-size: 0.9rem;
 }
 
 .badge-status {
     background: #e8f5e9;
-    color: #2e7d32;
-    padding: 5px 15px;
-    border-radius: 15px;
+    color: #166534;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-weight: 700;
     font-size: 0.75rem;
+}
+
+/* BOTÕES DE AÇÃO */
+.action-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btns button {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-icon {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.edit-icon:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.delete-icon {
+    background: #fff1f2;
+    color: #e11d48;
+}
+
+.delete-icon:hover {
+    background: #e11d48;
+    color: white;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 1024px) {
+    .form-main-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-upload-box {
+        height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .row {
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,10 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgroSystem - Gestão de Máquinas</title>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/maquinas.css' %}">
@@ -16,19 +14,21 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fas fa-seedling"></i>
-                <span>AgroSystem</span>
+                <a href="{% url 'dashboard' %}" class="logo-link">
+                    <i class="fas fa-seedling"></i>
+                    <span>AgroSystem</span>
+                </a>
             </div>
             <nav class="sidebar-nav">
                 <ul>
                     <li><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
-                    <li class="active"><a href="#"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li class="active"><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
                     <li><a href="{% url 'plantacoes' %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
                     <li><a href="{% url 'animais' %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
-                <a href="{% url 'login' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
             </div>
         </aside>
 
@@ -38,94 +38,86 @@
                     <h2>Gestão de Maquinário</h2>
                     <p>Controle de frota e organização de tarefas</p>
                 </div>
+                {% if tem_maquinas %}
                 <a href="{% url 'config_maquinas' %}" class="btn-new-machine">
                     <i class="fas fa-plus"></i> NOVA MÁQUINA
                 </a>
+                {% endif %}
             </header>
 
-            <section class="welcome-banner machine-setup-banner">
-                <div class="welcome-text">
-                    <h2>🚜 Gestão de Frota</h2>
-                    <p>Mantenha suas máquinas em dia. Adicione novos equipamentos ou registre manutenções preventivas para evitar paradas indesejadas.</p>
-                </div>
-                <a href="{% url 'config_maquinas' %}" class="btn-setup">Cadastrar Nova Máquina</a>
-            </section>
-
-            <section class="maquinas-split-layout">
-                <div class="maquinas-list-panel">
-                    <h3>Sua Frota</h3>
-                    <div class="list-scroll">
-                        <div class="machine-item active">
-                            <i class="fas fa-tractor"></i>
-                            <div class="m-details">
-                                <strong>Trator John Deere</strong>
-                                <span>JD-6115J</span>
-                            </div>
-                        </div>
-                        <div class="machine-item">
-                            <i class="fas fa-truck-pickup"></i>
-                            <div class="m-details">
-                                <strong>Pulverizador 4030</strong>
-                                <span>PV-AGRO-01</span>
-                            </div>
-                        </div>
+            {% if not tem_maquinas %}
+                <section class="welcome-banner machine-setup-banner">
+                    <div class="welcome-text">
+                        <h2>🚜 Gestão de Frota</h2>
+                        <p>Sua frota está vazia. Adicione seus equipamentos para gerenciar manutenções.</p>
                     </div>
-                </div>
-
-                <div class="maquinas-details-panel">
-                    <div class="details-header">
-                        <div class="title-row">
-                            <i class="fas fa-tractor"></i>
-                            <h2>Trator John Deere 6115J</h2>
-                        </div>
-                        <span class="status-tag active">Ativo</span>
-                    </div>
-
-                    <div class="tasks-section">
-                        <label><i class="fas fa-tasks"></i> Lista de Afazeres:</label>
-                        <div class="add-task-row">
-                            <input type="text" id="new-task-input" placeholder="O que precisa ser feito?">
-                            <button class="btn-add-task"><i class="fas fa-plus"></i></button>
-                        </div>
-
-                        <div class="checklist-container">
-                            <div class="task-item">
-                                <input type="checkbox" id="t1" onchange="toggleTask(this)">
-                                <label for="t1">Trocar óleo do motor (500h)</label>
+                    <a href="{% url 'config_maquinas' %}" class="btn-setup">Cadastrar Primeira Máquina</a>
+                </section>
+            {% else %}
+                <section class="maquinas-split-layout">
+                    <div class="maquinas-list-panel">
+                        <h3>Sua Frota</h3>
+                        <div class="list-scroll">
+                            {% for m in maquinas %}
+                            <div class="machine-item {% if forloop.first %}active{% endif %}" onclick="selectMachine('{{ m.id }}')">
+                                {% if m.tipo == 'trator' %}<i class="fas fa-tractor"></i>
+                                {% elif m.tipo == 'colheitadeira' %}<i class="fas fa-seedling"></i>
+                                {% elif m.tipo == 'pulverizador' %}<i class="fas fa-spray-can"></i>
+                                {% else %}<i class="fas fa-truck-pickup"></i>{% endif %}
+                                
+                                <div class="m-details">
+                                    <strong>{{ m.nome }}</strong>
+                                    <span>{{ m.identificacao }}</span>
+                                </div>
                             </div>
-                            <div class="task-item">
-                                <input type="checkbox" id="t2" onchange="toggleTask(this)">
-                                <label for="t2">Revisar dentes da grade</label>
-                            </div>
-                            <div class="task-item done">
-                                <input type="checkbox" id="t3" checked onchange="toggleTask(this)">
-                                <label for="t3">Limpeza interna da cabine</label>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
 
-                    <div class="details-footer">
-                        <button class="btn-delete-machine">
-                            <i class="fas fa-trash"></i> Excluir Máquina
-                        </button>
-                        <button class="btn-save-notes">
-                            <i class="fas fa-save"></i> Salvar Checklist
-                        </button>
+                    <div class="maquinas-details-panel">
+                        {% with m=maquinas.0 %} 
+                        <div class="details-header">
+                            <div class="title-row">
+                                <i class="fas fa-tractor"></i>
+                                <h2>{{ m.nome }} {{ m.modelo }}</h2>
+                            </div>
+                            <span class="status-tag active">Ativo</span>
+                        </div>
+
+                        <div class="info-specs" style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">
+                             <p><i class="fas fa-clock"></i> Horímetro/KM: <strong>{{ m.horimetro }}</strong></p>
+                             <p><i class="fas fa-map-marker-alt"></i> Fazenda: <strong>{{ m.propriedade.nome_fazenda }}</strong></p>
+                             <p><i class="fas fa-barcode"></i> ID: <strong>{{ m.identificacao }}</strong></p>
+                        </div>
+
+                        <div class="tasks-section">
+                            <label><i class="fas fa-tasks"></i> Lista de Afazeres:</label>
+                            <div class="add-task-row">
+                                <input type="text" id="new-task-input" placeholder="Nova tarefa para {{ m.nome }}...">
+                                <button class="btn-add-task"><i class="fas fa-plus"></i></button>
+                            </div>
+
+                            <div class="checklist-container">
+                                <div class="task-item">
+                                    <input type="checkbox" id="t1" onchange="toggleTask(this)">
+                                    <label for="t1">Revisão Periódica</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="details-footer">
+                            <button class="btn-delete-machine">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                            <button class="btn-save-notes">
+                                <i class="fas fa-save"></i> Salvar Checklist
+                            </button>
+                        </div>
+                        {% endwith %}
                     </div>
-                </div>
-            </section>
+                </section>
+            {% endif %}
         </main>
     </div>
-
-    <script>
-        function toggleTask(checkbox) {
-            const item = checkbox.parentElement;
-            if (checkbox.checked) {
-                item.classList.add('done');
-            } else {
-                item.classList.remove('done');
-            }
-        }
-    </script>
 </body>
 </html>

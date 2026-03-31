@@ -3,7 +3,6 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgroSystem - Cadastrar Máquina</title>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
@@ -14,20 +13,30 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fas fa-seedling"></i>
-                <span>AgroSystem</span>
+                <a href="{% url 'dashboard' %}" class="logo-link">
+                    <i class="fas fa-seedling"></i>
+                    <span>AgroSystem</span>
+                </a>
             </div>
             <nav class="sidebar-nav">
                 <ul>
                     <li><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
-                    <li><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li class="active"><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li><a href="{% url 'plantacoes' %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
+                    <li><a href="{% url 'animais' %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
                 </ul>
             </nav>
+            <div class="sidebar-footer">
+                <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
         </aside>
 
         <main class="main-content">
             <header class="top-header">
-                <h2>Gestão de Frota</h2>
+                <div class="header-title">
+                    <h2>Gestão de Frota</h2>
+                    <p>Adicione novas máquinas ao seu inventário</p>
+                </div>
                 <a href="{% url 'maquinas' %}" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
             </header>
 
@@ -35,54 +44,59 @@
                 <div class="form-header">
                     <i class="fas fa-tools"></i>
                     <h3>Nova Máquina / Equipamento</h3>
-                    <p>Adicione novos itens à sua frota para controle de manutenção.</p>
                 </div>
 
                 <form method="POST" class="agro-form">
                     {% csrf_token %}
                     
                     <div class="input-group">
-                        <label>Nome da Máquina</label>
-                        <input type="text" name="nome_maquina" placeholder="Ex: Trator John Deere 6115J" required>
+                        <label>Nome da Máquina (Apelido)</label>
+                        <input type="text" name="nome" placeholder="Ex: Trator Principal" required>
                     </div>
 
                     <div class="row-inputs">
                         <div class="input-group">
-                            <label>Tipo de Equipamento</label>
-                            <select name="tipo_maquina" id="select-maquina" onchange="checkMaquina(this)">
+                            <label>Tipo</label>
+                            <select name="tipo" id="select-tipo" onchange="checkMaquina(this)">
                                 <option value="trator">Trator</option>
                                 <option value="colheitadeira">Colheitadeira</option>
                                 <option value="pulverizador">Pulverizador</option>
-                                <option value="semeadora">Semeadora</option>
-                                <option value="outro">Outro...</option>
+                                <option value="plantadeira">Plantadeira</option>
+                                <option value="outro">Outro</option>
                             </select>
                         </div>
                         <div class="input-group">
-                            <label>Ano de Fabricação</label>
-                            <input type="number" name="ano" placeholder="2024" min="1900" max="2026">
+                            <label>Modelo</label>
+                            <input type="text" name="modelo" placeholder="Ex: 6115J" required>
                         </div>
                     </div>
 
-                    <div class="input-group" id="maquina-outro" style="display: none;">
+                    <div class="input-group" id="maquina-outro" style="display: none; margin-top: 10px;">
                         <label>Especifique o Tipo</label>
-                        <input type="text" name="outro_tipo" id="input-maquina-outro" placeholder="Ex: Drone, Roçadeira, Caminhão...">
+                        <input type="text" name="outro_tipo" id="input-outro" placeholder="Ex: Drone, Caminhão...">
+                    </div>
+
+                    <div class="row-inputs">
+                        <div class="input-group">
+                            <label>Identificação (Placa/Série)</label>
+                            <input type="text" name="identificacao" placeholder="Ex: ABC-123" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Horímetro Atual (h)</label>
+                            <input type="number" name="horimetro" value="0" required>
+                        </div>
                     </div>
 
                     <div class="input-group">
-                        <label>Status Inicial</label>
-                        <select name="status">
-                            <option value="operacional">Operacional (Ativa)</option>
-                            <option value="manutencao">Em Manutenção</option>
-                            <option value="parada">Parada / Reserva</option>
+                        <label>Vincular à Fazenda</label>
+                        <select name="propriedade">
+                            {% for f in fazendas %}
+                                <option value="{{ f.id }}">{{ f.nome_fazenda }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
-                    <div class="input-group">
-                        <label>Horímetro / KM Atual</label>
-                        <input type="number" name="uso_atual" placeholder="Ex: 1500" required>
-                    </div>
-
-                    <button type="submit" class="btn-save-agro">Cadastrar na Frota</button>
+                    <button type="submit" class="btn-save-agro">Salvar no Banco de Dados</button>
                 </form>
             </section>
         </main>
@@ -91,15 +105,14 @@
     <script>
         function checkMaquina(select) {
             const campoOutro = document.getElementById('maquina-outro');
-            const inputOutro = document.getElementById('input-maquina-outro');
+            const inputOutro = document.getElementById('input-outro');
             
             if (select.value === 'outro') {
-                campoOutro.style.display = 'flex'; // Exibe o campo
-                inputOutro.setAttribute('required', 'required'); // Torna obrigatório
-                inputOutro.focus();
+                campoOutro.style.display = 'block';
+                inputOutro.setAttribute('required', 'required');
             } else {
-                campoOutro.style.display = 'none'; // Esconde
-                inputOutro.removeAttribute('required'); // Remove a obrigatoriedade
+                campoOutro.style.display = 'none';
+                inputOutro.removeAttribute('required');
             }
         }
     </script>

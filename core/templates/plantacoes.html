@@ -14,8 +14,10 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fas fa-seedling"></i>
-                <span>AgroSystem</span>
+                <a href="{% url 'dashboard' %}" class="logo-link">
+                    <i class="fas fa-seedling"></i>
+                    <span>AgroSystem</span>
+                </a>
             </div>
             <nav class="sidebar-nav">
                 <ul>
@@ -32,112 +34,117 @@
 
         <main class="main-content plant-bg">
             <header class="page-header-clean">
-                <h2>Adicionar Planta</h2>
-                <p>Gerencie sua lavoura de forma eficiente</p>
+                <h2>Gestão de Plantações</h2>
+                <p>Registre e acompanhe o ciclo de vida da sua lavoura</p>
             </header>
 
             <section class="form-container-glass">
-                <form class="plant-form">
+                <form class="plant-form" method="POST">
+                    {% csrf_token %}
                     <div class="form-section">
-                        <h3 class="section-title">Informações da Planta</h3>
+                        <h3 class="section-title">Novo Plantio</h3>
                         
                         <div class="input-group full">
-                            <label>Nome da Planta</label>
+                            <label>Nome da Cultura / Talhão</label>
                             <div class="input-with-icon">
-                                <input type="text" placeholder="Ex: Milho Safrinha">
+                                <input type="text" name="nome_planta" placeholder="Ex: Milho Safrinha - Talhão 04" required>
                                 <i class="fas fa-seedling"></i>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="input-group">
-                                <br><label>Tipo de Planta</label>
-                                <select>
-                                    <option>Cereal</option>
-                                    <option>Oleaginosa</option>
-                                    <option>Leguminosa</option>
+                            <div class="input-group"><br>
+                                <label>Tipo de Cultura</label>
+                                <select name="tipo_planta">
+                                    <option value="cereal">Cereal</option>
+                                    <option value="oleaginosa">Oleaginosa</option>
+                                    <option value="leguminosa">Leguminosa</option>
+                                    <option value="frutifera">Frutífera</option>
                                 </select>
                             </div>
-                            <div class="input-group">
-                                <br><label>Área Plantada (ha)</label>
-                                <input type="number" placeholder="0.0">
+                            <div class="input-group"><br>
+                                <label>Área Plantada (ha)</label>
+                                <input type="number" name="area_plantada" step="0.1" placeholder="Ex: 15.5" required>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="input-group">
                                 <label>Data de Plantio</label>
-                                <input type="date">
+                                <input type="date" name="data_plantio" required>
                             </div>
                             <div class="input-group">
-                                <label>Variedade (Opcional)</label>
-                                <input type="text" placeholder="Ex: Híbrido K9">
+                                <label>Variedade/Semente</label>
+                                <input type="text" name="variedade" placeholder="Ex: Híbrido K9">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="input-group">
-                                <label>Status Atual</label>
-                                <select>
-                                    <option>Plantado</option>
-                                    <option>Em Germinação</option>
-                                    <option>Desenvolvimento</option>
+                                <label>Status do Ciclo</label>
+                                <select name="status">
+                                    <option value="plantado">Recém Plantado</option>
+                                    <option value="germinacao">Em Germinação</option>
+                                    <option value="desenvolvimento">Desenvolvimento Vegetativo</option>
+                                    <option value="colheita">Pronto para Colheita</option>
                                 </select>
                             </div>
                             <div class="input-group">
-                                <label>Tipo de Solo</label>
-                                <select>
-                                    <option>Argiloso</option>
-                                    <option>Arenoso</option>
-                                    <option>Misto</option>
+                                <label>Destinar à Fazenda</label>
+                                <select name="fazenda">
+                                    {% for f in fazendas %}
+                                        <option value="{{ f.id }}">{{ f.nome_fazenda }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-actions-bar">
-                        <button type="submit" class="btn-save-plant">Salvar Planta</button>
+                        <button type="submit" class="btn-save-plant">Salvar Plantação</button>
                         <button type="reset" class="btn-clear">Limpar</button>
-                        <button type="button" class="btn-cancel">Cancelar</button>
+                        <a href="{% url 'dashboard' %}" class="btn-cancel">Cancelar</a>
                     </div>
                 </form>
             </section>
 
             <section class="table-list-section">
                 <div class="table-header">
-                    <h3>Plantas Cadastradas</h3>
+                    <h3>Lavoura Ativa</h3>
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Buscar...">
+                        <input type="text" placeholder="Buscar por cultura...">
                     </div>
                 </div>
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome da Planta</th>
-                            <th>Tipo</th>
-                            <th>Área</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>001</td>
-                            <td>Milho</td>
-                            <td>Cereal</td>
-                            <td>15.0 ha</td>
-                            <td><span class="badge-status">Plantado</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="edit-icon"><i class="fas fa-pen"></i></button>
-                                    <button class="delete-icon"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Cultura</th>
+                                <th>Tipo</th>
+                                <th>Área</th>
+                                <th>Data Plantio</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Soja Transgênica</strong></td>
+                                <td>Oleaginosa</td>
+                                <td>45.0 ha</td>
+                                <td>12/10/2025</td>
+                                <td><span class="badge-status">Desenvolvimento</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="edit-icon" title="Editar"><i class="fas fa-pen"></i></button>
+                                        <button class="delete-icon" title="Excluir"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
