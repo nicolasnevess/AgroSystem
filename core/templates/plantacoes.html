@@ -33,119 +33,137 @@
         </aside>
 
         <main class="main-content plant-bg">
-            <header class="page-header-clean">
-                <h2>Gestão de Plantações</h2>
-                <p>Registre e acompanhe o ciclo de vida da sua lavoura</p>
-            </header>
-
-            <section class="form-container-glass">
-                <form class="plant-form" method="POST">
-                    {% csrf_token %}
-                    <div class="form-section">
-                        <h3 class="section-title">Novo Plantio</h3>
-                        
-                        <div class="input-group full">
-                            <label>Nome da Cultura / Talhão</label>
-                            <div class="input-with-icon">
-                                <input type="text" name="nome_planta" placeholder="Ex: Milho Safrinha - Talhão 04" required>
-                                <i class="fas fa-seedling"></i>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="input-group"><br>
-                                <label>Tipo de Cultura</label>
-                                <select name="tipo_planta">
-                                    <option value="cereal">Cereal</option>
-                                    <option value="oleaginosa">Oleaginosa</option>
-                                    <option value="leguminosa">Leguminosa</option>
-                                    <option value="frutifera">Frutífera</option>
-                                </select>
-                            </div>
-                            <div class="input-group"><br>
-                                <label>Área Plantada (ha)</label>
-                                <input type="number" name="area_plantada" step="0.1" placeholder="Ex: 15.5" required>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="input-group">
-                                <label>Data de Plantio</label>
-                                <input type="date" name="data_plantio" required>
-                            </div>
-                            <div class="input-group">
-                                <label>Variedade/Semente</label>
-                                <input type="text" name="variedade" placeholder="Ex: Híbrido K9">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="input-group">
-                                <label>Status do Ciclo</label>
-                                <select name="status">
-                                    <option value="plantado">Recém Plantado</option>
-                                    <option value="germinacao">Em Germinação</option>
-                                    <option value="desenvolvimento">Desenvolvimento Vegetativo</option>
-                                    <option value="colheita">Pronto para Colheita</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label>Destinar à Fazenda</label>
-                                <select name="fazenda">
-                                    {% for f in fazendas %}
-                                        <option value="{{ f.id }}">{{ f.nome_fazenda }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
+            
+            {% if not tem_fazenda %}
+                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; border-radius: 20px; margin: 40px auto; max-width: 800px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                    <div class="welcome-text" style="text-align: center; margin-bottom: 30px;">
+                        <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
+                        <p style="color: #666; font-size: 1.2rem; line-height: 1.6;">
+                            Você ainda não possui uma propriedade cadastrada. <br>
+                            <strong>Adicione sua fazenda</strong> para começar o plantio e gerir seus talhões.
+                        </p>
                     </div>
 
-                    <div class="form-actions-bar">
-                        <button type="submit" class="btn-save-plant">Salvar Plantação</button>
-                        <button type="reset" class="btn-clear">Limpar</button>
-                        <a href="{% url 'dashboard' %}" class="btn-cancel">Cancelar</a>
-                    </div>
-                </form>
-            </section>
+                    <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 18px 45px; border-radius: 35px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(75, 102, 48, 0.3);">
+                        <i class="fas fa-plus"></i> Configurar Propriedade
+                    </a>
+                </section>
+            {% else %}
+                <header class="page-header-clean">
+                    <h2>Gestão de Plantações</h2>
+                    <p>Registre e acompanhe o ciclo de vida da sua lavoura</p>
+                </header>
 
-            <section class="table-list-section">
-                <div class="table-header">
-                    <h3>Lavoura Ativa</h3>
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Buscar por cultura...">
+                <section class="form-container-glass">
+                    <form class="plant-form" method="POST">
+                        {% csrf_token %}
+                        <div class="form-section">
+                            <h3 class="section-title">Novo Plantio</h3>
+                            
+                            <div class="input-group full">
+                                <label>Nome da Cultura / Talhão</label>
+                                <div class="input-with-icon">
+                                    <input type="text" name="nome_planta" placeholder="Ex: Milho Safrinha - Talhão 04" required>
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group"><br>
+                                    <label>Tipo de Cultura</label>
+                                    <select name="tipo_planta">
+                                        <option value="cereal">Cereal</option>
+                                        <option value="oleaginosa">Oleaginosa</option>
+                                        <option value="leguminosa">Leguminosa</option>
+                                        <option value="frutifera">Frutífera</option>
+                                    </select>
+                                </div>
+                                <div class="input-group"><br>
+                                    <label>Área Plantada (ha)</label>
+                                    <input type="number" name="area_plantada" step="0.1" placeholder="Ex: 15.5" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group">
+                                    <label>Data de Plantio</label>
+                                    <input type="date" name="data_plantio" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Variedade/Semente</label>
+                                    <input type="text" name="variedade" placeholder="Ex: Híbrido K9">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group">
+                                    <label>Status do Ciclo</label>
+                                    <select name="status">
+                                        <option value="plantado">Recém Plantado</option>
+                                        <option value="germinacao">Em Germinação</option>
+                                        <option value="desenvolvimento">Desenvolvimento Vegetativo</option>
+                                        <option value="colheita">Pronto para Colheita</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Destinar à Fazenda</label>
+                                    <select name="fazenda">
+                                        {% for f in fazendas %}
+                                            <option value="{{ f.id }}">{{ f.nome_fazenda }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions-bar">
+                            <button type="submit" class="btn-save-plant">Salvar Plantação</button>
+                            <button type="reset" class="btn-clear">Limpar</button>
+                            <a href="{% url 'dashboard' %}" class="btn-cancel">Cancelar</a>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="table-list-section">
+                    <div class="table-header">
+                        <h3>Lavoura Ativa</h3>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Buscar por cultura...">
+                        </div>
                     </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>Cultura</th>
-                                <th>Tipo</th>
-                                <th>Área</th>
-                                <th>Data Plantio</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Soja Transgênica</strong></td>
-                                <td>Oleaginosa</td>
-                                <td>45.0 ha</td>
-                                <td>12/10/2025</td>
-                                <td><span class="badge-status">Desenvolvimento</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="edit-icon" title="Editar"><i class="fas fa-pen"></i></button>
-                                        <button class="delete-icon" title="Excluir"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Cultura</th>
+                                    <th>Tipo</th>
+                                    <th>Área</th>
+                                    <th>Data Plantio</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Soja Transgênica</strong></td>
+                                    <td>Oleaginosa</td>
+                                    <td>45.0 ha</td>
+                                    <td>12/10/2025</td>
+                                    <td><span class="badge-status">Desenvolvimento</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="edit-icon" title="Editar"><i class="fas fa-pen"></i></button>
+                                            <button class="delete-icon" title="Excluir"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            {% endif %}
+
         </main>
     </div>
 </body>

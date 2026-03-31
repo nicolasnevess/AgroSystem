@@ -33,143 +33,147 @@
         </aside>
 
         <main class="main-content animal-bg">
-            <header class="page-header-clean">
-                <h2>Gestão de Rebanho</h2>
-                <p>Controle zootécnico e sanitário dos seus animais</p>
-            </header>
-
-            <section class="form-container-glass">
-                <form class="animal-form" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-main-layout">
-                        <div class="form-fields-column">
-                            <h3 class="section-title">Informações do Animal</h3>
-                            
-                            <div class="row">
-                                <div class="input-group">
-                                    <label>Identificação (Brinco/ID)</label>
-                                    <input type="text" name="identificacao" placeholder="Ex: BEP01" required>
-                                </div>
-                                <div class="input-group">
-                                    <label>Nome do Animal</label>
-                                    <input type="text" name="nome_animal" placeholder="Ex: Estrela">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group">
-                                    <label>Espécie</label>
-                                    <select name="especie">
-                                        <option value="bovino">Bovino</option>
-                                        <option value="suino">Suíno</option>
-                                        <option value="ovino">Ovino</option>
-                                        <option value="equino">Equino</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label>Raça</label>
-                                    <input type="text" name="raca" placeholder="Ex: Nelore">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group">
-                                    <label>Sexo</label>
-                                    <select name="sexo">
-                                        <option value="M">Macho</option>
-                                        <option value="F">Fêmea</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label>Data de Nascimento</label>
-                                    <input type="date" name="data_nascimento">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group">
-                                    <label>Peso Atual (kg)</label>
-                                    <input type="number" name="peso" step="0.1" placeholder="0.0">
-                                </div>
-                                <div class="input-group">
-                                    <label>Status</label>
-                                    <select name="status">
-                                        <option value="ativo">Ativo</option>
-                                        <option value="tratamento">Em Tratamento</option>
-                                        <option value="vendido">Vendido</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h3 class="section-title" style="margin-top: 20px;">Informações Sanitárias</h3>
-                            <div class="input-group full">
-                                <label>Última Vacina / Medicamento</label>
-                                <input type="text" name="sanitario" placeholder="Ex: Febre Aftosa - Aplicada em 10/02/2026">
-                            </div>
-                        </div>
-
-                        <div class="form-photo-column">
-                            <h3 class="section-title">Foto do Animal</h3>
-                            <div class="photo-upload-box">
-                                <div class="upload-placeholder">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>Upload da Foto</p>
-                                    <span>JPG ou PNG. Máx 5MB</span>
-                                </div>
-                                <input type="file" id="animal-photo" name="foto" hidden onchange="previewImage(this)">
-                                <label for="animal-photo" class="btn-upload-trigger">Selecionar Imagem</label>
-                            </div>
-                        </div>
+            {% if not tem_fazenda %}
+                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; border-radius: 20px; margin: 40px auto; max-width: 800px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                    <div class="welcome-text" style="text-align: center; margin-bottom: 30px;">
+                        <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
+                        <p style="color: #666; font-size: 1.2rem; line-height: 1.6;">
+                            Você ainda não possui uma propriedade cadastrada. <br>
+                            <strong>Adicione sua fazenda</strong> para começar a gerenciar seu rebanho.
+                        </p>
                     </div>
+                    <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 18px 45px; border-radius: 35px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(75, 102, 48, 0.3);">
+                        <i class="fas fa-plus"></i> Configurar Propriedade
+                    </a>
+                </section>
+            {% else %}
+                <header class="page-header-clean">
+                    <h2>Gestão de Rebanho</h2>
+                    <p>Controle zootécnico e sanitário dos seus animais</p>
+                </header>
 
-                    <div class="form-actions-bar">
-                        <button type="submit" class="btn-save-animal">Salvar Animal</button>
-                        <button type="reset" class="btn-clear">Limpar</button>
-                        <a href="{% url 'dashboard' %}" class="btn-cancel">Cancelar</a>
-                    </div>
-                </form>
-            </section>
-
-            <section class="table-list-section">
-                <div class="table-header">
-                    <h3>Animais no Rebanho</h3>
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Buscar por ID ou Nome...">
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Espécie</th>
-                                <th>Raça</th>
-                                <th>Peso</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>BEP01</strong></td>
-                                <td>Estrela</td>
-                                <td>Bovino</td>
-                                <td>Nelore</td>
-                                <td>450 kg</td>
-                                <td><span class="badge-status">Ativo</span></td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="edit-icon" title="Editar"><i class="fas fa-pen"></i></button>
-                                        <button class="delete-icon" title="Excluir"><i class="fas fa-trash"></i></button>
+                <section class="form-container-glass">
+                    <form class="animal-form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-main-layout">
+                            <div class="form-fields-column">
+                                <h3 class="section-title">Informações do Animal</h3>
+                                <div class="row">
+                                    <div class="input-group">
+                                        <label>Identificação (Brinco/ID)</label>
+                                        <input type="text" name="identificacao" placeholder="Ex: BEP01" required>
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                                    <div class="input-group">
+                                        <label>Nome do Animal</label>
+                                        <input type="text" name="nome_animal" placeholder="Ex: Estrela">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-group">
+                                        <label>Espécie</label>
+                                        <select name="especie">
+                                            <option value="bovino">Bovino</option>
+                                            <option value="suino">Suíno</option>
+                                            <option value="ovino">Ovino</option>
+                                            <option value="equino">Equino</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Raça</label>
+                                        <input type="text" name="raca" placeholder="Ex: Nelore">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-group">
+                                        <label>Sexo</label>
+                                        <select name="sexo">
+                                            <option value="M">Macho</option>
+                                            <option value="F">Fêmea</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Data de Nascimento</label>
+                                        <input type="date" name="data_nascimento">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-group">
+                                        <label>Peso Atual (kg)</label>
+                                        <input type="number" name="peso" step="0.1" placeholder="0.0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Status</label>
+                                        <select name="status">
+                                            <option value="ativo">Ativo</option>
+                                            <option value="tratamento">Em Tratamento</option>
+                                            <option value="vendido">Vendido</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <h3 class="section-title" style="margin-top: 20px;">Informações Sanitárias</h3>
+                                <div class="input-group full">
+                                    <label>Última Vacina / Medicamento</label>
+                                    <input type="text" name="sanitario" placeholder="Ex: Febre Aftosa - Aplicada em 10/02/2026">
+                                </div>
+                            </div>
+                            <div class="form-photo-column">
+                                <h3 class="section-title">Foto do Animal</h3>
+                                <div class="photo-upload-box">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Upload da Foto</p>
+                                        <span>JPG ou PNG. Máx 5MB</span>
+                                    </div>
+                                    <input type="file" id="animal-photo" name="foto" hidden>
+                                    <label for="animal-photo" class="btn-upload-trigger">Selecionar Imagem</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions-bar">
+                            <button type="submit" class="btn-save-animal">Salvar Animal</button>
+                            <button type="reset" class="btn-clear">Limpar</button>
+                            <a href="{% url 'dashboard' %}" class="btn-cancel">Cancelar</a>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="table-list-section">
+                    <div class="table-header">
+                        <h3>Animais no Rebanho</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Espécie</th>
+                                    <th>Raça</th>
+                                    <th>Peso</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>BEP01</strong></td>
+                                    <td>Estrela</td>
+                                    <td>Bovino</td>
+                                    <td>Nelore</td>
+                                    <td>450 kg</td>
+                                    <td><span class="badge-status">Ativo</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="edit-icon" title="Editar"><i class="fas fa-pen"></i></button>
+                                            <button class="delete-icon" title="Excluir"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            {% endif %}
         </main>
     </div>
 </body>

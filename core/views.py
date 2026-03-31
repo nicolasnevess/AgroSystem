@@ -68,13 +68,21 @@ def dashboard_view(request):
 
 @login_required
 def maquinas_view(request):
-    # Busca todas as máquinas do usuário logado
-    minhas_maquinas = Maquina.objects.filter(usuario=request.user).order_by('-id')
-    tem_maquinas = minhas_maquinas.exists()
-    
+    # 1. Primeiro definimos se o usuário tem fazenda
+    fazendas = Propriedade.objects.filter(usuario=request.user)
+    tem_fazenda = fazendas.exists()  # <-- ESSA LINHA RESOLVE O NAMEERROR
+
+    # 2. Agora buscamos as máquinas (apenas se houver fazenda, para evitar outros erros)
+    if tem_fazenda:
+        minhas_maquinas = Maquina.objects.filter(usuario=request.user).order_by('-id')
+    else:
+        minhas_maquinas = Maquina.objects.none() # Lista vazia se não houver fazenda
+
+    # 3. Passamos as variáveis para o HTML
     return render(request, 'maquinas.html', {
         'maquinas': minhas_maquinas,
-        'tem_maquinas': tem_maquinas
+        'tem_maquinas': minhas_maquinas.exists(),
+        'tem_fazenda': tem_fazenda, # Passando para o template usar no {% if %}
     })
 
 @login_required
@@ -97,11 +105,21 @@ def config_areas_view(request):
 
 @login_required
 def plantacoes_view(request):
-    return render(request, 'plantacoes.html')
+    tem_fazenda = Propriedade.objects.filter(usuario=request.user).exists()
+    fazendas = Propriedade.objects.filter(usuario=request.user)
+    
+    return render(request, 'plantacoes.html', {
+        'tem_fazenda': tem_fazenda,
+        'fazendas': fazendas,
+    })
 
 @login_required
 def animais_view(request):
-    return render(request, 'animais.html')
+    tem_fazenda = Propriedade.objects.filter(usuario=request.user).exists()
+    
+    return render(request, 'animais.html', {
+        'tem_fazenda': tem_fazenda,
+    })
 
 @login_required
 def config_animais_view(request):
