@@ -24,10 +24,26 @@
 
             <nav class="sidebar-nav">
                 <ul>
-                    <li class="active"><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
-                    <li><a href="{% url 'maquinas' %}?fazenda_id={{ fazenda_ativa.id }}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
-                    <li><a href="{% url 'plantacoes' %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
-                    <li><a href="{% url 'animais' %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                    <li class="active">
+                        <a href="{% url 'dashboard' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-chart-pie"></i> MONITORAMENTO
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'maquinas' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-tractor"></i> MÁQUINAS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'plantacoes' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-leaf"></i> PLANTAÇÕES
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'animais' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-paw"></i> ANIMAIS
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
@@ -42,13 +58,14 @@
             <header class="top-header">
                 <div class="header-left">
                     {% if tem_propriedade %}
-                    <select class="farm-selector" onchange="location.href='?fazenda_id=' + this.value">
-                    <option value="" disabled>Selecionar Fazenda</option>
-                    {% for f in fazendas %}
-                    <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
-                    {{ f.nome_fazenda }}
-                    </option>
-                    {% endfor %}
+                    <select class="farm-selector" onchange="navegarFazenda(this.value)">
+                        <option value="" disabled>Selecionar Fazenda</option>
+                        {% for f in fazendas %}
+                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
+                            {{ f.nome_fazenda }}
+                        </option>
+                        {% endfor %}
+                        <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
                     </select>
                     {% endif %}
                 </div>
@@ -58,20 +75,18 @@
             </header>
 
             {% if not tem_propriedade %}
-                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; border-radius: 20px; margin: 40px auto; max-width: 800px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <div class="welcome-text" style="text-align: center; margin-bottom: 30px;">
+                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 800px;">
+                    <div class="welcome-text">
                         <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
                         <p style="color: #666; font-size: 1.2rem; line-height: 1.6;">
                             Você ainda não possui uma propriedade cadastrada. <br>
-                            <strong>Adicione sua fazenda</strong> para começar a gerenciar seu agronegócio.
+                            <strong>Adicione sua fazenda</strong> para começar.
                         </p>
                     </div>
-
-                    <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 18px 45px; border-radius: 35px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(75, 102, 48, 0.3);">
+                    <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 18px 45px; border-radius: 35px; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 20px;">
                         <i class="fas fa-plus"></i> Configurar Propriedade
                     </a>
                 </section>
-
             {% else %}
                 <div class="content-grid">
                     <div class="info-card farm-info-box">
@@ -100,18 +115,17 @@
                             </li>
                             {% endfor %}
                         </ul>
-                        <a href="{% url 'maquinas' %}" style="font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600; margin-top: 10px; display: block;">Ver frota completa →</a>
+                        <a href="{% url 'maquinas' %}?fazenda_id={{ fazenda_ativa.id }}" style="font-size: 0.8rem; color: #4b6630; text-decoration: none; font-weight: 600; margin-top: 10px; display: block;">Ver frota completa →</a>
                     </div>
                     {% endif %}
 
-                    {% if not tem_maquinas and not tem_plantacoes %}
+                    {% if not tem_maquinas %}
                     <div class="info-card next-steps-card">
                         <i class="fas fa-rocket"></i>
                         <h3>Sua fazenda está pronta!</h3>
-                        <p>Comece a cadastrar suas máquinas ou plantações para ver os dados aqui.</p>
+                        <p>Comece a cadastrar suas máquinas para ver os dados aqui.</p>
                         <div class="next-steps-btns">
-                            <a href="{% url 'config_maquinas' %}" class="btn-setup-alt">+ Máquina</a>
-                            <a href="{% url 'plantacoes' %}" class="btn-setup-alt">+ Plantação</a>
+                            <a href="{% url 'config_maquinas' %}?fazenda_id={{ fazenda_ativa.id }}" class="btn-setup-alt">+ Máquina</a>
                         </div>
                     </div>
                     {% endif %}
@@ -119,5 +133,15 @@
             {% endif %}
         </main>
     </div>
+
+    <script>
+        function navegarFazenda(valor) {
+            if (valor === "NOVA") {
+                window.location.href = "{% url 'config_propriedade' %}";
+            } else if (valor) {
+                window.location.href = "?fazenda_id=" + valor;
+            }
+        }
+    </script>
 </body>
 </html>
