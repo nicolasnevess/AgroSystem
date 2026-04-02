@@ -22,13 +22,13 @@
     align-items: center;
     padding: 30px 40px;
     border-radius: 15px;
-    color: white;
+    color: #333;
     margin-bottom: 30px;
     box-shadow: 0 10px 20px rgba(75, 102, 48, 0.15);
 }
 
 .machine-setup-banner h2 {
-    color: white !important;
+    color: rgb(0, 0, 0) !important;
     margin-bottom: 8px;
     font-size: 1.6rem;
 }

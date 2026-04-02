@@ -33,6 +33,29 @@
         </aside>
 
         <main class="main-content">
+            
+            <header class="top-header">
+                <div class="header-left">
+                    {% if tem_fazenda %}
+                    <select class="farm-selector" onchange="localStorage.removeItem('ultimaMaquinaSelecionada'); location.href='?fazenda_id=' + this.value">
+                        <option value="" disabled>Selecionar Fazenda</option>
+                        {% for f in fazendas %}
+                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
+                            {{ f.nome_fazenda }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                </div>
+                <div class="user-profile">
+                    {% if tem_maquinas %}
+                    <a href="{% url 'config_maquinas' %}?fazenda_id={{ fazenda_ativa.id }}" class="btn-new-machine" style="text-decoration: none;">
+                        <i class="fas fa-plus"></i> NOVA MÁQUINA
+                    </a>
+                    {% endif %}
+                </div>
+            </header>
+
             {% if not tem_fazenda %}
                 <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 800px;">
                     <div class="welcome-text">
@@ -41,31 +64,22 @@
                             Você ainda não possui uma propriedade cadastrada.<br>
                             <strong>Adicione sua fazenda</strong> para começar a gerenciar sua frota.
                         </p>
-                        <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block;">
-                            <i class="fas fa-plus"></i> Cadastrar Minha Fazenda
-                        </a>
+                        <a href="{% url 'config_propriedade' %}" class="btn-setup">Cadastrar Minha Fazenda</a>
                     </div>
                 </section>
             {% else %}
-                <header class="page-header">
-                    <div>
-                        <h2>Gestão de Maquinário</h2>
-                        <p>Controle de frota e organização de tarefas</p>
-                    </div>
-                    {% if tem_maquinas %}
-                    <a href="{% url 'config_maquinas' %}" class="btn-new-machine">
-                        <i class="fas fa-plus"></i> NOVA MÁQUINA
-                    </a>
-                    {% endif %}
-                </header>
-
+                
                 {% if not tem_maquinas %}
-                    <section class="welcome-banner machine-setup-banner">
+                    <section class="welcome-banner machine-setup-banner" style="background: white; padding: 40px; border-radius: 20px; text-align: center; border: 2px dashed #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <div class="welcome-text">
-                            <h2>🚜 Gestão de Frota</h2>
-                            <p>Sua frota está vazia. Adicione seus equipamentos.</p>
+                            <h2 style="color: #000000; font-weight: 700; margin-bottom: 10px;">🚜 Frota Vazia</h2>
+                            <p style="color: #333; margin-bottom: 20px;">Não há máquinas cadastradas na fazenda <strong>{{ fazenda_ativa.nome_fazenda }}</strong>.</p>
                         </div>
-                        <a href="{% url 'config_maquinas' %}" class="btn-setup">Cadastrar Primeira Máquina</a>
+                        <a href="{% url 'config_maquinas' %}?fazenda_id={{ fazenda_ativa.id }}" 
+                           class="btn-setup" 
+                           style="display: inline-block; background: #4b6630; color: #ffffff; padding: 15px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                           Cadastrar Primeira Máquina
+                        </a>
                     </section>
                 {% else %}
                     <section class="maquinas-split-layout">
@@ -93,7 +107,6 @@
                                 {% endfor %}
                                 
                                 <script>
-                                    // Pinta a máquina correta antes mesmo do JS carregar totalmente (evita o pulo visual)
                                     (function() {
                                         const ultimaId = localStorage.getItem('ultimaMaquinaSelecionada');
                                         if (ultimaId) {

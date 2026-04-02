@@ -25,7 +25,7 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li class="active"><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
-                    <li><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li><a href="{% url 'maquinas' %}?fazenda_id={{ fazenda_ativa.id }}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
                     <li><a href="{% url 'plantacoes' %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
                     <li><a href="{% url 'animais' %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
                 </ul>
@@ -42,14 +42,13 @@
             <header class="top-header">
                 <div class="header-left">
                     {% if tem_propriedade %}
-                    <select class="farm-selector" onchange="if(this.value) window.location.href=this.value">
-                        <option value="" disabled selected>📍 Selecionar Fazenda</option>
-                        {% for f in fazendas %}
-                        <option value="#" {% if f == fazenda_ativa %}selected{% endif %}>
-                            {{ f.nome_fazenda }}
-                        </option>
-                        {% endfor %}
-                        <option value="{% url 'config_propriedade' %}" style="font-weight:bold; color:var(--secondary-green);">+ Adicionar Outra</option>
+                    <select class="farm-selector" onchange="location.href='?fazenda_id=' + this.value">
+                    <option value="" disabled>Selecionar Fazenda</option>
+                    {% for f in fazendas %}
+                    <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
+                    {{ f.nome_fazenda }}
+                    </option>
+                    {% endfor %}
                     </select>
                     {% endif %}
                 </div>

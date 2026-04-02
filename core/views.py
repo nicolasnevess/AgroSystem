@@ -46,18 +46,34 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
+    # 1. Busca todas as fazendas do usuário para o seletor (dropdown)
     fazendas = Propriedade.objects.filter(usuario=request.user)
     tem_propriedade = fazendas.exists()
-    fazenda_ativa = fazendas.first()
     
-    minhas_maquinas = Maquina.objects.filter(usuario=request.user)
+    # 2. Captura o ID da fazenda vindo da URL (ex: ?fazenda_id=2)
+    fazenda_id = request.GET.get('fazenda_id')
+    
+    # 3. Define qual fazenda mostrar no Dashboard
+    if fazenda_id:
+        # Se veio um ID, busca essa fazenda específica (garantindo que seja do usuário)
+        fazenda_ativa = get_object_or_404(Propriedade, id=fazenda_id, usuario=request.user)
+    else:
+        # Se não veio nada, padrão é a primeira da lista
+        fazenda_ativa = fazendas.first()
+    
+    # 4. FILTRAGEM: Busca apenas as máquinas DAQUELA fazenda ativa
+    if fazenda_ativa:
+        minhas_maquinas = Maquina.objects.filter(propriedade=fazenda_ativa)
+    else:
+        minhas_maquinas = Maquina.objects.none()
+
     tem_maquinas = minhas_maquinas.exists()
-    tem_plantacoes = False
+    tem_plantacoes = False # Quando criar o modelo de Plantação, filtre por fazenda_ativa também
 
     context = {
         'tem_propriedade': tem_propriedade,
-        'fazendas': fazendas,
-        'fazenda_ativa': fazenda_ativa,
+        'fazendas': fazendas, # Lista completa para o <select>
+        'fazenda_ativa': fazenda_ativa, # A fazenda que o usuário está vendo agora
         'tem_maquinas': tem_maquinas,
         'maquinas': minhas_maquinas,
         'tem_plantacoes': tem_plantacoes,
@@ -66,19 +82,31 @@ def dashboard_view(request):
 
 @login_required
 def maquinas_view(request):
+    # 1. Busca todas as fazendas para o dropdown
     fazendas = Propriedade.objects.filter(usuario=request.user)
     tem_fazenda = fazendas.exists()
 
+    # 2. Captura qual fazenda o usuário quer ver (pela URL)
+    fazenda_id = request.GET.get('fazenda_id')
+    
     if tem_fazenda:
-        # prefetch_related evita múltiplas consultas ao banco para carregar as tarefas
-        minhas_maquinas = Maquina.objects.filter(usuario=request.user).prefetch_related('tarefas').order_by('-id')
+        if fazenda_id:
+            fazenda_ativa = get_object_or_404(Propriedade, id=fazenda_id, usuario=request.user)
+        else:
+            fazenda_ativa = fazendas.first()
+        
+        # 3. Filtra as máquinas APENAS desta fazenda específica
+        minhas_maquinas = Maquina.objects.filter(propriedade=fazenda_ativa).prefetch_related('tarefas').order_by('-id')
     else:
+        fazenda_ativa = None
         minhas_maquinas = Maquina.objects.none()
 
     return render(request, 'maquinas.html', {
         'maquinas': minhas_maquinas,
         'tem_maquinas': minhas_maquinas.exists(),
         'tem_fazenda': tem_fazenda,
+        'fazendas': fazendas,          # Lista completa
+        'fazenda_ativa': fazenda_ativa # Fazenda atual
     })
 
 # --- CONFIGURAÇÕES E CADASTROS ---
