@@ -9,9 +9,7 @@ class Propriedade(models.Model):
         ('misto', 'Misto'),
     ]
     
-    # N fazendas para 1 usuário
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='propriedade')
-    
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='propriedades')
     nome_fazenda = models.CharField(max_length=100)
     area_total = models.DecimalField(max_digits=10, decimal_places=2)
     tipo_solo = models.CharField(max_length=20, choices=SOLO_CHOICES)
@@ -20,7 +18,7 @@ class Propriedade(models.Model):
     
     def __str__(self):
         return self.nome_fazenda
-   
+
 # MÁQUINAS 
 class Maquina(models.Model):
     TIPO_CHOICES = [
@@ -41,3 +39,14 @@ class Maquina(models.Model):
 
     def __str__(self):
         return f"{self.nome} ({self.identificacao})"
+
+# TAREFAS / OBSERVAÇÕES DA MÁQUINA
+class TarefaMaquina(models.Model):
+    # Relaciona a tarefa a uma máquina específica
+    maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE, related_name='tarefas')
+    descricao = models.CharField(max_length=255)
+    concluida = models.BooleanField(default=False)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.descricao} - {self.maquina.nome}"
