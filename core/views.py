@@ -4,9 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .forms import CadastroForm
-from .models import Propriedade, Maquina, TarefaMaquina
-
-# Para as tarefas funcionarem via JavaScript (AJAX)
+from .models import Propriedade, Maquina, TarefaMaquina, Plantacao
+from django.utils import timezone
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -41,61 +40,137 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
-
-# --- DASHBOARD E GERENCIAMENTO ---
+# --- DASHBOARD ---
 
 @login_required
 def dashboard_view(request):
-    # 1. Busca todas as fazendas do usuário para o seletor (dropdown)
     fazendas = Propriedade.objects.filter(usuario=request.user)
     tem_propriedade = fazendas.exists()
     
-    # 2. Captura o ID da fazenda vindo da URL (ex: ?fazenda_id=2)
+    # 1. Tenta pegar o ID da URL
     fazenda_id = request.GET.get('fazenda_id')
     
-    # 3. Define qual fazenda mostrar no Dashboard
     if fazenda_id:
-        # Se veio um ID, busca essa fazenda específica (garantindo que seja do usuário)
-        fazenda_ativa = get_object_or_404(Propriedade, id=fazenda_id, usuario=request.user)
+        # Se veio na URL, salva na sessão (memória do navegador)
+        request.session['fazenda_ativa_id'] = fazenda_id
     else:
-        # Se não veio nada, padrão é a primeira da lista
-        fazenda_ativa = fazendas.first()
+        # Se não veio na URL, tenta recuperar da sessão
+        fazenda_id = request.session.get('fazenda_ativa_id')
     
-    # 4. FILTRAGEM: Busca apenas as máquinas DAQUELA fazenda ativa
+    # 2. Define a fazenda ativa
+    if fazenda_id and tem_propriedade:
+        fazenda_ativa = Propriedade.objects.filter(id=fazenda_id, usuario=request.user).first()
+        # Se por acaso o ID da sessão for de uma fazenda deletada, volta pra primeira
+        if not fazenda_ativa:
+            fazenda_ativa = fazendas.first()
+    else:
+        fazenda_ativa = fazendas.first()
+
+    minhas_maquinas = Maquina.objects.none()
+    minhas_plantacoes = Plantacao.objects.none()
+    alertas_atraso = []
+
     if fazenda_ativa:
         minhas_maquinas = Maquina.objects.filter(propriedade=fazenda_ativa)
-    else:
-        minhas_maquinas = Maquina.objects.none()
-
-    tem_maquinas = minhas_maquinas.exists()
-    tem_plantacoes = False # Quando criar o modelo de Plantação, filtre por fazenda_ativa também
+        minhas_plantacoes = Plantacao.objects.filter(propriedade=fazenda_ativa)
+        
+        # 3. Lógica de Alertas: Não finalizadas e com data menor que hoje
+        alertas_atraso = minhas_plantacoes.exclude(status='finalizado').filter(
+            previsao_colheita__lt=timezone.now().date()
+        )
 
     context = {
         'tem_propriedade': tem_propriedade,
-        'fazendas': fazendas, # Lista completa para o <select>
-        'fazenda_ativa': fazenda_ativa, # A fazenda que o usuário está vendo agora
-        'tem_maquinas': tem_maquinas,
+        'fazendas': fazendas,
+        'fazenda_ativa': fazenda_ativa,
+        'tem_maquinas': minhas_maquinas.exists(),
         'maquinas': minhas_maquinas,
-        'tem_plantacoes': tem_plantacoes,
+        'tem_plantacoes': minhas_plantacoes.exists(),
+        'plantacoes': minhas_plantacoes,
+        'plantacoes_atrasadas': alertas_atraso, # Nome batendo com o que colocamos no HTML
     }
     return render(request, 'dashboard.html', context)
 
+# --- PLANTAÇÕES ---
+
+@login_required
+def plantacoes_view(request):
+    fazendas = Propriedade.objects.filter(usuario=request.user)
+    
+    # Tenta URL, depois Sessão
+    fazenda_id = request.GET.get('fazenda_id') or request.session.get('fazenda_ativa_id')
+    
+    if fazenda_id:
+        fazenda_ativa = Propriedade.objects.filter(id=fazenda_id, usuario=request.user).first()
+    else:
+        fazenda_ativa = fazendas.first()
+
+    if request.method == 'POST':
+        id_fazenda_destinataria = request.POST.get('fazenda')
+        fazenda_obj = get_object_or_404(Propriedade, id=id_fazenda_destinataria, usuario=request.user)
+        
+        # Salva na sessão que essa é a fazenda ativa agora
+        request.session['fazenda_ativa_id'] = id_fazenda_destinataria
+
+        nome_cru = request.POST.get('nome_planta', '')
+        nome_formatado = nome_cru.strip().capitalize()
+
+        Plantacao.objects.create(
+            propriedade=fazenda_obj,
+            nome_planta=nome_formatado,
+            tipo_planta=request.POST.get('tipo_planta'),
+            area_plantada=request.POST.get('area_plantada'),
+            data_plantio=request.POST.get('data_plantio'),
+            previsao_colheita=request.POST.get('previsao_colheita'),
+            status=request.POST.get('status', 'plantado')
+        )
+        return redirect('plantacoes') # O ID agora será pego da sessão automaticamente
+
+    plantacoes = Plantacao.objects.filter(propriedade=fazenda_ativa)
+
+    return render(request, 'plantacoes.html', {
+        'fazendas': fazendas,
+        'fazenda_ativa': fazenda_ativa,
+        'plantacoes': plantacoes,
+        'tem_fazenda': fazendas.exists()
+    })
+
+@login_required
+def concluir_plantacao(request, plantacao_id):
+    plantacao = get_object_or_404(Plantacao, id=plantacao_id, propriedade__usuario=request.user)
+    plantacao.status = 'finalizado'
+    plantacao.save()
+    return redirect(f'/plantacoes/?fazenda_id={plantacao.propriedade.id}')
+
+@login_required
+def deletar_plantacao(request, plantacao_id):
+    plantacao = get_object_or_404(Plantacao, id=plantacao_id, propriedade__usuario=request.user)
+    f_id = plantacao.propriedade.id
+    plantacao.delete()
+    return redirect(f'/plantacoes/?fazenda_id={f_id}')
+
+# --- MÁQUINAS ---
+
 @login_required
 def maquinas_view(request):
-    # 1. Busca todas as fazendas para o dropdown
     fazendas = Propriedade.objects.filter(usuario=request.user)
     tem_fazenda = fazendas.exists()
-
-    # 2. Captura qual fazenda o usuário quer ver (pela URL)
-    fazenda_id = request.GET.get('fazenda_id')
+    
+    # Tenta pegar da URL, se não tiver, pega da Sessão
+    fazenda_id = request.GET.get('fazenda_id') or request.session.get('fazenda_ativa_id')
     
     if tem_fazenda:
         if fazenda_id:
-            fazenda_ativa = get_object_or_404(Propriedade, id=fazenda_id, usuario=request.user)
+            fazenda_ativa = fazendas.filter(id=fazenda_id).first()
+            # Se o ID for inválido, pega a primeira
+            if not fazenda_ativa:
+                fazenda_ativa = fazendas.first()
         else:
             fazenda_ativa = fazendas.first()
         
-        # 3. Filtra as máquinas APENAS desta fazenda específica
+        # Salva a fazenda atual na sessão para as outras páginas lembrarem
+        request.session['fazenda_ativa_id'] = fazenda_ativa.id
+        
         minhas_maquinas = Maquina.objects.filter(propriedade=fazenda_ativa).prefetch_related('tarefas').order_by('-id')
     else:
         fazenda_ativa = None
@@ -105,11 +180,11 @@ def maquinas_view(request):
         'maquinas': minhas_maquinas,
         'tem_maquinas': minhas_maquinas.exists(),
         'tem_fazenda': tem_fazenda,
-        'fazendas': fazendas,          # Lista completa
-        'fazenda_ativa': fazenda_ativa # Fazenda atual
+        'fazendas': fazendas,
+        'fazenda_ativa': fazenda_ativa
     })
 
-# --- CONFIGURAÇÕES E CADASTROS ---
+# --- CONFIGURAÇÕES (NOMES SINCRONIZADOS COM URLS.PY) ---
 
 @login_required
 def config_propriedade_view(request):
@@ -126,31 +201,11 @@ def config_propriedade_view(request):
     return render(request, 'config_propriedade.html')
 
 @login_required
-def config_areas_view(request):
-    """View para cadastrar áreas (talhões)"""
-    return render(request, 'config_areas.html')
-
-@login_required
-def plantacoes_view(request):
-    tem_fazenda = Propriedade.objects.filter(usuario=request.user).exists()
-    fazendas = Propriedade.objects.filter(usuario=request.user)
-    return render(request, 'plantacoes.html', {'tem_fazenda': tem_fazenda, 'fazendas': fazendas})
-
-@login_required
-def animais_view(request):
-    tem_fazenda = Propriedade.objects.filter(usuario=request.user).exists()
-    return render(request, 'animais.html', {'tem_fazenda': tem_fazenda})
-
-@login_required
-def config_animais_view(request):
-    """View para cadastrar animais"""
-    return render(request, 'config_animais.html')
-
-@login_required
 def config_maquinas_view(request):
+    fazendas = Propriedade.objects.filter(usuario=request.user)
     if request.method == 'POST':
         propriedade_id = request.POST.get('propriedade')
-        propriedade_obj = Propriedade.objects.get(id=propriedade_id)
+        propriedade_obj = get_object_or_404(Propriedade, id=propriedade_id, usuario=request.user)
         Maquina.objects.create(
             usuario=request.user,
             propriedade=propriedade_obj,
@@ -160,12 +215,25 @@ def config_maquinas_view(request):
             identificacao=request.POST.get('identificacao'),
             horimetro=request.POST.get('horimetro')
         )
-        return redirect('maquinas')
-    fazendas = Propriedade.objects.filter(usuario=request.user)
+        return redirect(f'/maquinas/?fazenda_id={propriedade_obj.id}')
     return render(request, 'config_maquinas.html', {'fazendas': fazendas})
 
+@login_required
+def config_areas_view(request):
+    fazendas = Propriedade.objects.filter(usuario=request.user)
+    return render(request, 'config_areas.html', {'fazendas': fazendas})
 
-# --- LÓGICA DE TAREFAS (AJAX) ---
+@login_required
+def config_animais_view(request):
+    fazendas = Propriedade.objects.filter(usuario=request.user)
+    return render(request, 'config_animais.html', {'fazendas': fazendas})
+
+@login_required
+def animais_view(request):
+    fazendas = Propriedade.objects.filter(usuario=request.user)
+    return render(request, 'animais.html', {'tem_fazenda': fazendas.exists(), 'fazendas': fazendas})
+
+# --- AJAX TAREFAS ---
 
 @csrf_exempt
 @login_required
@@ -174,19 +242,11 @@ def adicionar_tarefa(request, maquina_id):
         try:
             data = json.loads(request.body)
             descricao = data.get('descricao', '').strip()
-            
             if descricao:
-                # Transforma a primeira letra em Maiúscula
                 descricao = descricao[0].upper() + descricao[1:]
-                
                 maquina = get_object_or_404(Maquina, id=maquina_id, usuario=request.user)
                 tarefa = TarefaMaquina.objects.create(maquina=maquina, descricao=descricao)
-                
-                return JsonResponse({
-                    'id': tarefa.id,
-                    'descricao': tarefa.descricao,
-                    'concluida': tarefa.concluida
-                })
+                return JsonResponse({'id': tarefa.id, 'descricao': tarefa.descricao, 'concluida': tarefa.concluida})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Dados inválidos'}, status=400)
@@ -195,7 +255,6 @@ def adicionar_tarefa(request, maquina_id):
 @login_required
 def alternar_tarefa(request, tarefa_id):
     if request.method == 'POST':
-        # Busca garantindo que a tarefa pertence a uma máquina do usuário logado
         tarefa = get_object_or_404(TarefaMaquina, id=tarefa_id, maquina__usuario=request.user)
         tarefa.concluida = not tarefa.concluida
         tarefa.save()
@@ -206,7 +265,6 @@ def alternar_tarefa(request, tarefa_id):
 @login_required
 def deletar_tarefa(request, tarefa_id):
     if request.method == 'POST':
-        # Busca garantindo que a tarefa pertence a uma máquina do usuário logado
         tarefa = get_object_or_404(TarefaMaquina, id=tarefa_id, maquina__usuario=request.user)
         tarefa.delete()
         return JsonResponse({'status': 'sucesso'})

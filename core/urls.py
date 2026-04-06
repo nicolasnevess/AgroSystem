@@ -43,4 +43,6 @@ urlpatterns = [
     path('animais/', views.animais_view, name='animais'),
     path('cadastrar-animal/', views.config_animais_view, name='config_animais'),
     path('cadastrar-maquina/', views.config_maquinas_view, name='config_maquinas'),
+    path('plantacoes/concluir/<int:plantacao_id>/', views.concluir_plantacao, name='concluir_plantacao'),
+    path('plantacoes/deletar/<int:plantacao_id>/', views.deletar_plantacao, name='deletar_plantacao'),
 ]
