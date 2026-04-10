@@ -1,3 +1,4 @@
+import os
 """
 Django settings for projetoagro project.
 
@@ -152,3 +153,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'nicaogamer098@gmail.com'
 EMAIL_HOST_PASSWORD = 'wadyohduwrlluhka'
 DEFAULT_FROM_EMAIL = 'AgroSystem <nicaogamer098@gmail.com>'
+
+# FOTOS
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

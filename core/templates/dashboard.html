@@ -23,16 +23,32 @@
 
             <nav class="sidebar-nav">
                 <ul>
-                    <li class="active"><a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
-                    <li><a href="{% url 'maquinas' %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
-                    <li><a href="{% url 'plantacoes' %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
-                    <li><a href="{% url 'animais' %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                    <li class="active">
+                        <a href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-pie"></i> <span>MONITORAMENTO</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'maquinas' %}">
+                            <i class="fas fa-tractor"></i> <span>MÁQUINAS</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'plantacoes' %}">
+                            <i class="fas fa-leaf"></i> <span>PLANTAÇÕES</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'animais' %}">
+                            <i class="fas fa-paw"></i> <span>ANIMAIS</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
             <div class="sidebar-footer">
                 <a href="{% url 'logout' %}" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Sair
+                    <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
                 </a>
             </div>
         </aside>
@@ -43,7 +59,9 @@
                     {% if tem_propriedade %}
                     <select class="farm-selector" onchange="navegarFazenda(this.value)">
                         {% for f in fazendas %}
-                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>{{ f.nome_fazenda }}</option>
+                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
+                            {{ f.nome_fazenda }}
+                        </option>
                         {% endfor %}
                         <option value="NOVA">+ Adicionar Outra</option>
                     </select>
@@ -65,7 +83,10 @@
                     <h3>Clima em Tempo Real</h3>
                     <div class="weather-content">
                         <i class="fas fa-sun"></i>
-                        <div><span class="temp">31°C</span><span class="desc">Céu Limpo</span></div>
+                        <div>
+                            <span class="temp">31°C</span>
+                            <span class="desc">Céu Limpo</span>
+                        </div>
                     </div>
                 </div>
 
@@ -73,24 +94,39 @@
                     <h3><i class="fas fa-tractor"></i> Frota Ativa</h3>
                     <ul style="list-style: none;">
                         {% for m in maquinas|slice:":3" %}
-                        <li style="padding: 5px 0; border-bottom: 1px solid #eee;"><strong>{{ m.nome }}</strong></li>
+                        <li style="padding: 5px 0; border-bottom: 1px solid #eee;">
+                            <strong>{{ m.nome }}</strong>
+                        </li>
                         {% empty %}
                         <li>Nenhuma máquina ativa.</li>
                         {% endfor %}
                     </ul>
+                    {% if maquinas %}
+                    <a href="{% url 'maquinas' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver frota completa →</a>
+                    {% endif %}
                 </div>
 
                 <div class="info-card alerts-box">
                     <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
-                    <div class="alert-item {% if plantacoes_atrasadas %}high{% else %}success{% endif %}">
-                        {% if plantacoes_atrasadas %}
+                    
+                    {% if plantacoes_atrasadas %}
+                        <div class="alert-item high">
                             <i class="fas fa-clock"></i>
-                            <p>Existem <strong>{{ plantacoes_atrasadas|length }}</strong> colheitas atrasadas!</p>
-                        {% else %}
+                            <div>
+                                <p><strong>Atenção! Colheita Atrasada:</strong></p>
+                                <ul style="margin-left: 15px; font-size: 0.85rem; margin-top: 5px;">
+                                    {% for p in plantacoes_atrasadas %}
+                                        <li>{{ p.nome_planta }} ({{ p.previsao_colheita|date:"d/m" }})</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert-item success">
                             <i class="fas fa-check-circle"></i>
                             <p>Tudo em dia na sua lavoura.</p>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </main>
@@ -98,9 +134,14 @@
 
     <script>
         function navegarFazenda(valor) {
-            if (valor === "NOVA") window.location.href = "{% url 'config_propriedade' %}";
-            else if (valor) window.location.href = "?fazenda_id=" + valor;
+            if (valor === "NOVA") {
+                window.location.href = "{% url 'config_propriedade' %}";
+            } else if (valor) {
+                // Passamos o ID pela URL e a VIEW cuidará de salvar na SESSÃO
+                window.location.href = "?fazenda_id=" + valor;
+            }
         }
     </script>
 </body>
+
 </html>

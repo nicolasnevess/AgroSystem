@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .forms import CadastroForm
-from .models import Propriedade, Maquina, TarefaMaquina, Plantacao
+from .models import Propriedade, Maquina, TarefaMaquina, Plantacao, Animal
 from django.utils import timezone
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -231,7 +231,79 @@ def config_animais_view(request):
 @login_required
 def animais_view(request):
     fazendas = Propriedade.objects.filter(usuario=request.user)
-    return render(request, 'animais.html', {'tem_fazenda': fazendas.exists(), 'fazendas': fazendas})
+    tem_fazenda = fazendas.exists()
+    
+    # 1. Recupera a fazenda da URL ou da Sessão (Persistência)
+    fazenda_id = request.GET.get('fazenda_id') or request.session.get('fazenda_ativa_id')
+    
+    if tem_fazenda:
+        fazenda_ativa = fazendas.filter(id=fazenda_id).first() or fazendas.first()
+        request.session['fazenda_ativa_id'] = fazenda_ativa.id
+    else:
+        fazenda_ativa = None
+
+    # 2. Lógica para SALVAR o animal (POST)
+    if request.method == 'POST' and fazenda_ativa:
+        # Pegamos os dados do formulário (names do seu HTML)
+        Animal.objects.create(
+            propriedade=fazenda_ativa,
+            identificacao=request.POST.get('identificacao'),
+            nome_animal=request.POST.get('nome_animal'),
+            especie=request.POST.get('especie'),
+            raca=request.POST.get('raca'),
+            sexo=request.POST.get('sexo'),
+            data_nascimento=request.POST.get('data_nascimento') or None,
+            peso=request.POST.get('peso') or 0,
+            status=request.POST.get('status', 'ativo'),
+            sanitario=request.POST.get('sanitario'),
+            foto=request.FILES.get('foto') # Lida com a imagem pelo Pillow
+        )
+        messages.success(request, "Animal cadastrado com sucesso!")
+        return redirect('animais')
+
+    # 3. Lista os animais da fazenda ativa
+    animais = Animal.objects.filter(propriedade=fazenda_ativa) if fazenda_ativa else []
+
+    return render(request, 'animais.html', {
+        'tem_fazenda': tem_fazenda,
+        'fazendas': fazendas,
+        'fazenda_ativa': fazenda_ativa,
+        'animais': animais # Manda a lista para a tabela
+    })
+    
+@login_required
+def deletar_animal(request, animal_id):
+    animal = get_object_or_404(Animal, id=animal_id, propriedade__usuario=request.user)
+    animal.delete()
+    messages.success(request, "Animal removido do rebanho.")
+    return redirect('animais')
+
+@login_required
+def editar_animal(request, animal_id):
+    # Garante que o animal existe e pertence ao usuário logado
+    animal = get_object_or_404(Animal, id=animal_id, propriedade__usuario=request.user)
+    
+    if request.method == 'POST':
+        animal.identificacao = request.POST.get('identificacao')
+        animal.nome_animal = request.POST.get('nome_animal')
+        animal.especie = request.POST.get('especie')
+        animal.raca = request.POST.get('raca')
+        animal.sexo = request.POST.get('sexo')
+        animal.peso = request.POST.get('peso') or 0  # Evita erro se o peso vier vazio
+        animal.status = request.POST.get('status')
+        animal.sanitario = request.POST.get('sanitario')
+        
+        # Se enviou uma foto nova, troca. Se não, mantém a antiga.
+        if request.FILES.get('foto'):
+            animal.foto = request.FILES.get('foto')
+            
+        animal.save()
+        messages.success(request, f"O animal {animal.identificacao} foi atualizado com sucesso!")
+        return redirect('animais')
+
+    # Se alguém tentar acessar a URL via GET (direto no navegador), 
+    # apenas mandamos de volta para a lista, já que o edit é por Modal.
+    return redirect('animais')
 
 # --- AJAX TAREFAS ---
 
