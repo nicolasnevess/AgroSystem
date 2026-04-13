@@ -231,20 +231,30 @@ def config_animais_view(request):
 @login_required
 def animais_view(request):
     fazendas = Propriedade.objects.filter(usuario=request.user)
-    tem_fazenda = fazendas.exists()
     
-    # 1. Recupera a fazenda da URL ou da Sessão (Persistência)
-    fazenda_id = request.GET.get('fazenda_id') or request.session.get('fazenda_ativa_id')
+    # 1. Prioridade total para o que vem na URL (?fazenda_id=X)
+    fazenda_id = request.GET.get('fazenda_id')
     
-    if tem_fazenda:
-        fazenda_ativa = fazendas.filter(id=fazenda_id).first() or fazendas.first()
-        request.session['fazenda_ativa_id'] = fazenda_ativa.id
+    if fazenda_id:
+        # Se veio na URL, atualizamos a sessão IMEDIATAMENTE
+        request.session['fazenda_ativa_id'] = fazenda_id
     else:
-        fazenda_ativa = None
+        # Se não veio na URL, tentamos pegar o que estava na sessão
+        fazenda_id = request.session.get('fazenda_ativa_id')
 
-    # 2. Lógica para SALVAR o animal (POST)
+    # 2. Busca a fazenda no banco
+    fazenda_ativa = None
+    if fazendas.exists():
+        if fazenda_id:
+            fazenda_ativa = fazendas.filter(id=fazenda_id).first()
+        
+        # Se o ID da sessão/URL for inválido ou nulo, pega a primeira disponível
+        if not fazenda_ativa:
+            fazenda_ativa = fazendas.first()
+            request.session['fazenda_ativa_id'] = fazenda_ativa.id
+
+    # 3. Lógica do POST (Salvar Animal) - Mantida igual
     if request.method == 'POST' and fazenda_ativa:
-        # Pegamos os dados do formulário (names do seu HTML)
         Animal.objects.create(
             propriedade=fazenda_ativa,
             identificacao=request.POST.get('identificacao'),
@@ -256,19 +266,18 @@ def animais_view(request):
             peso=request.POST.get('peso') or 0,
             status=request.POST.get('status', 'ativo'),
             sanitario=request.POST.get('sanitario'),
-            foto=request.FILES.get('foto') # Lida com a imagem pelo Pillow
+            foto=request.FILES.get('foto')
         )
         messages.success(request, "Animal cadastrado com sucesso!")
-        return redirect('animais')
+        return redirect(f'/animais/?fazenda_id={fazenda_ativa.id}')
 
-    # 3. Lista os animais da fazenda ativa
     animais = Animal.objects.filter(propriedade=fazenda_ativa) if fazenda_ativa else []
 
     return render(request, 'animais.html', {
-        'tem_fazenda': tem_fazenda,
+        'tem_fazenda': fazendas.exists(),
         'fazendas': fazendas,
         'fazenda_ativa': fazenda_ativa,
-        'animais': animais # Manda a lista para a tabela
+        'animais': animais 
     })
     
 @login_required

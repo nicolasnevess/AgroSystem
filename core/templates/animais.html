@@ -46,14 +46,16 @@
             </section>
             {% else %}
 
-            <header class="top-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 15px;">
+
+            <header class="top-header">
                 <div class="header-left">
-                    <select class="farm-selector" onchange="location.href='?fazenda=' + this.value" style="padding: 10px; border-radius: 8px; border: 1px solid #ccc; min-width: 200px;">
-                        {% for f in todas_fazendas %}
+                    <select class="farm-selector" onchange="navegarFazenda(this.value)">
+                        {% for f in fazendas %}
                         <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
                             {{ f.nome_fazenda }}
                         </option>
                         {% endfor %}
+                        <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
                     </select>
                 </div>
                 <div class="header-right" style="text-align: right;">
@@ -294,14 +296,22 @@
 
     <script src="{% static 'js/modal_animais.js' %}"></script>
     <script>
-        function previewImage(input) {
-            const container = document.getElementById('preview-container');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    container.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">`;
-                }
-                reader.readAsDataURL(input.files[0]);
+        // Função de navegação corrigida para animais
+        function navegarFazenda(valor) {
+            if (valor === "NOVA") {
+                window.location.href = "{% url 'config_propriedade' %}";
+            } else if (valor) {
+                // Em animais, usamos o parâmetro 'fazenda' para combinar com seu onclick
+                window.location.href = "?fazenda=" + valor;
+            }
+        }
+
+        function navegarFazenda(valor) {
+            if (valor === "NOVA") {
+                window.location.href = "{% url 'config_propriedade' %}";
+            } else if (valor) {
+                // MUITO IMPORTANTE: O nome aqui tem que ser fazenda_id para bater com o request.GET.get da View
+                window.location.href = window.location.pathname + "?fazenda_id=" + valor;
             }
         }
         function clearPreview() {

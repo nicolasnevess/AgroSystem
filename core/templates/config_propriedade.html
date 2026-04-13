@@ -14,8 +14,10 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fas fa-seedling"></i>
-                <span>AgroSystem</span>
+                <a href="{% url 'dashboard' %}" class="logo-link">
+                    <i class="fas fa-seedling"></i>
+                    <span>AgroSystem</span>
+                </a>
             </div>
             <nav class="sidebar-nav">
                 <ul>
@@ -37,7 +39,7 @@
                 <div class="form-header">
                     <i class="fas fa-map-marked-alt"></i>
                     <h3>Dados da Propriedade</h3>
-                    <p>Preencha as informações básicas para liberar o monitoramento.</p>
+                    <p>Preencha as informações básicas.</p>
                 </div>
 
                 <form method="POST" class="agro-form">

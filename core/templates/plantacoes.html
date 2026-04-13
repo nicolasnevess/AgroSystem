@@ -65,12 +65,13 @@
 
             <header class="top-header">
                 <div class="header-left">
-                    <select class="farm-selector" onchange="location.href='?fazenda_id=' + this.value">
+                    <select class="farm-selector" onchange="navegarFazenda(this.value)">
                         {% for f in fazendas %}
                         <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
                             {{ f.nome_fazenda }}
                         </option>
                         {% endfor %}
+                        <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
                     </select>
                 </div>
                 <div class="header-right" style="text-align: right;">
@@ -212,6 +213,16 @@
                 }
             });
         }
+
+        function navegarFazenda(valor) {
+            if (valor === "NOVA") {
+                window.location.href = "{% url 'config_propriedade' %}";
+            } else if (valor) {
+                // Passamos o ID pela URL e a VIEW cuidará de salvar na SESSÃO
+                window.location.href = "?fazenda_id=" + valor;
+            }
+        }
+    
     </script>
 </body>
 </html>

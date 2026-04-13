@@ -298,30 +298,3 @@ display: flex;
     }
 }
 
-/* --- SELETOR DE FAZENDA IGUAL AO DE PLANTAÇÕES --- */
-.header-left .farm-selector {
-    background: transparent; /* Tira o fundo branco */
-    border: 1px solid rgba(75, 102, 48, 0.3); /* Borda verde bem clarinha */
-    color: #4b6630; /* Cor do texto igual ao tema */
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 8px 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    outline: none;
-    appearance: none; /* Remove a setinha padrão do Windows se quiser */
-    -webkit-appearance: none;
-    transition: all 0.3s ease;
-}
-
-.header-left .farm-selector:hover {
-    background: rgba(75, 102, 48, 0.05); /* Fundo verdinho bem de leve no hover */
-    border-color: #4b6630;
-}
-
-/* Se quiser a setinha customizada (opcional) */
-.header-left {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
