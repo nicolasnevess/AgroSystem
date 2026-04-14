@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSystem - Editar Máquina</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/editar_maquina.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="edit-page">
+
+    <div class="form-card">
+        <header class="form-header">
+            <i class="fas fa-tractor"></i>
+            <h2>Editar Máquina</h2>
+            <p>Ajustando detalhes da unidade: <strong>{{ maquina.nome }}</strong></p>
+        </header>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label><i class="fas fa-tag"></i> Nome / Apelido</label>
+                <input type="text" name="nome" value="{{ maquina.nome }}" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-cog"></i> Tipo de Máquina</label>
+                <select name="tipo">
+                    <option value="trator" {% if maquina.tipo == 'trator' %}selected{% endif %}>Trator</option>
+                    <option value="colheitadeira" {% if maquina.tipo == 'colheitadeira' %}selected{% endif %}>Colheitadeira</option>
+                    <option value="pulverizador" {% if maquina.tipo == 'pulverizador' %}selected{% endif %}>Pulverizador</option>
+                    <option value="outros" {% if maquina.tipo == 'outros' %}selected{% endif %}>Outros</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-info-circle"></i> Modelo</label>
+                <input type="text" name="modelo" value="{{ maquina.modelo }}">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-barcode"></i> Identificação (Placa/Série)</label>
+                <input type="text" name="identificacao" value="{{ maquina.identificacao }}">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-clock"></i> Horímetro Atual</label>
+                <input type="number" name="horimetro" value="{{ maquina.horimetro }}">
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-save">Atualizar Frota</button>
+                <a href="{% url 'maquinas' %}" class="btn-back">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

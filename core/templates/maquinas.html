@@ -108,29 +108,24 @@
                                     </div>
                                 </div>
                                 {% endfor %}
-                                
-                                <script>
-                                    (function() {
-                                        const ultimaId = localStorage.getItem('ultimaMaquinaSelecionada');
-                                        if (ultimaId) {
-                                            const item = document.getElementById('maquina-item-' + ultimaId);
-                                            if (item) item.classList.add('active');
-                                        } else {
-                                            const primeiro = document.querySelector('.machine-item');
-                                            if (primeiro) primeiro.classList.add('active');
-                                        }
-                                    })();
-                                </script>
                             </div>
                         </div>
 
                         <div class="maquinas-details-panel">
-                            <div class="details-header">
+                            <div class="details-header" style="display: flex; justify-content: space-between; align-items: center;">
                                 <div class="title-row">
                                     <i class="fas fa-tractor"></i>
                                     <h2 id="view-titulo">Carregando...</h2>
                                 </div>
-                                <span class="status-tag active">Ativo</span>
+                                
+                                <div class="machine-actions-top" style="display: flex; gap: 10px;">
+                                    <a href="#" id="link-editar-maquina" class="btn-action-icon edit" title="Editar Máquina" style="color: #2e7d32; background: #e8f5e9; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; text-decoration: none;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="#" id="link-deletar-maquina" class="btn-action-icon delete" title="Excluir Máquina" style="color: #cf1322; background: #fff1f0; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; text-decoration: none;" onclick="return confirm('Tem certeza que deseja excluir esta máquina?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="info-specs" style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">
@@ -161,11 +156,35 @@
             if (valor === "NOVA") {
                 window.location.href = "{% url 'config_propriedade' %}";
             } else if (valor) {
-                // Remove a seleção de máquina salva para evitar erros ao carregar outra fazenda
                 localStorage.removeItem('ultimaMaquinaSelecionada');
                 window.location.href = "?fazenda_id=" + valor;
             }
         }
+
+        // Função para atualizar os links dinamicamente no painel lateral
+        function atualizarLinksAcao(id) {
+            const linkEditar = document.getElementById('link-editar-maquina');
+            const linkDeletar = document.getElementById('link-deletar-maquina');
+            
+            if (id) {
+                // Monta as URLs baseadas nos nomes que definimos no urls.py
+                linkEditar.href = `/maquinas/editar/${id}/`;
+                linkDeletar.href = `/maquinas/deletar/${id}/`;
+                linkEditar.style.display = 'flex';
+                linkDeletar.style.display = 'flex';
+            }
+        }
+
+        // Sobrescrevendo levemente a chamada da função original no JS para incluir a atualização dos links
+        const originalAtualizarDetalhes = window.atualizarDetalhes;
+        window.atualizarDetalhes = function(elemento, nome, modelo, horimetro, fazenda, identificacao, id) {
+            // Se a função original existir no maquinas.js, chama ela
+            if (typeof originalAtualizarDetalhes === 'function') {
+                originalAtualizarDetalhes(elemento, nome, modelo, horimetro, fazenda, identificacao, id);
+            }
+            // Atualiza os links de editar/excluir
+            atualizarLinksAcao(id);
+        };
     </script>
     <script src="{% static 'js/maquinas.js' %}?v={% now 'U' %}"></script>
 </body>

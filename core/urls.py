@@ -47,6 +47,8 @@ urlpatterns = [
     # --- Máquinas ---
     path('maquinas/', views.maquinas_view, name='maquinas'),
     path('cadastrar-maquina/', views.config_maquinas_view, name='config_maquinas'),
+    path('maquinas/editar/<int:maquina_id>/', views.editar_maquina, name='editar_maquina'),
+    path('maquinas/deletar/<int:maquina_id>/', views.deletar_maquina, name='deletar_maquina'),
 
     # --- Animais (Rebanho) ---
     path('animais/', views.animais_view, name='animais'),

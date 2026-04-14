@@ -47,32 +47,32 @@ def dashboard_view(request):
     fazendas = Propriedade.objects.filter(usuario=request.user)
     tem_propriedade = fazendas.exists()
     
-    # 1. Tenta pegar o ID da URL
+    # 1. Tenta pegar o ID da URL ou da Sessão
     fazenda_id = request.GET.get('fazenda_id')
     
     if fazenda_id:
-        # Se veio na URL, salva na sessão (memória do navegador)
         request.session['fazenda_ativa_id'] = fazenda_id
     else:
-        # Se não veio na URL, tenta recuperar da sessão
         fazenda_id = request.session.get('fazenda_ativa_id')
     
     # 2. Define a fazenda ativa
     if fazenda_id and tem_propriedade:
         fazenda_ativa = Propriedade.objects.filter(id=fazenda_id, usuario=request.user).first()
-        # Se por acaso o ID da sessão for de uma fazenda deletada, volta pra primeira
         if not fazenda_ativa:
             fazenda_ativa = fazendas.first()
     else:
         fazenda_ativa = fazendas.first()
 
+    # Inicializa as variáveis vazias para evitar erro caso não haja fazenda
     minhas_maquinas = Maquina.objects.none()
     minhas_plantacoes = Plantacao.objects.none()
+    meus_animais = Animal.objects.none() # <-- ADICIONADO
     alertas_atraso = []
 
     if fazenda_ativa:
         minhas_maquinas = Maquina.objects.filter(propriedade=fazenda_ativa)
         minhas_plantacoes = Plantacao.objects.filter(propriedade=fazenda_ativa)
+        meus_animais = Animal.objects.filter(propriedade=fazenda_ativa) # <-- ADICIONADO
         
         # 3. Lógica de Alertas: Não finalizadas e com data menor que hoje
         alertas_atraso = minhas_plantacoes.exclude(status='finalizado').filter(
@@ -87,10 +87,11 @@ def dashboard_view(request):
         'maquinas': minhas_maquinas,
         'tem_plantacoes': minhas_plantacoes.exists(),
         'plantacoes': minhas_plantacoes,
-        'plantacoes_atrasadas': alertas_atraso, # Nome batendo com o que colocamos no HTML
+        'plantacoes_atrasadas': alertas_atraso,
+        'animais': meus_animais, # <-- ADICIONADO (Manda para o card do Dash)
+        'tem_animais': meus_animais.exists(), # <-- ADICIONADO para controle opcional
     }
     return render(request, 'dashboard.html', context)
-
 
 # --- PROPRIEDADE ---
 
@@ -221,6 +222,29 @@ def maquinas_view(request):
         'fazendas': fazendas,
         'fazenda_ativa': fazenda_ativa
     })
+    
+@login_required
+def editar_maquina(request, maquina_id):
+    maquina = get_object_or_404(Maquina, id=maquina_id, usuario=request.user)
+    
+    if request.method == 'POST':
+        maquina.nome = request.POST.get('nome')
+        maquina.tipo = request.POST.get('tipo')
+        maquina.modelo = request.POST.get('modelo')
+        maquina.identificacao = request.POST.get('identificacao')
+        maquina.horimetro = request.POST.get('horimetro')
+        maquina.save()
+        messages.success(request, f"Máquina {maquina.nome} atualizada!")
+        return redirect('maquinas')
+    
+    return render(request, 'editar_maquina.html', {'maquina': maquina})
+
+@login_required
+def deletar_maquina(request, maquina_id):
+    maquina = get_object_or_404(Maquina, id=maquina_id, usuario=request.user)
+    maquina.delete()
+    messages.success(request, "Máquina removida da frota.")
+    return redirect('maquinas')   
 
 # --- CONFIGURAÇÕES (NOMES SINCRONIZADOS COM URLS.PY) ---
 

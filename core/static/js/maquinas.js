@@ -20,6 +20,19 @@ function atualizarDetalhes(elemento, nome, modelo, horimetro, fazenda, identific
     document.getElementById('view-fazenda').innerText = fazenda;
     document.getElementById('view-id').innerText = identificacao;
 
+    // --- ATUALIZA OS LINKS DE EDITAR E EXCLUIR ---
+    const btnEditar = document.getElementById('link-editar-maquina');
+    const btnDeletar = document.getElementById('link-deletar-maquina');
+
+    if (pk_banco && btnEditar && btnDeletar) {
+        btnEditar.href = `/maquinas/editar/${pk_banco}/`;
+        btnDeletar.href = `/maquinas/deletar/${pk_banco}/`;
+        
+        // Garante que os botões apareçam
+        btnEditar.style.display = 'flex';
+        btnDeletar.style.display = 'flex';
+    }
+
     renderizarTarefasVisuais(pk_banco);
 }
 

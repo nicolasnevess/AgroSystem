@@ -1,0 +1,107 @@
+/* Estilos para a tela de edição de máquinas */
+.edit-page {
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    width: 100%;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-header i {
+    font-size: 2.5rem;
+    color: #4b6630; /* Verde do seu AgroSystem */
+    margin-bottom: 10px;
+}
+
+.form-header h2 {
+    color: #333;
+    font-weight: 700;
+}
+
+.form-header p {
+    color: #777;
+    font-size: 0.85rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.85rem;
+}
+
+.form-group label i {
+    margin-right: 5px;
+    color: #4b6630;
+}
+
+.form-group input, 
+.form-group select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #4b6630;
+}
+
+.button-group {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-save {
+    background: #4b6630;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-save:hover {
+    background: #3a4d28;
+    transform: translateY(-2px);
+}
+
+.btn-back {
+    text-align: center;
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 5px;
+}
+
+.btn-back:hover {
+    color: #e11d48; /* Cor de perigo/cancela */
+}

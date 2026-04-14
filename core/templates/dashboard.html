@@ -105,7 +105,7 @@
 
                 <div class="info-card">
                     <h3><i class="fas fa-tractor"></i> Frota Ativa</h3>
-                    <ul style="list-style: none;">
+                    <ul style="list-style: none; padding: 0; margin: 0;">
                         {% for m in maquinas|slice:":3" %}
                         <li style="padding: 5px 0; border-bottom: 1px solid #eee;">
                             <strong>{{ m.nome }}</strong>
@@ -121,7 +121,6 @@
 
                 <div class="info-card alerts-box">
                     <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
-                    
                     {% if plantacoes_atrasadas %}
                         <div class="alert-item high">
                             <i class="fas fa-clock"></i>
@@ -141,6 +140,24 @@
                         </div>
                     {% endif %}
                 </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-paw"></i> Rebanho Ativo</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        {% for a in animais|slice:":3" %}
+                        <li style="padding: 5px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <strong>{{ a.identificacao }}</strong>
+                            <span style="font-size: 0.8rem; color: #666;">{{ a.especie }}</span>
+                        </li>
+                        {% empty %}
+                        <li>Nenhum animal cadastrado.</li>
+                        {% endfor %}
+                    </ul>
+                    {% if animais %}
+                    <a href="{% url 'animais' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver rebanho completo →</a>
+                    {% endif %}
+                </div>
+                
             </div>
         </main>
     </div>
