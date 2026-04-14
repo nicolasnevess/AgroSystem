@@ -57,4 +57,6 @@ urlpatterns = [
     # --- Configurações de Propriedade ---
     path('configurar-propriedade/', views.config_propriedade_view, name='config_propriedade'),
     path('cadastrar-area/', views.config_areas_view, name='config_areas'),
+    path('propriedade/editar/<int:propriedade_id>', views.editar_propriedade, name='editar_propriedade'),
+    path('propriedade/deletar/<int:propriedade_id>/', views.deletar_propriedade, name='deletar_propriedade'),
 ]   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

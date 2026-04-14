@@ -91,6 +91,44 @@ def dashboard_view(request):
     }
     return render(request, 'dashboard.html', context)
 
+
+# --- PROPRIEDADE ---
+
+@login_required
+def editar_propriedade(request, propriedade_id):
+    propriedade = get_object_or_404(Propriedade, id=propriedade_id, usuario=request.user)
+    
+    if request.method == 'POST':
+        propriedade.nome_fazenda = request.POST.get('nome_fazenda')
+        propriedade.area_total = request.POST.get('area_total')
+        propriedade.tipo_solo = request.POST.get('tipo_solo')
+        propriedade.cidade = request.POST.get('cidade')
+        propriedade.uf = request.POST.get('uf')
+        propriedade.save()
+        messages.success(request, 'Propriedade atualizada com sucesso!')
+        return redirect('dashboard')
+    
+    return render(request, 'editar_propriedade.html', {'propriedade': propriedade})
+
+@login_required
+def deletar_propriedade(request, propriedade_id):
+    propriedade = get_object_or_404(Propriedade, id=propriedade_id, usuario=request.user)
+    
+    # Impedir de deletar se for a única fazenda
+    # if Propriedade.objects.filter(usuario=request.user).count() <= 1:
+    #     messages.error(request, "Você precisa de pelo menos uma fazenda cadastrada.")
+    #     return redirect('dashboard')
+
+    propriedade.delete()
+    messages.success(request, "Propriedade removida com sucesso!")
+    
+    # Se deletar a fazenda que estava ativa, limpa a sessão
+    if str(propriedade_id) == str(request.session.get('fazenda_ativa_id')):
+        request.session['fazenda_ativa_id'] = None
+        
+    return redirect('dashboard')
+
+
 # --- PLANTAÇÕES ---
 
 @login_required

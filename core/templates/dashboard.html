@@ -57,14 +57,26 @@
             <header class="top-header">
                 <div class="header-left">
                     {% if tem_propriedade %}
-                    <select class="farm-selector" onchange="navegarFazenda(this.value)">
-                        {% for f in fazendas %}
-                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
-                            {{ f.nome_fazenda }}
-                        </option>
-                        {% endfor %}
-                        <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
-                    </select>
+                    <div class="selector-wrapper" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                        <select class="farm-selector" onchange="navegarFazenda(this.value)">
+                            {% for f in fazendas %}
+                            <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
+                                {{ f.nome_fazenda }}
+                            </option>
+                            {% endfor %}
+                            <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
+                        </select>
+                        
+                        <div class="header-actions" style="display: flex; gap: 10px;">
+                            <a href="{% url 'editar_propriedade' fazenda_ativa.id %}" class="btn-action edit" title="Editar Propriedade">
+                                <i class="fas fa-edit"></i> <span>Editar</span>
+                            </a>
+                            <a href="{% url 'deletar_propriedade' fazenda_ativa.id %}" class="btn-action delete" title="Excluir Propriedade"
+                               onclick="return confirm('ATENÇÃO: Excluir esta fazenda apagará permanentemente todos os animais, máquinas e plantações vinculados a ela. Confirmar?')">
+                                <i class="fas fa-trash"></i> <span>Excluir</span>
+                            </a>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
                 <div class="user-profile">
@@ -77,6 +89,7 @@
                     <h3><i class="fas fa-warehouse"></i> {{ fazenda_ativa.nome_fazenda }}</h3>
                     <p>Área Total: <strong>{{ fazenda_ativa.area_total }} ha</strong></p>
                     <p>Solo: <strong>{{ fazenda_ativa.get_tipo_solo_display }}</strong></p>
+                    <p>Localização: <strong>{{ fazenda_ativa.cidade|default:"Não informada" }}</strong></p>
                 </div>
 
                 <div class="info-card">
@@ -137,7 +150,6 @@
             if (valor === "NOVA") {
                 window.location.href = "{% url 'config_propriedade' %}";
             } else if (valor) {
-                // Passamos o ID pela URL e a VIEW cuidará de salvar na SESSÃO
                 window.location.href = "?fazenda_id=" + valor;
             }
         }
