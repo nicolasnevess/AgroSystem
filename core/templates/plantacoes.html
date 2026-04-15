@@ -23,206 +23,133 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li>
-                        <a href="{% url 'dashboard' %}">
-                            <i class="fas fa-chart-pie"></i> <span>MONITORAMENTO</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'maquinas' %}">
-                            <i class="fas fa-tractor"></i> <span>MÁQUINAS</span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="#">
-                            <i class="fas fa-leaf"></i> <span>PLANTAÇÕES</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'animais' %}">
-                            <i class="fas fa-paw"></i> <span>ANIMAIS</span>
-                        </a>
-                    </li>
+                    <li><a href="{% url 'dashboard' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
+                    <li><a href="{% url 'maquinas' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
+                    <li class="active"><a href="#"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
+                    <li><a href="{% url 'animais' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
-                <a href="{% url 'logout' %}" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
-                </a>
+                <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
             </div>
         </aside>
 
         <main class="main-content plant-bg">
-            {% if not tem_fazenda %}
-            <section class="welcome-banner" style="background: rgba(255,255,255,0.9); padding: 60px; border-radius: 20px; text-align: center; margin-top: 50px;">
-                <h2 style="color: #4b6630;">🌱 Quase lá!</h2>
-                <p>Cadastre uma fazenda para começar a gerenciar seus plantios.</p>
-                <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 30px; border-radius: 30px; display: inline-block; margin-top: 20px; text-decoration: none; font-weight: bold;">
-                    Configurar Propriedade
-                </a>
-            </section>
-            {% else %}
-
             <header class="top-header">
                 <div class="header-left">
+                    {% if tem_fazenda %}
                     <select class="farm-selector" onchange="navegarFazenda(this.value)">
                         {% for f in fazendas %}
-                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>
-                            {{ f.nome_fazenda }}
-                        </option>
+                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>{{ f.nome_fazenda }}</option>
                         {% endfor %}
                         <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
                     </select>
+                    {% endif %}
                 </div>
-                <div class="header-right" style="text-align: right;">
-                    <h2 style="color: var(--primary-green); font-weight: 700;">Gestão de Plantações</h2>
-                    <p style="color: #666; font-size: 0.85rem;">Controle de Ciclo e Safra</p>
+                <div class="user-profile">
+                    <span>Bem-vindo, <strong>{{ user.first_name|default:user.username }}</strong></span>
                 </div>
             </header>
 
-            <section class="form-container-glass">
-                <form class="plant-form" method="POST">
-                    {% csrf_token %}
-                    <div class="form-section">
-                        <h3 class="section-title">Novo Plantio</h3>
-                        <div class="input-group full">
-                            <label>Nome da Cultura / Talhão</label>
-                            <input type="text" name="nome_planta" placeholder="Ex: Milho Safrinha" required>
-                        </div>
-                        <div class="row">
-                            <div class="input-group">
-                                <br><label>Tipo de Cultura</label>
-                                <select name="tipo_planta">
-                                    <option value="Cereal">Cereal</option>
-                                    <option value="Oleaginosa">Oleaginosa</option>
-                                    <option value="Leguminosa">Leguminosa</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <br><label>Área (ha)</label>
-                                <input type="number" name="area_plantada" step="0.1" placeholder="Ex: 10 ha" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-group">
-                                <label>Data de Plantio</label>
-                                <input type="date" name="data_plantio" required>
-                            </div>
-                            <div class="input-group">
-                                <label>Previsão de Colheita</label>
-                                <input type="date" name="previsao_colheita" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-group">
-                                <label>Status Atual</label>
-                                <select name="status">
-                                    <option value="plantado">Recém Plantado</option>
-                                    <option value="germinacao">Em Germinação</option>
-                                    <option value="desenvolvimento">Desenvolvimento Vegetativo</option>
-                                    <option value="colheita">Pronto para Colheita</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label>Fazenda Destino</label>
-                                <input type="text" value="{{ fazenda_ativa.nome_fazenda }}" disabled style="background: #f1f2f6; cursor: not-allowed;">
-                                <input type="hidden" name="fazenda" value="{{ fazenda_ativa.id }}">
-                            </div>
-                        </div>
+            {% if not tem_fazenda %}
+                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 60px auto; max-width: 800px; display: block;">
+                    <div class="welcome-text">
+                        <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
+                        <p style="color: #666; font-size: 1.2rem; margin-bottom: 30px;">
+                            Você ainda não possui uma propriedade cadastrada.<br>
+                            <strong>Adicione sua fazenda</strong> para começar a gerenciar seus plantios.
+                        </p>
+                        <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block;">
+                            Cadastrar Minha Fazenda
+                        </a>
                     </div>
-                    <div class="form-actions-bar" style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
-                        <button type="submit" class="btn-save-plant">Salvar Plantação</button>
-                        <button type="reset" class="btn-clear" style="background: #eee; color: #555; padding: 12px 30px; border-radius: 30px; border: none; font-weight: 700; cursor: pointer;">Limpar</button>
-                    </div>
-                </form>
-            </section>
+                </section>
+            {% else %}
+                <section class="form-container-glass" style="margin-top: 20px;">
+                    <form class="plant-form" method="POST">
+                        {% csrf_token %}
+                        <div class="form-section">
+                            <h3 class="section-title">Novo Plantio em {{ fazenda_ativa.nome_fazenda }}</h3>
+                            <div class="input-group full">
+                                <label>Nome da Cultura / Talhão</label>
+                                <input type="text" name="nome_planta" placeholder="Ex: Soja Safra 2026" required>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <label>Tipo de Cultura</label>
+                                    <select name="tipo_planta">
+                                        <option value="Cereal">Cereal</option>
+                                        <option value="Oleaginosa">Oleaginosa</option>
+                                        <option value="Leguminosa">Leguminosa</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Área (ha)</label>
+                                    <input type="number" name="area_plantada" step="0.1" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <label>Data de Plantio</label>
+                                    <input type="date" name="data_plantio" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Previsão de Colheita</label>
+                                    <input type="date" name="previsao_colheita" required>
+                                </div>
+                            </div>
+                            <input type="hidden" name="fazenda" value="{{ fazenda_ativa.id }}">
+                        </div>
+                        <div class="form-actions-bar">
+                            <button type="submit" class="btn-save-plant">Salvar Plantação</button>
+                        </div>
+                    </form>
+                </section>
 
-            <section class="table-list-section">
-                <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                    <h3>Lavoura Ativa: <strong>{{ fazenda_ativa.nome_fazenda }}</strong></h3>
-                    
-                    <select class="farm-selector" onchange="filtrarTabela(this.value)" style="min-width: 200px;">
-                        <option value="todos">Todas as Culturas</option>
-                        <option value="Cereal">Cereais</option>
-                        <option value="Oleaginosa">Oleaginosas</option>
-                        <option value="Leguminosa">Leguminosas</option>
-                    </select>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>Cultura</th>
-                                <th>Tipo</th>
-                                <th>Área</th>
-                                <th>Previsão</th>
-                                <th style="text-align: center;">Status</th>
-                                <th style="text-align: center;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpo-tabela">
-                            {% for p in plantacoes %}
-                            <tr class="linha-plantacao" data-tipo="{{ p.tipo_planta }}">
-                                <td><strong>{{ p.nome_planta }}</strong></td>
-                                <td>{{ p.tipo_planta }}</td>
-                                <td>{{ p.area_plantada }} ha</td>
-                                <td>{{ p.previsao_colheita|date:"d/m/Y" }}</td>
-                                <td style="text-align: center;">
-                                    {% if p.esta_atrasada %}
-                                    <span class="badge-status badge-atrasada">⚠️ ATRASADA</span>
-                                    {% else %}
-                                    <span class="badge-status status-{{ p.status }}">
-                                        {{ p.get_status_display }}
-                                    </span>
-                                    {% endif %}
-                                </td>
-                                <td style="text-align: center;">
-                                    <div class="action-btns" style="display: flex; gap: 10px; justify-content: center;">
-                                        {% if p.status != 'finalizado' %}
-                                        <a href="{% url 'concluir_plantacao' p.id %}" class="check-btn" title="Finalizar"><i class="fas fa-check"></i></a>
+                <section class="table-list-section">
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Cultura</th>
+                                    <th>Área</th>
+                                    <th>Previsão</th>
+                                    <th style="text-align: center;">Status</th>
+                                    <th style="text-align: center;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in plantacoes %}
+                                <tr>
+                                    <td><strong>{{ p.nome_planta }}</strong></td>
+                                    <td>{{ p.area_plantada }} ha</td>
+                                    <td>{{ p.previsao_colheita|date:"d/m/Y" }}</td>
+                                    <td style="text-align: center;">
+                                        {% if p.esta_atrasada %}
+                                            <span class="badge-status badge-atrasada">⚠️ ATRASADA</span>
+                                        {% else %}
+                                            <span class="badge-status status-{{ p.status }}">{{ p.get_status_display }}</span>
                                         {% endif %}
-                                        <a href="{% url 'deletar_plantacao' p.id %}" style="color: var(--danger);" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir esta plantação?')">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" style="text-align: center; padding: 30px; color: #888;">Nenhuma plantação registrada para esta fazenda.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <a href="{% url 'deletar_plantacao' p.id %}" style="color: #cf1322;" onclick="return confirm('Excluir?')"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="5" style="text-align: center; padding: 30px;">Nenhuma plantação registrada.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
             {% endif %}
         </main>
     </div>
-
     <script>
-        function filtrarTabela(tipo) {
-            const linhas = document.querySelectorAll('.linha-plantacao');
-            linhas.forEach(linha => {
-                const tipoLinha = linha.getAttribute('data-tipo');
-                if (tipo === 'todos' || tipoLinha === tipo) {
-                    linha.style.display = '';
-                } else {
-                    linha.style.display = 'none';
-                }
-            });
-        }
-
         function navegarFazenda(valor) {
-            if (valor === "NOVA") {
-                window.location.href = "{% url 'config_propriedade' %}";
-            } else if (valor) {
-                // Passamos o ID pela URL e a VIEW cuidará de salvar na SESSÃO
-                window.location.href = "?fazenda_id=" + valor;
-            }
+            if (valor === "NOVA") window.location.href = "{% url 'config_propriedade' %}";
+            else if (valor) window.location.href = "?fazenda_id=" + valor;
         }
-    
     </script>
 </body>
 </html>

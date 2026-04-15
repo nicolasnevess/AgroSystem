@@ -84,81 +84,95 @@
                 </div>
             </header>
 
-            <div class="content-grid">
-                <div class="info-card">
-                    <h3><i class="fas fa-warehouse"></i> {{ fazenda_ativa.nome_fazenda }}</h3>
-                    <p>Área Total: <strong>{{ fazenda_ativa.area_total }} ha</strong></p>
-                    <p>Solo: <strong>{{ fazenda_ativa.get_tipo_solo_display }}</strong></p>
-                    <p>Localização: <strong>{{ fazenda_ativa.cidade|default:"Não informada" }}</strong></p>
-                </div>
-
-                <div class="info-card">
-                    <h3>Clima em Tempo Real</h3>
-                    <div class="weather-content">
-                        <i class="fas fa-sun"></i>
-                        <div>
-                            <span class="temp">31°C</span>
-                            <span class="desc">Céu Limpo</span>
-                        </div>
+            {% if not tem_propriedade %}
+                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 800px;">
+                    <div class="welcome-text">
+                        <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
+                        <p style="color: #666; font-size: 1.2rem; margin-bottom: 30px;">
+                            Seja bem-vindo ao <strong>AgroSystem</strong>.<br>
+                            Para começar a monitorar sua produção, máquinas e rebanho, primeiro cadastre sua propriedade rural.
+                        </p>
+                        <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.3s;">
+                            Cadastrar Minha Fazenda
+                        </a>
                     </div>
-                </div>
+                </section>
+            {% else %}
+                <div class="content-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-warehouse"></i> {{ fazenda_ativa.nome_fazenda }}</h3>
+                        <p>Área Total: <strong>{{ fazenda_ativa.area_total }} ha</strong></p>
+                        <p>Solo: <strong>{{ fazenda_ativa.get_tipo_solo_display }}</strong></p>
+                        <p>Localização: <strong>{{ fazenda_ativa.cidade|default:"Não informada" }}</strong></p>
+                    </div>
 
-                <div class="info-card">
-                    <h3><i class="fas fa-tractor"></i> Frota Ativa</h3>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        {% for m in maquinas|slice:":3" %}
-                        <li style="padding: 5px 0; border-bottom: 1px solid #eee;">
-                            <strong>{{ m.nome }}</strong>
-                        </li>
-                        {% empty %}
-                        <li>Nenhuma máquina ativa.</li>
-                        {% endfor %}
-                    </ul>
-                    {% if maquinas %}
-                    <a href="{% url 'maquinas' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver frota completa →</a>
-                    {% endif %}
-                </div>
-
-                <div class="info-card alerts-box">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
-                    {% if plantacoes_atrasadas %}
-                        <div class="alert-item high">
-                            <i class="fas fa-clock"></i>
+                    <div class="info-card">
+                        <h3>Clima em Tempo Real</h3>
+                        <div class="weather-content">
+                            <i class="fas fa-sun"></i>
                             <div>
-                                <p><strong>Atenção! Colheita Atrasada:</strong></p>
-                                <ul style="margin-left: 15px; font-size: 0.85rem; margin-top: 5px;">
-                                    {% for p in plantacoes_atrasadas %}
-                                        <li>{{ p.nome_planta }} ({{ p.previsao_colheita|date:"d/m" }})</li>
-                                    {% endfor %}
-                                </ul>
+                                <span class="temp">31°C</span>
+                                <span class="desc">Céu Limpo</span>
                             </div>
                         </div>
-                    {% else %}
-                        <div class="alert-item success">
-                            <i class="fas fa-check-circle"></i>
-                            <p>Tudo em dia na sua lavoura.</p>
-                        </div>
-                    {% endif %}
-                </div>
+                    </div>
 
-                <div class="info-card">
-                    <h3><i class="fas fa-paw"></i> Rebanho Ativo</h3>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        {% for a in animais|slice:":3" %}
-                        <li style="padding: 5px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
-                            <strong>{{ a.identificacao }}</strong>
-                            <span style="font-size: 0.8rem; color: #666;">{{ a.especie }}</span>
-                        </li>
-                        {% empty %}
-                        <li>Nenhum animal cadastrado.</li>
-                        {% endfor %}
-                    </ul>
-                    {% if animais %}
-                    <a href="{% url 'animais' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver rebanho completo →</a>
-                    {% endif %}
+                    <div class="info-card">
+                        <h3><i class="fas fa-tractor"></i> Frota Ativa</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            {% for m in maquinas|slice:":3" %}
+                            <li style="padding: 5px 0; border-bottom: 1px solid #eee;">
+                                <strong>{{ m.nome }}</strong>
+                            </li>
+                            {% empty %}
+                            <li>Nenhuma máquina ativa.</li>
+                            {% endfor %}
+                        </ul>
+                        {% if maquinas %}
+                        <a href="{% url 'maquinas' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver frota completa →</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="info-card alerts-box">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
+                        {% if plantacoes_atrasadas %}
+                            <div class="alert-item high">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <p><strong>Atenção! Colheita Atrasada:</strong></p>
+                                    <ul style="margin-left: 15px; font-size: 0.85rem; margin-top: 5px;">
+                                        {% for p in plantacoes_atrasadas %}
+                                            <li>{{ p.nome_planta }} ({{ p.previsao_colheita|date:"d/m" }})</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert-item success">
+                                <i class="fas fa-check-circle"></i>
+                                <p>Tudo em dia na sua lavoura.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-paw"></i> Rebanho Ativo</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            {% for a in animais|slice:":3" %}
+                            <li style="padding: 5px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                                <strong>{{ a.identificacao }}</strong>
+                                <span style="font-size: 0.8rem; color: #666;">{{ a.especie }}</span>
+                            </li>
+                            {% empty %}
+                            <li>Nenhum animal cadastrado.</li>
+                            {% endfor %}
+                        </ul>
+                        {% if animais %}
+                        <a href="{% url 'animais' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver rebanho completo →</a>
+                        {% endif %}
+                    </div>
                 </div>
-                
-            </div>
+            {% endif %}
         </main>
     </div>
 

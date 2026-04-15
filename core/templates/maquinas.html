@@ -55,6 +55,9 @@
                     </a>
                     {% endif %}
                 </div>
+                <div class="user-profile">
+                    <span>Bem-vindo, <strong>{{ user.first_name|default:user.username }}</strong></span>
+                </div>
             </header>
 
             {% if not tem_fazenda %}
@@ -66,7 +69,7 @@
                             <strong>Adicione sua fazenda</strong> para começar a gerenciar sua frota.
                         </p>
                         <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block;">
-                            <i class="fas fa-plus"></i> Cadastrar Minha Fazenda
+                            Cadastrar Minha Fazenda
                         </a>
                     </div>
                 </section>
