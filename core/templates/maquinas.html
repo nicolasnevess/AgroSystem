@@ -47,8 +47,6 @@
                         <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
                     </select>
                     {% endif %}
-                </div>
-                <div class="user-profile">
                     {% if tem_maquinas %}
                     <a href="{% url 'config_maquinas' %}?fazenda_id={{ fazenda_ativa.id }}" class="btn-new-machine" style="text-decoration: none;">
                         <i class="fas fa-plus"></i> NOVA MÁQUINA
@@ -56,7 +54,10 @@
                     {% endif %}
                 </div>
                 <div class="user-profile">
+                    <div class="user-profile">
                     <span>Bem-vindo, <strong>{{ user.first_name|default:user.username }}</strong></span>
+                </div>
+                    
                 </div>
             </header>
 

@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
-<body>
+<body class="animal-bg">
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -35,68 +33,96 @@
             </div>
         </aside>
 
-        <main class="main-content animal-bg">
-            <header class="top-header">
-                <div class="header-left">
-                    {% if tem_fazenda %}
-                    <select class="farm-selector" onchange="navegarFazenda(this.value)">
-                        {% for f in fazendas %}
-                        <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>{{ f.nome_fazenda }}</option>
-                        {% endfor %}
-                        <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
-                    </select>
-                    {% endif %}
-                </div>
-                <div class="user-profile">
-                    <span>Bem-vindo, <strong>{{ user.first_name|default:user.username }}</strong></span>
-                </div>
-            </header>
-
+        <main class="main-content">
             {% if not tem_fazenda %}
-                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 60px auto; max-width: 800px; display: block;">
+                <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 800px;">
                     <div class="welcome-text">
                         <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
                         <p style="color: #666; font-size: 1.2rem; margin-bottom: 30px;">
                             Você ainda não possui uma propriedade cadastrada.<br>
                             <strong>Adicione sua fazenda</strong> para começar a gerenciar seu rebanho.
                         </p>
-                        <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block;">
-                            Cadastrar Minha Fazenda
+                        <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold;">
+                        Cadastrar Minha Fazenda
                         </a>
                     </div>
                 </section>
             {% else %}
-                <section class="form-container-glass" style="margin-top: 20px;">
+                <header class="top-header">
+                    <div class="header-left">
+                        <select class="farm-selector" onchange="navegarFazenda(this.value)">
+                            {% for f in fazendas %}
+                            <option value="{{ f.id }}" {% if f.id == fazenda_ativa.id %}selected{% endif %}>{{ f.nome_fazenda }}</option>
+                            {% endfor %}
+                            <option value="NOVA" style="font-weight:bold; color:#4b6630;">+ Adicionar Outra</option>
+                        </select>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-profile">
+                            <span>Bem-vindo, <strong>{{ user.first_name|default:user.username }}</strong></span>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="form-container-glass">
                     <form class="animal-form" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-main-layout">
                             <div class="form-fields-column">
-                                <h3 class="section-title">Cadastrar Animal em {{ fazenda_ativa.nome_fazenda }}</h3>
-                                <div class="row">
-                                    <div class="input-group">
-                                        <label>Brinco / ID</label>
-                                        <input type="text" name="identificacao" required>
+                                <h3 class="section-title">Novo Animal em {{ fazenda_ativa.nome_fazenda }}</h3>
+                                <div class="row" style="display: flex; gap: 15px; margin-bottom: 15px;">
+                                    <div class="input-group" style="flex: 1;">
+                                        <label>ID (Brinco)</label>
+                                        <input type="text" name="identificacao" placeholder="Ex: A-201" required>
                                     </div>
-                                    <div class="input-group">
-                                        <label>Peso (kg)</label>
-                                        <input type="number" name="peso" step="0.1">
+                                    <div class="input-group" style="flex: 1;">
+                                        <label>Nome do Animal</label>
+                                        <input type="text" name="nome_animal" placeholder="Ex: Estrela">
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-group">
+                                <div class="row" style="display: flex; gap: 15px; margin-bottom: 15px;">
+                                    <div class="input-group" style="flex: 1;">
                                         <label>Espécie</label>
                                         <select name="especie">
                                             <option value="bovino">Bovino</option>
                                             <option value="suino">Suíno</option>
+                                            <option value="ovino">Ovino</option>
+                                            <option value="equino">Equino</option>
                                         </select>
                                     </div>
-                                    <div class="input-group">
-                                        <label>Status</label>
-                                        <select name="status">
-                                            <option value="ativo">Ativo</option>
-                                            <option value="tratamento">Tratamento</option>
+                                    <div class="input-group" style="flex: 1;">
+                                        <label>Raça</label>
+                                        <input type="text" name="raca" placeholder="Ex: Nelore">
+                                    </div>
+                                </div>
+                                <div class="row" style="display: flex; gap: 15px; margin-bottom: 15px;">
+                                    <div class="input-group" style="flex: 1;">
+                                        <label>Sexo</label>
+                                        <select name="sexo">
+                                            <option value="M">Macho</option>
+                                            <option value="F">Fêmea</option>
                                         </select>
                                     </div>
+                                    <div class="input-group" style="flex: 1;">
+                                        <label>Peso (kg)</label>
+                                        <input type="number" name="peso" step="0.1" placeholder="0.0">
+                                    </div>
+                                </div>
+                                <div class="input-group full">
+                                    <label>Status</label>
+                                    <select name="status">
+                                        <option value="ativo">Ativo</option>
+                                        <option value="tratamento">Em Tratamento</option>
+                                        <option value="vendido">Vendido</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-photo-column">
+                                <h3 class="section-title">Foto</h3>
+                                <div class="photo-upload-box">
+                                    <i class="fas fa-camera" id="icon-preview"> Selecionar imagem</i><br>
+                                    <input type="file" name="foto" onchange="previewImage(this)">
+                                    <img id="img-preview" src="#" alt="Preview" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
                                 </div>
                             </div>
                         </div>
@@ -111,8 +137,9 @@
                         <table class="custom-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Espécie</th>
+                                    <th>Foto</th>
+                                    <th>ID / Nome</th>
+                                    <th>Espécie / Raça</th>
                                     <th>Peso</th>
                                     <th>Status</th>
                                     <th style="text-align: center;">Ações</th>
@@ -121,14 +148,26 @@
                             <tbody>
                                 {% for a in animais %}
                                 <tr>
-                                    <td><strong>{{ a.identificacao }}</strong></td>
-                                    <td>{{ a.get_especie_display }}</td>
+                                    <td>
+                                        <div style="width: 45px; height: 45px; border-radius: 5px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #eee;">
+                                            {% if a.foto %}
+                                                <img src="{{ a.foto.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                            {% else %}
+                                                <i class="fas fa-paw" style="color: #ccc;"></i>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td><strong>{{ a.identificacao }} / {{ a.nome_animal|default:"-" }}</strong></td>
+                                    <td>{{ a.get_especie_display }} / {{ a.raca|default:"N/A" }} ({{ a.sexo }})</td>
                                     <td>{{ a.peso }} kg</td>
                                     <td><span class="badge-status {{ a.status }}">{{ a.get_status_display }}</span></td>
                                     <td style="text-align: center;">
+                                        <a href="javascript:void(0)" onclick="abrirModalEdicao('{{ a.id }}', '{{ a.identificacao }}', '{{ a.nome_animal|default:'' }}', '{{ a.peso }}', '{{ a.especie }}', '{{ a.raca|default:'' }}', '{{ a.sexo }}', '{{ a.status }}', '{% if a.foto %}{{ a.foto.url }}{% endif %}')" style="color: #4b6630; margin-right: 15px;"><i class="fas fa-edit"></i></a>
                                         <a href="{% url 'deletar_animal' a.id %}" style="color: #cf1322;" onclick="return confirm('Excluir?')"><i class="fas fa-trash"></i></a>
                                     </td>
                                 </tr>
+                                {% empty %}
+                                <tr><td colspan="6" style="text-align: center; padding: 40px; color: #999;">Nenhum animal cadastrado.</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -137,11 +176,85 @@
             {% endif %}
         </main>
     </div>
-    <script>
-        function navegarFazenda(valor) {
-            if (valor === "NOVA") window.location.href = "{% url 'config_propriedade' %}";
-            else if (valor) window.location.href = "?fazenda_id=" + valor;
-        }
-    </script>
+
+    <div id="modalEditarAnimal" class="modal" style="display:none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); overflow: hidden;">
+        <div class="modal-content glass-card" style="background: white; margin: 5% auto; padding: 30px; border-radius: 15px; width: 500px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <span class="close" onclick="fecharModal()" style="position: absolute; right: 20px; top: 15px; cursor: pointer; font-size: 28px; font-weight: bold; color: #666;">&times;</span>
+            
+            <h3 style="color: #4b6630; margin-bottom: 20px; text-align: center;"><i class="fas fa-edit"></i> Editar Animal</h3>
+            
+            <form id="formEditarAnimal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin: 0 auto; border: 3px solid #4b6630; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                        <img id="edit_foto_preview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <i id="edit_foto_vazia" class="fas fa-paw" style="font-size: 40px; color: #ccc;"></i>
+                    </div>
+                </div>
+
+                <div class="row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>ID (Brinco)</label>
+                        <input type="text" name="identificacao" id="edit_identificacao" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Nome</label>
+                        <input type="text" name="nome_animal" id="edit_nome" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div class="row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Espécie</label>
+                        <select name="especie" id="edit_especie" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="bovino">Bovino</option>
+                            <option value="suino">Suíno</option>
+                            <option value="ovino">Ovino</option>
+                            <option value="equino">Equino</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Sexo</label>
+                        <select name="sexo" id="edit_sexo" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="M">Macho</option>
+                            <option value="F">Fêmea</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Raça</label>
+                        <input type="text" name="raca" id="edit_raca" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Peso (kg)</label>
+                        <input type="number" name="peso" id="edit_peso" step="0.1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Status</label>
+                    <select name="status" id="edit_status" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <option value="ativo">Ativo</option>
+                        <option value="tratamento">Tratamento</option>
+                        <option value="vendido">Vendido</option>
+                    </select>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 25px;">
+                    <label>Alterar Foto</label>
+                    <input type="file" name="foto" style="font-size: 0.8rem;">
+                </div>
+
+                <button type="submit" class="btn-save-animal" style="width: 100%; background: #4b6630; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem;">
+                    SALVAR ALTERAÇÕES
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'js/animais.js' %}"></script>
 </body>
 </html>

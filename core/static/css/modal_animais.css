@@ -1,4 +1,6 @@
 /* static/css/modal_animais.css */
+
+/* Overlay - Fundo escuro */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -7,43 +9,87 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(4px);
-    display: none;
+    display: none; /* JS muda para flex */
     align-items: center;
     justify-content: center;
     z-index: 9999;
 }
 
+/* Card do Modal */
 .modal-card {
     background: white;
     width: 95%;
-    max-width: 550px;
-    /* Aumentei um pouco a largura */
-    padding: 20px;
+    max-width: 500px;
+    padding: 25px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
     animation: slideUp 0.3s ease;
 }
 
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Header e Título */
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
 }
 
+.modal-header h3 {
+    margin: 0;
+    color: #4b6630;
+}
+
+/* Botão Fechar (X) */
+.close-btn {
+    font-size: 28px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #cf1322;
+}
+
+/* FOTO REDONDA - CORRIGIDA */
+.edit-preview-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    
+    /* Faz a imagem ignorar as proporções originais e preencher o círculo */
+    object-fit: cover; 
+    
+    /* Garante que o corte seja pelo centro exato */
+    object-position: center; 
+    
+    border: 3px solid #4b6630;
+    margin: 0 auto 15px; /* Centraliza horizontalmente se o pai for block */
+    display: block;
+    
+    /* Prevenção contra bugs de alinhamento em containers flex */
+    flex-shrink: 0; 
+    background-color: #f0f0f0;
+}
+
+/* Layout dos Campos */
 .modal-card .row {
     display: flex;
     gap: 15px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
+    margin-bottom: 15px;
 }
 
 .modal-card .input-group {
     flex: 1;
-    min-width: 140px;
-    /* Garante que os campos não fiquem minusculos */
     display: flex;
     flex-direction: column;
 }
@@ -56,27 +102,28 @@
 }
 
 .modal-card input,
-.modal-card select,
-.modal-card textarea {
-    padding: 8px;
+.modal-card select {
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
 }
 
-.edit-preview-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #4b6630;
-    margin: 0 auto 10px;
-    display: block;
+/* Botão Salvar */
+.btn-save-modal {
+    width: 100%;
+    background: #4b6630;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
 }
 
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 15px;
+.btn-save-modal:hover {
+    background: #3a5025;
 }

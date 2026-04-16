@@ -2,6 +2,16 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+# --- CLASSE MÃE (PILAR: HERANÇA) ---
+# Esta classe não vira uma tabela, ela serve de molde para as outras.
+class AtivoFazenda(models.Model):
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    # Aqui poderíamos colocar 'propriedade', mas para não quebrar seu código
+    # vamos deixar apenas a data de criação como base comum.
+
+    class Meta:
+        abstract = True
+
 # --- PROPRIEDADE ---
 class Propriedade(models.Model):
     SOLO_CHOICES = [
@@ -21,7 +31,7 @@ class Propriedade(models.Model):
         return self.nome_fazenda
 
 # --- MÁQUINAS ---
-class Maquina(models.Model):
+class Maquina(AtivoFazenda): # Herda de AtivoFazenda
     TIPO_CHOICES = [
         ('trator', 'Trator'),
         ('colheitadeira', 'Colheitadeira'),
@@ -51,8 +61,8 @@ class TarefaMaquina(models.Model):
     def __str__(self):
         return f"{self.descricao} - {self.maquina.nome}"
 
-# --- NOVO: PLANTAÇÕES ---
-class Plantacao(models.Model):
+# --- PLANTAÇÕES ---
+class Plantacao(AtivoFazenda): # Herda de AtivoFazenda
     STATUS_CHOICES = [
         ('plantado', 'Recém Plantado'),
         ('germinacao', 'Em Germinação'),
@@ -62,23 +72,23 @@ class Plantacao(models.Model):
     ]
 
     propriedade = models.ForeignKey(Propriedade, on_delete=models.CASCADE, related_name='plantacoes')
-    nome_planta = models.CharField(max_length=100) # Ex: Soja Talhão A
-    tipo_planta = models.CharField(max_length=50) # Ex: Oleaginosa
+    nome_planta = models.CharField(max_length=100) 
+    tipo_planta = models.CharField(max_length=50) 
     area_plantada = models.DecimalField(max_digits=10, decimal_places=2)
     data_plantio = models.DateField()
     previsao_colheita = models.DateField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='plantado')
 
+    # PILAR: ENCAPSULAMENTO
     @property
     def esta_atrasada(self):
-        """Retorna True se a data atual passou da previsão e não foi finalizado"""
         return self.status != 'finalizado' and self.previsao_colheita < timezone.now().date()
 
     def __str__(self):
         return f"{self.nome_planta} - {self.propriedade.nome_fazenda}"
 
 # --- ANIMAIS ---
-class Animal(models.Model):
+class Animal(AtivoFazenda): # Herda de AtivoFazenda
     ESPECIE_CHOICES = [
         ('bovino', 'Bovino'),
         ('suino', 'Suíno'),
@@ -98,34 +108,25 @@ class Animal(models.Model):
     ]
 
     propriedade = models.ForeignKey(Propriedade, on_delete=models.CASCADE, related_name='animais')
-    identificacao = models.CharField(max_length=50) # Brinco/ID
+    identificacao = models.CharField(max_length=50)
     nome_animal = models.CharField(max_length=100, blank=True, null=True)
     especie = models.CharField(max_length=20, choices=ESPECIE_CHOICES)
     raca = models.CharField(max_length=50)
     sexo = models.CharField(max_length=1, choices=SEXO_CHOICES)
-    data_nascimento = models.DateField(blank=True, null=True)
-    peso = models.DecimalField(max_digits=10, decimal_places=2, help_text="Peso em kg")
+    #data_nascimento = models.DateField(blank=True, null=True)
+    peso = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ativo')
-    sanitario = models.TextField(blank=True, null=True, help_text="Histórico de vacinas/medicamentos")
+    #sanitario = models.TextField(blank=True, null=True)
     foto = models.ImageField(upload_to='animais/', blank=True, null=True)
 
+    # PILAR: POLIMORFISMO (Sobrescrita de método)
     def save(self, *args, **kwargs):
-        # Identificação sempre em MAIÚSCULO e sem espaços sobrando
         if self.identificacao:
             self.identificacao = self.identificacao.upper().strip()
-        
-        # Nome e Raça com a Primeira Letra Maiúscula (Capitalize)
         if self.nome_animal:
             self.nome_animal = self.nome_animal.strip().capitalize()
-        
         if self.raca:
             self.raca = self.raca.strip().capitalize()
-            
-        # Sanitário também formatado para manter o padrão
-        if self.sanitario:
-            self.sanitario = self.sanitario.strip().capitalize()
-
-        # Chama o método save original para gravar no banco
         super(Animal, self).save(*args, **kwargs)
 
     def __str__(self):
