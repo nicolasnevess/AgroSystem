@@ -108,11 +108,12 @@
 
                     <div class="info-card">
                         <h3>Clima em Tempo Real</h3>
+                        <p class="city-name" style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px;">Buscando cidade...</p>
                         <div class="weather-content">
                             <i class="fas fa-sun"></i>
                             <div>
-                                <span class="temp">31°C</span>
-                                <span class="desc">Céu Limpo</span>
+                                <span class="temp"> °C</span>
+                                <span class="desc">Carregando clima...</span>
                             </div>
                         </div>
                     </div>
@@ -185,6 +186,9 @@
             }
         }
     </script>
+
+    <script src="{% static 'js/clima.js' %}"></script>
+
 </body>
 
 </html>

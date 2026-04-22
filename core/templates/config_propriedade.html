@@ -66,12 +66,17 @@
 
                     <div class="row-inputs">
                         <div class="input-group">
-                            <label>Cidade</label>
-                            <input type="text" name="cidade" placeholder="Piracicaba" required>
-                        </div>
-                        <div class="input-group">
                             <label>Estado (UF)</label>
-                            <input type="text" name="uf" placeholder="SP" maxlength="2" required>
+                            <select id="estado" name="uf" required>
+                                <option value="">Selecione o Estado</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Cidade</label>
+                            <select id="cidade" name="cidade" required>
+                                <option value="">Selecione a Cidade</option>
+                            </select>
                         </div>
                     </div>
 
@@ -80,5 +85,6 @@
             </section>
         </main>
     </div>
+    <script src="{% static 'js/config_fazenda.js' %}"></script>
 </body>
 </html>
