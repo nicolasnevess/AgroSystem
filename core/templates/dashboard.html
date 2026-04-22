@@ -24,22 +24,22 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li class="active">
-                        <a href="{% url 'dashboard' %}">
+                        <a href="javascript:void(0)">
                             <i class="fas fa-chart-pie"></i> <span>MONITORAMENTO</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'maquinas' %}">
+                        <a href="{% url 'maquinas' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
                             <i class="fas fa-tractor"></i> <span>MÁQUINAS</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'plantacoes' %}">
+                        <a href="{% url 'plantacoes' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
                             <i class="fas fa-leaf"></i> <span>PLANTAÇÕES</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'animais' %}">
+                        <a href="{% url 'animais' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
                             <i class="fas fa-paw"></i> <span>ANIMAIS</span>
                         </a>
                     </li>

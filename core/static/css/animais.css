@@ -22,7 +22,7 @@
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 35px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.5);
@@ -171,7 +171,7 @@
 /* TABELA */
 .table-list-section {
     background: white;
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 25px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
     margin-bottom: 50px;
@@ -242,9 +242,10 @@
 
 /* BOTÕES DE AÇÃO */
 .action-btns {
-display: flex;
+    display: flex;
     align-items: center;
-    gap: 8px; /* Espaço entre os botões */
+    gap: 8px;
+    /* Espaço entre os botões */
 }
 
 .action-btns a,
@@ -255,10 +256,14 @@ display: flex;
     border: none;
     cursor: pointer;
     transition: 0.3s;
-    display: flex;         /* Isso centraliza o ícone dentro do quadrado */
-    align-items: center;    /* Alinhamento vertical */
-    justify-content: center; /* Alinhamento horizontal */
-    text-decoration: none;  /* Remove o sublinhado do link da lixeira */
+    display: flex;
+    /* Isso centraliza o ícone dentro do quadrado */
+    align-items: center;
+    /* Alinhamento vertical */
+    justify-content: center;
+    /* Alinhamento horizontal */
+    text-decoration: none;
+    /* Remove o sublinhado do link da lixeira */
 }
 
 .edit-icon {
@@ -281,20 +286,98 @@ display: flex;
     color: white;
 }
 
-/* RESPONSIVIDADE */
+/* Responsividade para o header */
+@media (max-width: 768px) {
+    .selector-wrapper {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    /* Botão de salvar animal seguindo o padrão */
+    .btn-action,
+    .btn-save-animal {
+        flex: 1;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* --- RESPONSIVIDADE (MEDIA QUERIES) --- */
+
+/* Tablets e Telas Médias */
 @media (max-width: 1024px) {
-    .form-main-layout {
-        grid-template-columns: 1fr;
+    .sidebar {
+        width: 80px;
+        padding: 20px 10px;
+    }
+
+    .sidebar .sidebar-header span,
+    .sidebar .sidebar-nav span,
+    .sidebar .sidebar-footer span,
+    .sidebar-nav a {
+        justify-content: center;
+    }
+
+    .sidebar span {
+        display: none;
+    }
+
+    .sidebar-nav a {
+        padding: 15px 0;
+    }
+
+    .main-content {
+        margin-left: 80px;
+    }
+}
+
+/* Celulares Grandes e Tablets em modo retrato */
+@media (max-width: 768px) {
+
+    /* Faz a Foto e os Campos do Animal ficarem um embaixo do outro */
+    .form-main-layout,
+    .animal-form .row {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .form-fields-column,
+    .form-photo-column {
+        width: 100% !important;
+    }
+
+    .top-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .farm-selector {
+        width: 100%;
+    }
+
+    .header-right {
+        text-align: left;
+        width: 100%;
+    }
+
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+}
+
+/* Celulares Pequenos */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 15px;
     }
 
     .photo-upload-box {
         height: 200px;
     }
 }
-
-@media (max-width: 768px) {
-    .row {
-        grid-template-columns: 1fr;
-    }
-}
-

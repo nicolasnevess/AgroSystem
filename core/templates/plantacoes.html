@@ -23,10 +23,26 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="{% url 'dashboard' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
-                    <li><a href="{% url 'maquinas' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
-                    <li class="active"><a href="#"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
-                    <li><a href="{% url 'animais' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                    <li>
+                        <a href="{% url 'dashboard' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-chart-pie"></i> <span>MONITORAMENTO</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'maquinas' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-tractor"></i> <span>MÁQUINAS</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="javascript:void(0)">
+                            <i class="fas fa-leaf"></i> <span>PLANTAÇÕES</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'animais' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-paw"></i> <span>ANIMAIS</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
@@ -50,7 +66,6 @@
                     <span>Bem-vindo, <strong>{{ user.first_name|default:user.username }}</strong></span>
                 </div>
             </header>
-
             {% if not tem_fazenda %}
                 <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 60px auto; max-width: 800px; display: block;">
                     <div class="welcome-text">
@@ -65,7 +80,7 @@
                     </div>
                 </section>
             {% else %}
-                <section class="form-container-glass" style="margin-top: 20px;">
+                <section class="form-container-glass">
                     <form class="plant-form" method="POST">
                         {% csrf_token %}
                         <div class="form-section">
@@ -153,3 +168,4 @@
     </script>
 </body>
 </html>
+

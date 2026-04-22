@@ -1,10 +1,16 @@
+/* ============================================================
+   MAQUINAS.CSS - ESTILIZAÇÃO GERAL DO MÓDULO DE FROTA
+   ============================================================ */
+
 /* LAYOUT GERAL */
 .maquinas-split-layout {
     display: grid;
     grid-template-columns: 320px 1fr;
     gap: 25px;
-    height: auto; 
+    height: auto;
     min-height: 500px;
+    margin-top: -65px;
+    /* Ajuste para subir o painel sobre o fundo se necessário */
 }
 
 .page-header {
@@ -14,7 +20,7 @@
     margin-bottom: 25px;
 }
 
-/* BANNER DE DESTAQUE */
+/* BANNER DE DESTAQUE (QUANDO NÃO HÁ MÁQUINAS) */
 .machine-setup-banner {
     background: linear-gradient(135deg, #4b6630 0%, #3a4d28 100%);
     display: flex;
@@ -54,7 +60,7 @@
     background: #f1f2f6;
 }
 
-/* BOTÃO NOVA MÁQUINA */
+/* BOTÃO NOVA MÁQUINA (NO HEADER) */
 .btn-new-machine {
     background-color: #4b6630 !important;
     color: white !important;
@@ -71,14 +77,15 @@
 
 .btn-new-machine:hover {
     background-color: #3a4d28 !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* PAINÉIS */
-.maquinas-list-panel, .maquinas-details-panel {
+/* PAINÉIS LATERAIS E DE CONTEÚDO */
+.maquinas-list-panel,
+.maquinas-details-panel {
     background: white;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
 .maquinas-list-panel {
@@ -105,12 +112,23 @@
     border: 1px solid #f1f2f6;
 }
 
-.machine-item i { font-size: 1.2rem; }
+.machine-item i {
+    font-size: 1.2rem;
+}
 
-.m-details strong { display: block; font-size: 0.9rem; }
-.m-details span { font-size: 0.75rem; opacity: 0.8; }
+.m-details strong {
+    display: block;
+    font-size: 0.9rem;
+}
 
-.machine-item:hover { background: #f9fbf7; }
+.m-details span {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.machine-item:hover {
+    background: #f9fbf7;
+}
 
 .machine-item.active {
     background: #4b6630;
@@ -134,9 +152,18 @@
     border-bottom: 2px solid #f9fbf7;
 }
 
-.title-row { display: flex; align-items: center; gap: 15px; }
-.title-row i { font-size: 1.8rem; color: #4b6630; }
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
+.title-row i {
+    font-size: 1.8rem;
+    color: #4b6630;
+}
+
+/* SEÇÃO DE OBSERVAÇÕES / CHECKLIST */
 .tasks-section label {
     font-weight: 600;
     color: #333;
@@ -144,17 +171,24 @@
     display: block;
 }
 
-.add-task-row { display: flex; gap: 10px; margin-bottom: 25px; }
-.add-task-row input { 
-    flex: 1; 
-    padding: 14px; 
-    border: 2px solid #f1f2f6; 
-    border-radius: 10px; 
-    outline: none; 
+.add-task-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.add-task-row input {
+    flex: 1;
+    padding: 14px;
+    border: 2px solid #f1f2f6;
+    border-radius: 10px;
+    outline: none;
     transition: 0.3s;
 }
 
-.add-task-row input:focus { border-color: #8dbb5e; }
+.add-task-row input:focus {
+    border-color: #8dbb5e;
+}
 
 .btn-add-task {
     background: #8dbb5e;
@@ -166,9 +200,11 @@
     transition: 0.3s;
 }
 
-.btn-add-task:hover { background: #7aa54f; }
+.btn-add-task:hover {
+    background: #7aa54f;
+}
 
-/* CHECKLIST */
+/* CHECKLIST ITEMS */
 .task-item {
     display: flex;
     align-items: center;
@@ -182,16 +218,30 @@
 }
 
 .task-item input[type="checkbox"] {
-    width: 18px; height: 18px;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
     accent-color: #4b6630;
 }
 
-.task-item label { flex: 1; cursor: pointer; margin: 0; font-size: 0.9rem; }
-.task-item.done { background: #f8f9fa; opacity: 0.6; }
-.task-item.done label { text-decoration: line-through; color: #95a5a6; }
+.task-item label {
+    flex: 1;
+    cursor: pointer;
+    margin: 0;
+    font-size: 0.9rem;
+}
 
-/* RODAPÉ */
+.task-item.done {
+    background: #f8f9fa;
+    opacity: 0.6;
+}
+
+.task-item.done label {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+/* RODAPÉ DO PAINEL DE DETALHES */
 .details-footer {
     margin-top: auto;
     display: flex;
@@ -228,7 +278,9 @@
     transition: 0.3s;
 }
 
-.btn-save-notes:hover { background: #144b18 !important; }
+.btn-save-notes:hover {
+    background: #144b18 !important;
+}
 
 .status-tag.active {
     background: #e8f5e9;
@@ -239,6 +291,58 @@
     font-weight: 700;
 }
 
-@media (max-width: 992px) {
-    .maquinas-split-layout { grid-template-columns: 1fr; }
+/* --- RESPONSIVIDADE: MÁQUINAS (BASE DASHBOARD) --- */
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 80px;
+        padding: 20px 10px;
+    }
+
+    .sidebar span {
+        display: none;
+    }
+
+    .sidebar-nav a {
+        justify-content: center;
+        padding: 15px 0;
+    }
+
+    .main-content {
+        margin-left: 80px;
+    }
+
+    /* Ajuste do layout de máquinas para não esmagar */
+    .maquinas-split-layout {
+        grid-template-columns: 250px 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .maquinas-split-layout {
+        grid-template-columns: 1fr;
+        /* Igual ao seu content-grid */
+    }
+
+    .top-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .farm-selector,
+    .btn-new-machine {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 15px;
+    }
+
+    .maquinas-list-panel,
+    .maquinas-details-panel {
+        padding: 15px;
+    }
 }

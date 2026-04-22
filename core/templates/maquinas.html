@@ -21,10 +21,27 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="{% url 'dashboard' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-chart-pie"></i> MONITORAMENTO</a></li>
-                    <li class="active"><a href="{% url 'maquinas' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-tractor"></i> MÁQUINAS</a></li>
-                    <li><a href="{% url 'plantacoes' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-leaf"></i> PLANTAÇÕES</a></li>
-                    <li><a href="{% url 'animais' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}"><i class="fas fa-paw"></i> ANIMAIS</a></li>
+                    <li>
+                        <a href="{% url 'dashboard' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-chart-pie"></i> <span>MONITORAMENTO</span>
+                        </a>
+                    </li>
+                    <li>
+                        <li class="active">
+                        <a href="javascript:void(0)">
+                            <i class="fas fa-tractor"></i> <span>MÁQUINAS</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'plantacoes' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-leaf"></i> <span>PLANTAÇÕES</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'animais' %}{% if fazenda_ativa %}?fazenda_id={{ fazenda_ativa.id }}{% endif %}">
+                            <i class="fas fa-paw"></i> <span>ANIMAIS</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="sidebar-footer">

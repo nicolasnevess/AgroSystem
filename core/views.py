@@ -121,17 +121,22 @@ def deletar_plantacao(request, plantacao_id):
 def maquinas_view(request):
     fazendas = Propriedade.objects.filter(usuario=request.user)
     fazenda_id = request.GET.get('fazenda_id') or request.session.get('fazenda_ativa_id')
+    
+    # Busca a fazenda ativa
     fazenda_ativa = fazendas.filter(id=fazenda_id).first() or fazendas.first()
     
-    # IMPORTANTE: Seu HTML usa 'maquinas' (plural) e 'tem_fazenda'
-    maquinas_list = fazenda_ativa.maquinas.all() if fazenda_ativa else []
-    
+    # Se houver fazenda, pegamos o QuerySet. Se não, pegamos um QuerySet vazio do modelo Maquina
+    if fazenda_ativa:
+        maquinas_queryset = fazenda_ativa.maquinas.all()
+    else:
+        maquinas_queryset = Maquina.objects.none() # QuerySet vazio (aceita .exists())
+
     return render(request, 'maquinas.html', {
         'fazendas': fazendas,
         'fazenda_ativa': fazenda_ativa,
-        'maquinas': maquinas_list,        # Plural para o {% for m in maquinas %}
-        'tem_fazenda': fazendas.exists(),  # O nome exato que está no seu {% if tem_fazenda %}
-        'tem_maquinas': maquinas_list.exists() # O nome exato que está no seu {% if not tem_maquinas %}
+        'maquinas': maquinas_queryset,         
+        'tem_fazenda': fazendas.exists(),  
+        'tem_maquinas': maquinas_queryset.exists() # Agora funciona sempre!
     })
 
 @login_required
@@ -324,3 +329,4 @@ def deletar_tarefa(request, tarefa_id):
         tarefa.delete()
         return JsonResponse({'status': 'sucesso'})
     return JsonResponse({'status': 'erro'}, status=400)
+
