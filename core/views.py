@@ -307,8 +307,22 @@ def adicionar_tarefa(request, maquina_id):
     if request.method == 'POST':
         data = json.loads(request.body)
         maquina = get_object_or_404(Maquina, id=maquina_id, usuario=request.user)
-        tarefa = TarefaMaquina.objects.create(maquina=maquina, descricao=data.get('descricao'))
-        return JsonResponse({'id': tarefa.id, 'descricao': tarefa.descricao, 'concluida': tarefa.concluida})
+        
+        tarefa = TarefaMaquina.objects.create(
+            maquina=maquina, 
+            descricao=data.get('descricao')
+        )
+        
+        # Converte o horário do banco (UTC) para o horário local (Brasília/SP)
+        data_local = timezone.localtime(tarefa.data_criacao)
+        
+        return JsonResponse({
+            'id': tarefa.id, 
+            'descricao': tarefa.descricao, 
+            'concluida': tarefa.concluida,
+            # Agora usamos a data_local que tem o fuso horário corrigido
+            'data_criacao': data_local.strftime('%d/%m/%Y %H:%M') 
+        })
     return JsonResponse({'error': 'Erro'}, status=400)
 
 @csrf_exempt

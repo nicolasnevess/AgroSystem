@@ -5,15 +5,15 @@ function navegarFazenda(valor) {
 }
 
 // Preview da foto no cadastro (Topo da página)
-function previewImage(input) {
-    const preview = document.getElementById('img-preview');
-    const icon = document.getElementById('icon-preview');
+function previewImageEdit(input) {
+    const preview = document.getElementById('edit_foto_preview');
+    const vazia = document.getElementById('edit_foto_vazia');
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
             preview.style.display = 'block';
-            if (icon) icon.style.display = 'none';
+            vazia.style.display = 'none';
         }
         reader.readAsDataURL(input.files[0]);
     }

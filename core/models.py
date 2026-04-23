@@ -52,11 +52,10 @@ class Maquina(AtivoFazenda): # Herda de AtivoFazenda
         return f"{self.nome} ({self.identificacao})"
 
 # --- TAREFAS DA MÁQUINA ---
-class TarefaMaquina(models.Model):
+class TarefaMaquina(AtivoFazenda):
     maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE, related_name='tarefas')
     descricao = models.CharField(max_length=255)
     concluida = models.BooleanField(default=False)
-    data_criacao = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.descricao} - {self.maquina.nome}"

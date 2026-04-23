@@ -9,22 +9,37 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(4px);
-    display: none; /* JS muda para flex */
-    align-items: center;
-    justify-content: center;
+    display: none; /* O JS muda para flex */
+    align-items: center;    /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
     z-index: 9999;
+    padding: 20px;          /* Adiciona um respiro para o card não encostar no teto/chão */
+    box-sizing: border-box;
 }
 
 /* Card do Modal */
 .modal-card {
     background: white;
     width: 95%;
-    max-width: 500px;
-    padding: 25px;
+    max-width: 480px;
+    padding: 15px 20px; /* Diminuímos o padding superior/inferior */
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     position: relative;
     animation: slideUp 0.3s ease;
+    
+    /* Garante que o card não estique além da tela */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo para a barra de rolagem interna do modal (opcional, deixa mais bonito) */
+.modal-card::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-card::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
 }
 
 @keyframes slideUp {
@@ -62,8 +77,8 @@
 
 /* FOTO REDONDA - CORRIGIDA */
 .edit-preview-img {
-    width: 120px;
-    height: 120px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     
     /* Faz a imagem ignorar as proporções originais e preencher o círculo */
@@ -84,8 +99,8 @@
 /* Layout dos Campos */
 .modal-card .row {
     display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
 .modal-card .input-group {

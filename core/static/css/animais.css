@@ -231,13 +231,39 @@
     font-size: 0.9rem;
 }
 
+/* Sua base atual (pode manter como está) */
 .badge-status {
-    background: #e8f5e9;
+    background: #e8f5e9; /* Verde padrão */
     color: #166534;
     padding: 6px 14px;
     border-radius: 20px;
     font-weight: 700;
     font-size: 0.75rem;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+
+/* --- VARIAÇÕES DE CORES --- */
+
+/* Laranja para 'Em Tratamento' */
+.badge-status.tratamento {
+    background: #fff3e0;
+    color: #9a3412;
+    border-color: #fed7aa;
+}
+
+/* Vermelho para 'Vendido' */
+.badge-status.vendido {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+/* Azul ou Roxo para outros estados (opcional) */
+.badge-status.ativo {
+    background: #f0fdf4; /* Um verde mais clarinho que o seu padrão */
+    color: #166534;
+    border-color: #bbf7d0;
 }
 
 /* BOTÕES DE AÇÃO */
