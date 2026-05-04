@@ -72,7 +72,7 @@
                                 <i class="fas fa-edit"></i> <span>Editar</span>
                             </a>
                             <a href="{% url 'deletar_propriedade' fazenda_ativa.id %}" class="btn-action delete" title="Excluir Propriedade"
-                               onclick="return confirm('ATENÇÃO: Excluir esta fazenda apagará permanentemente todos os animais, máquinas e plantações vinculados a ela. Confirmar?')">
+                               onclick="return confirm('Confirmar exclusão?')">
                                 <i class="fas fa-trash"></i> <span>Excluir</span>
                             </a>
                         </div>
@@ -88,13 +88,7 @@
                 <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 800px;">
                     <div class="welcome-text">
                         <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
-                        <p style="color: #666; font-size: 1.2rem; margin-bottom: 30px;">
-                            Seja bem-vindo ao <strong>AgroSystem</strong>.<br>
-                            Para começar a monitorar sua produção, máquinas e rebanho, primeiro cadastre sua propriedade rural.
-                        </p>
-                        <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.3s;">
-                            Cadastrar Minha Fazenda
-                        </a>
+                        <a href="{% url 'config_propriedade' %}" class="btn-setup">Cadastrar Minha Fazenda</a>
                     </div>
                 </section>
             {% else %}
@@ -103,66 +97,43 @@
                         <h3><i class="fas fa-warehouse"></i> {{ fazenda_ativa.nome_fazenda }}</h3>
                         <p>Área Total: <strong>{{ fazenda_ativa.area_total }} ha</strong></p>
                         <p>Solo: <strong>{{ fazenda_ativa.get_tipo_solo_display }}</strong></p>
-                        <p>Localização: <strong>{{ fazenda_ativa.cidade|default:"Não informada" }}</strong></p>
+                        <p>Localização: <strong>{{ fazenda_ativa.cidade }}</strong></p>
                     </div>
 
-                    <div class="info-card" id="clima-wrapper"
-                        data-cidade="{{ fazenda_ativa.cidade }}"
-                        data-uf="{{ fazenda_ativa.uf }}">
-                        
+                    <div class="info-card" id="clima-wrapper" data-cidade="{{ fazenda_ativa.cidade }}" data-uf="{{ fazenda_ativa.uf }}">
                         <h3>Clima em Tempo Real</h3>
-                        <p class="city-name" style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px;">Buscando cidade...</p>
 
                         <div class="weather-content">
                             <i id="weather-icon" class="fas fa-sun"></i>
                             <div>
                                 <span class="temp"> °C</span>
-                                <span class="desc">Carregando clima...</span>
+                                <span class="desc">Carregando...</span>
                             </div>
                         </div>
+
+                         <p class="city-name" style="font-size: 0.9rem; color: #666; margin-bottom: 5px; font-weight: 600;">
+                            {{ fazenda_ativa.cidade }} - {{ fazenda_ativa.uf }}
+                        </p>
                     </div>
 
                     <div class="info-card">
                         <h3><i class="fas fa-tractor"></i> Frota Ativa</h3>
-                        <ul style="list-style: none; padding: 0; margin: 0;">
-                            {% for m in maquinas|slice:":3" %}
-                            <li style="padding: 5px 0; border-bottom: 1px solid #eee;">
-                                <strong>{{ m.nome }}</strong>
-                            </li>
-                            {% empty %}
-                            <li>Nenhuma máquina ativa.</li>
-                            {% endfor %}
-                        </ul>
-                        {% if maquinas %}
-                        <a href="{% url 'maquinas' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver frota completa →</a>
-                        {% endif %}
-                    </div>
-
-                    <div class="info-card alerts-box">
-                        <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
-                        {% if plantacoes_atrasadas %}
-                            <div class="alert-item high">
-                                <i class="fas fa-clock"></i>
-                                <div>
-                                    <p><strong>Atenção! Colheita Atrasada:</strong></p>
-                                    <ul style="margin-left: 15px; font-size: 0.85rem; margin-top: 5px;">
-                                        {% for p in plantacoes_atrasadas %}
-                                            <li>{{ p.nome_planta }} ({{ p.previsao_colheita|date:"d/m" }})</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="alert-item success">
-                                <i class="fas fa-check-circle"></i>
-                                <p>Tudo em dia na sua lavoura.</p>
-                            </div>
-                        {% endif %}
+                        <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                {% for m in maquinas %}
+                                <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                                    <strong>{{ m.nome }}</strong>
+                                </li>
+                                {% empty %}
+                                <li>Nenhuma máquina ativa.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="info-card">
                         <h3><i class="fas fa-paw"></i> Rebanho Ativo</h3>
-                        <ul style="list-style: none; padding: 0; margin: 0;">
+                        <ul style="list-style: none; padding: 0;">
                             {% for a in animais|slice:":3" %}
                             <li style="padding: 5px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
                                 <strong>{{ a.identificacao }}</strong>
@@ -172,9 +143,53 @@
                             <li>Nenhum animal cadastrado.</li>
                             {% endfor %}
                         </ul>
-                        {% if animais %}
-                        <a href="{% url 'animais' %}" style="display: block; margin-top: 10px; font-size: 0.8rem; color: var(--primary-green); text-decoration: none; font-weight: 600;">Ver rebanho completo →</a>
-                        {% endif %}
+                    </div>
+
+                    <div class="info-card">
+                        <h3 style="color: #3498db;"><i class="fas fa-leaf"></i> Lavoura em Dia</h3>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            {% for item in lista_colheita %}
+                                {% if item.dias >= 0 %}
+                                    <div style="padding: 8px; background: #f0f7ff; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #3498db;">
+                                        <strong style="display:block;">{{ item.nome }}</strong>
+                                        <small>Colheita em: {{ item.data|date:"d/m/Y" }}</small><br>
+                                        <small style="color: #3498db; font-weight:bold;">
+                                            {% if item.dias == 0 %} Colher hoje! {% else %} Faltam {{ item.dias }} dias {% endif %}
+                                        </small>
+                                    </div>
+                                {% endif %}
+                            {% empty %}
+                                <p style="font-size: 0.9rem; color: #666;">Sem plantações ativas.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="info-card alerts-box">
+                        <h3 style="color: #d9534f;"><i class="fas fa-exclamation-triangle"></i> Alertas de Atraso</h3>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            
+                            {% for item in lista_colheita %}
+                                {% if item.dias < 0 %}
+                                    <div style="padding: 8px; background: #fff5f5; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #d9534f;">
+                                        <strong style="display:block;">{{ item.nome }}</strong>
+                                        <small>Data prevista: {{ item.data|date:"d/m/Y" }}</small><br>
+                                        <small style="color: #d9534f; font-weight: bold;">Atrasada há {{ item.dias|stringformat:"i"|slice:"1:" }} dias</small>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if not plantacoes_atrasadas %}
+                                <script>
+                                    // Se não houver nenhum card vermelho dentro desta div, mostra a mensagem
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        const container = document.querySelector('.alerts-box div');
+                                        if (container && container.querySelectorAll('div').length === 0) {
+                                            container.innerHTML = '<p style="font-size: 0.9rem; color: #666; padding: 10px;"><i class="fas fa-check-circle" style="color: #27ae60;"></i> Tudo em dia na sua lavoura.</p>';
+                                        }
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endif %}
@@ -190,9 +205,6 @@
             }
         }
     </script>
-
     <script src="{% static 'js/clima.js' %}"></script>
-
 </body>
-
 </html>

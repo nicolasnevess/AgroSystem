@@ -55,16 +55,29 @@ def dashboard_view(request):
 
     if fazenda_ativa:
         request.session['fazenda_ativa_id'] = fazenda_ativa.id
-        # POO: Encapsulamento usando a property do Model
         plantacoes = fazenda_ativa.plantacoes.all()
-        alertas_atraso = [p for p in plantacoes if p.esta_atrasada]
         
+        # --- LÓGICA DE DIAS RESTANTES ---
+        hoje = timezone.now().date()
+        lista_colheita = []
+
+        for p in plantacoes:
+            # Só calcula para plantações que não foram finalizadas
+            if p.status != 'finalizado':
+                dias_restantes = (p.previsao_colheita - hoje).days
+                lista_colheita.append({
+                    'nome': p.nome_planta,
+                    'dias': dias_restantes,
+                    'data': p.previsao_colheita
+                })
+
         context.update({
             'maquinas': fazenda_ativa.maquinas.all(),
             'plantacoes': plantacoes,
-            'plantacoes_atrasadas': alertas_atraso,
+            'lista_colheita': lista_colheita, # Enviamos a nova lista com os cálculos
             'animais': fazenda_ativa.animais.all(),
         })
+        
     return render(request, 'dashboard.html', context)
 
 # --- 3. PLANTAÇÕES ---
