@@ -16,8 +16,11 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a href="{% url 'dashboard' %}" class="logo-link">
-                    <i class="fas fa-seedling"></i>
-                    <span>AgroSystem</span>
+                    <div class="brand-box">
+                        <div class="logo-placeholder">
+                            <img src="{% static 'img/logo.png' %}" alt="Logo AgroSystem">
+                        </div>
+                    </div>
                 </a>
             </div>
 
@@ -88,7 +91,13 @@
                 <section class="welcome-banner" style="background: rgba(255, 255, 255, 0.9); border: 2px dashed #4b6630; padding: 60px 40px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 800px;">
                     <div class="welcome-text">
                         <h2 style="color: #4b6630; font-size: 2.5rem; margin-bottom: 15px;">🌱 Quase lá!</h2>
-                        <a href="{% url 'config_propriedade' %}" class="btn-setup">Cadastrar Minha Fazenda</a>
+                        <p style="color: #666; font-size: 1.2rem; margin-bottom: 30px;">
+                            Você ainda não possui uma propriedade cadastrada.<br>
+                            <strong>Adicione sua fazenda</strong> para começar o gerenciamento.
+                        </p>
+                        <a href="{% url 'config_propriedade' %}" class="btn-setup" style="background: #4b6630; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block;">
+                            Cadastrar Minha Fazenda
+                        </a>
                     </div>
                 </section>
             {% else %}
@@ -146,14 +155,14 @@
                     </div>
 
                     <div class="info-card">
-                        <h3 style="color: #3498db;"><i class="fas fa-leaf"></i> Lavoura em Dia</h3>
+                        <h3 style="color: #4b9512;"><i class="fas fa-leaf"></i> Lavoura em Dia</h3>
                         <div style="max-height: 200px; overflow-y: auto;">
                             {% for item in lista_colheita %}
                                 {% if item.dias >= 0 %}
-                                    <div style="padding: 8px; background: #f0f7ff; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #3498db;">
+                                    <div style="padding: 8px; background: #f0f7ff; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #55aa14;">
                                         <strong style="display:block;">{{ item.nome }}</strong>
                                         <small>Colheita em: {{ item.data|date:"d/m/Y" }}</small><br>
-                                        <small style="color: #3498db; font-weight:bold;">
+                                        <small style="color: #4b9512; font-weight:bold;">
                                             {% if item.dias == 0 %} Colher hoje! {% else %} Faltam {{ item.dias }} dias {% endif %}
                                         </small>
                                     </div>

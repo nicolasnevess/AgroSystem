@@ -20,8 +20,8 @@ body {
 }
 
 .side-panel {
-    flex: 0 0 35%; 
-    background-color: rgba(58, 77, 40, 0.92); 
+    flex: 0 0 35%;
+    background-color: rgba(58, 77, 40, 0.92);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,16 +30,33 @@ body {
     z-index: 2;
 }
 
-.info-text {
-    font-size: 0.95rem;
-    margin-bottom: 25px;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.5;
-    font-weight: 300;
+.brand-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    width: 100%;
 }
 
-.brand-box h1 { font-size: 3.5rem; font-weight: 700; line-height: 1; }
-.logo-placeholder { font-size: 4.5rem; color: #8dbb5e; margin-bottom: 10px; }
+.logo-placeholder {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.logo-placeholder img {
+    margin-top: -50px;
+    width: 100%;       /* Faz a imagem ocupar todo o espaço do placeholder */
+    max-width: 400px;  /* Define o tamanho máximo que você quer (ajuste aqui!) */
+    height: auto;      /* Mantém a proporção para não achatar */
+    object-fit: contain; 
+    transition: transform 0.3s ease; /* Efeito legal ao passar o mouse */
+    image-rendering: auto;
+}
+
+.logo-placeholder img:hover {
+    transform: scale(1.1);
+}
 
 .form-container {
     flex: 1;
@@ -49,12 +66,12 @@ body {
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.1); 
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 25px;
-    padding: 50px; 
+    padding: 50px;
     width: 500px;
     margin-right: 200px;
     text-align: center;
@@ -75,7 +92,8 @@ body {
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 12px;
-    background-color: #f0f5ff; /* Fundo visível */
+    background-color: #f0f5ff;
+    /* Fundo visível */
     border: 1px solid #d1d9e6;
     outline: none;
     font-size: 1rem;
@@ -95,10 +113,13 @@ body {
     transition: 0.3s;
 }
 
-.btn-agro:hover { background-color: #3a4d28; }
+.btn-agro:hover {
+    background-color: #3a4d28;
+}
 
 /* Estilo dos Links */
-.forgot-password, .signup-wrapper {
+.forgot-password,
+.signup-wrapper {
     display: block;
     margin-top: 20px;
     color: rgba(255, 255, 255, 0.8);
@@ -106,7 +127,8 @@ body {
     text-decoration: none;
 }
 
-.signup-link, .forgot-password {
+.signup-link,
+.forgot-password {
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     transition: 0.3s;
@@ -114,10 +136,12 @@ body {
 
 .signup-link {
     font-weight: 600;
-    color: #8dbb5e; /* Verde destaque para o link */
+    color: #8dbb5e;
+    /* Verde destaque para o link */
 }
 
-.forgot-password:hover, .signup-link:hover {
+.forgot-password:hover,
+.signup-link:hover {
     color: #ffffff;
     text-decoration: underline;
 }
@@ -145,5 +169,18 @@ body {
     border: 1px solid #ff6b6b;
 }
 
-@media (max-width: 1200px) { .glass-card { margin-right: 0; } }
-@media (max-width: 900px) { .main-wrapper { flex-direction: column; } .side-panel { width: 100%; } }
+@media (max-width: 1200px) {
+    .glass-card {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .main-wrapper {
+        flex-direction: column;
+    }
+
+    .side-panel {
+        width: 100%;
+    }
+}

@@ -5,13 +5,13 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 10px;
     font-family: 'Poppins', sans-serif;
 }
 
 .form-card {
     background: white;
-    padding: 40px;
+    padding: 20px 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     max-width: 500px;
@@ -20,27 +20,30 @@
 
 .form-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .form-header i {
-    font-size: 2.5rem;
-    color: #4b6630; /* Verde do seu AgroSystem */
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #4b6630;
+    margin-bottom: 5px;
 }
 
 .form-header h2 {
     color: #333;
     font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 2px;
 }
 
 .form-header p {
     color: #777;
     font-size: 0.85rem;
+    margin-bottom: 0;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .form-group label {

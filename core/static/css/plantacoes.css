@@ -188,6 +188,12 @@
     border: none;
     font-weight: 700;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-save-plant:hover {
+    background: #077e29;
+    transform: translateY(-2px);
 }
 
 /* Isso só será aplicado na tabela de plantações */

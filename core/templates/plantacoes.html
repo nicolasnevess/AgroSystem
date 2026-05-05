@@ -17,10 +17,14 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a href="{% url 'dashboard' %}" class="logo-link">
-                    <i class="fas fa-seedling"></i>
-                    <span>AgroSystem</span>
+                    <div class="brand-box">
+                        <div class="logo-placeholder">
+                            <img src="{% static 'img/logo.png' %}" alt="Logo AgroSystem">
+                        </div>
+                    </div>
                 </a>
             </div>
+
             <nav class="sidebar-nav">
                 <ul>
                     <li>

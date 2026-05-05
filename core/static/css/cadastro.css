@@ -33,23 +33,32 @@ body {
     z-index: 2;
 }
 
-.brand-box h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin: 10px 0;
-    line-height: 1;
+.brand-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    width: 100%;
 }
 
 .logo-placeholder {
-    font-size: 4.5rem;
-    color: #8dbb5e;
-    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.brand-box p {
-    font-size: 1.2rem;
-    font-weight: 300;
-    opacity: 0.9;
+.logo-placeholder img {
+    margin-top: -50px;
+    width: 100%;       /* Faz a imagem ocupar todo o espaço do placeholder */
+    max-width: 400px;  /* Define o tamanho máximo que você quer (ajuste aqui!) */
+    height: auto;      /* Mantém a proporção para não achatar */
+    object-fit: contain; 
+    transition: transform 0.3s ease; /* Efeito legal ao passar o mouse */
+    image-rendering: auto;
+}
+
+.logo-placeholder img:hover {
+    transform: scale(1.1);
 }
 
 /* Lado Direito (Área do Card) */

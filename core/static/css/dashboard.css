@@ -184,11 +184,6 @@ body {
     font-weight: 700;
 }
 
-/* --- ALERTAS QUADRADO --- */
-.alerts-box {
-    border-left: 5px solid #ff4d4d;
-}
-
 .alert-item {
     display: flex;
     align-items: center;
@@ -276,6 +271,39 @@ body {
     background-color: #cf1322;
     color: white;
 }
+
+.brand-box {
+    display: flex;
+    justify-content: center; /* Alinha no canto esquerdo */
+    align-items: center;
+    padding: 5px;         /* Espaçamento interno para não grudar na borda física */
+    width: 100%;
+}
+
+.logo-placeholder {
+    width: auto;                /* Deixa a largura fluida */
+    display: block;
+}
+
+.logo-placeholder img {
+    width: 120px;               /* Ajuste o tamanho aqui conforme seu gosto */
+    max-width: 100%;            /* Impede que ela saia da sidebar */
+    height: auto;
+    object-fit: contain;
+    
+    /* Caso queira um leve arredondamento se a logo for quadrada */
+    border-radius: 8px; 
+    
+    /* Garante que ela ignore alinhamentos de texto do pai */
+    margin-left: 0;             
+}
+
+/* Ajuste opcional para o header da sidebar não centralizar o link */
+.sidebar-header {
+    text-align: left;           /* Garante que o conteúdo vá para a esquerda */
+    width: 100%;
+}
+
 
 /* Responsividade para o header */
 @media (max-width: 768px) {

@@ -5,49 +5,52 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 10px;
 }
 
 .form-card {
     background: white;
-    padding: 40px;
+    padding: 20px 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    max-width: 550px;
+    max-width: 500px;
     width: 100%;
 }
 
 .form-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .form-header i {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     color: var(--primary-green);
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .form-header h2 {
     color: var(--primary-green);
     font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 2px;
 }
 
 .form-header p {
     color: #777;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    margin-bottom: 0;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-weight: 600;
     color: #444;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .form-group label i {
@@ -58,12 +61,13 @@
 .form-group input, 
 .form-group select {
     width: 100%;
-    padding: 12px 15px;
+    padding: 8px 10px;
     border: 1px solid #ddd;
     border-radius: 10px;
     outline: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: all 0.3s;
+    height: auto;
 }
 
 .form-group input:focus {
