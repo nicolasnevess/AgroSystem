@@ -146,7 +146,7 @@
                         <ul style="list-style: none; padding: 0;">
                             {% for a in animais|slice:":3" %}
                             <li style="padding: 5px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
-                                <strong>{{ a.identificacao }}</strong>
+                                <strong>{{ a.nome_animal }} - ID ( {{ a.identificacao }} )</strong>
                                 <span style="font-size: 0.8rem; color: #666;">{{ a.especie }}</span>
                             </li>
                             {% empty %}
