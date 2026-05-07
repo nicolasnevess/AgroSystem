@@ -36,7 +36,7 @@
 
         <main class="main-content">
             <header class="top-header">
-                <h2>Configuração Inicial</h2>
+                <h2>Adicionar Propriedade</h2>
                 <a href="{% url 'dashboard' %}" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
             </header>
 
@@ -50,7 +50,7 @@
                 <form method="POST" class="agro-form">
                     {% csrf_token %}
                     <div class="input-group">
-                        <label>Nome da Fazenda / Propriedade</label>
+                        <label>Nome da Propriedade</label>
                         <input type="text" name="nome_fazenda" placeholder="Ex: Fazenda Santa Maria" required>
                     </div>
 
