@@ -218,4 +218,3 @@ if (document.readyState === 'loading') {
 } else {
     inicializar();
 }
-
