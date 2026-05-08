@@ -20,10 +20,10 @@ def login_view(request):
             login(request, form.get_user())
             return redirect('dashboard')
         else:
-            # Se o form não for válido, ele já contém os erros internamente
+            # Se o form não for válido, ele já contém os erros.
             messages.error(request, "Usuário ou senha inválidos.")
             
-    # Aqui passamos o 'form' que pode estar vazio (GET) ou com erros (POST)
+    # Aqui passa o form que pode estar vazio (GET) ou com erros (POST)
     return render(request, 'login.html', {'form': form})
 
 def cadastro_view(request):
@@ -42,6 +42,7 @@ def cadastro_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
 
 # --- 2. DASHBOARD ---
 
@@ -74,11 +75,12 @@ def dashboard_view(request):
         context.update({
             'maquinas': fazenda_ativa.maquinas.all(),
             'plantacoes': plantacoes,
-            'lista_colheita': lista_colheita, # Enviamos a nova lista com os cálculos
+            'lista_colheita': lista_colheita, # Envia a nova lista com os cálculos
             'animais': fazenda_ativa.animais.all(),
         })
         
     return render(request, 'dashboard.html', context)
+
 
 # --- 3. PLANTAÇÕES ---
 
@@ -86,12 +88,12 @@ def dashboard_view(request):
 def plantacoes_view(request):
     fazendas = Propriedade.objects.filter(usuario=request.user)
     
-    # Busca a fazenda ativa (Sessão ou URL)
+    # Busca a fazenda ativa
     fazenda_id = request.GET.get('fazenda_id') or request.session.get('fazenda_ativa_id')
     fazenda_ativa = fazendas.filter(id=fazenda_id).first() or fazendas.first()
 
     if request.method == 'POST' and fazenda_ativa:
-        # Criando a plantação (O método save no Model cuidará da formatação)
+        # Criando a plantação
         Plantacao.objects.create(
             propriedade=fazenda_ativa,
             nome_planta=request.POST.get('nome_planta'),
@@ -108,8 +110,8 @@ def plantacoes_view(request):
     context = {
         'fazendas': fazendas,
         'fazenda_ativa': fazenda_ativa,
-        'tem_fazenda': fazendas.exists(), # SINCRONIZADO: O HTML usa 'tem_fazenda'
-        'plantacoes': fazenda_ativa.plantacoes.all() if fazenda_ativa else [] # SINCRONIZADO: plural
+        'tem_fazenda': fazendas.exists(), # O HTML usa tem_fazenda
+        'plantacoes': fazenda_ativa.plantacoes.all() if fazenda_ativa else [] # plural
     }
     
     return render(request, 'plantacoes.html', context)
@@ -128,6 +130,7 @@ def deletar_plantacao(request, plantacao_id):
     plantacao.delete()
     return redirect(f'/plantacoes/?fazenda_id={f_id}')
 
+
 # --- 4. MÁQUINAS ---
 
 @login_required
@@ -138,11 +141,11 @@ def maquinas_view(request):
     # Busca a fazenda ativa
     fazenda_ativa = fazendas.filter(id=fazenda_id).first() or fazendas.first()
     
-    # Se houver fazenda, pegamos o QuerySet. Se não, pegamos um QuerySet vazio do modelo Maquina
+    # Se houver fazenda, pega o QuerySet. Se não, pega um QuerySet vazio do modelo Maquina
     if fazenda_ativa:
         maquinas_queryset = fazenda_ativa.maquinas.all()
     else:
-        maquinas_queryset = Maquina.objects.none() # QuerySet vazio (aceita .exists())
+        maquinas_queryset = Maquina.objects.none() # QuerySet vazio
 
     return render(request, 'maquinas.html', {
         'fazendas': fazendas,
@@ -186,6 +189,7 @@ def deletar_maquina(request, maquina_id):
     f_id = maquina.propriedade.id
     maquina.delete()
     return redirect(f'/maquinas/?fazenda_id={f_id}')
+
 
 # --- 5. ANIMAIS ---
 
@@ -272,6 +276,7 @@ def deletar_animal(request, animal_id):
     animal.delete()
     return redirect(f'/animais/?fazenda_id={f_id}')
 
+
 # --- 6. PROPRIEDADE ---
 
 @login_required
@@ -312,6 +317,7 @@ def config_areas_view(request):
     fazendas = Propriedade.objects.filter(usuario=request.user)
     return render(request, 'config_areas.html', {'fazendas': fazendas})
 
+
 # --- 7. TAREFAS (AJAX) ---
 
 @csrf_exempt
@@ -326,14 +332,14 @@ def adicionar_tarefa(request, maquina_id):
             descricao=data.get('descricao')
         )
         
-        # Converte o horário do banco (UTC) para o horário local (Brasília/SP)
+        # Converte o horário do banco para o horário local
         data_local = timezone.localtime(tarefa.data_criacao)
         
         return JsonResponse({
             'id': tarefa.id, 
             'descricao': tarefa.descricao, 
             'concluida': tarefa.concluida,
-            # Agora usamos a data_local que tem o fuso horário corrigido
+            # Agora usa a data_local que tem o fuso horário corrigido
             'data_criacao': data_local.strftime('%d/%m/%Y %H:%M') 
         })
     return JsonResponse({'error': 'Erro'}, status=400)
