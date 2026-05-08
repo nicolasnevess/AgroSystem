@@ -118,7 +118,7 @@ class Animal(AtivoFazenda): # Herda de AtivoFazenda
     #sanitario = models.TextField(blank=True, null=True)
     foto = models.ImageField(upload_to='animais/', blank=True, null=True)
 
-    # PILAR: POLIMORFISMO (Sobrescrita de método)
+    # POLIMORFISMO
     def save(self, *args, **kwargs):
         if self.identificacao:
             self.identificacao = self.identificacao.upper().strip()

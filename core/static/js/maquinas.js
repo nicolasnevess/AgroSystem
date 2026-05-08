@@ -119,7 +119,7 @@ async function salvarTarefa() {
         const data = await response.json(); 
         const container = document.getElementById('container-tarefas');
         
-        // 1. Atualiza o painel visual (o que você está vendo agora)
+        // Atualiza o painel visual (o que você está vendo agora)
         if (container.querySelector('p')) container.innerHTML = '';
 
         const novaTarefaHtml = `
@@ -140,7 +140,7 @@ async function salvarTarefa() {
         `;
         container.insertAdjacentHTML('afterbegin', novaTarefaHtml);
 
-        // 2. O PULO DO GATO: Salva na "biblioteca escondida" para persistir ao trocar de máquina
+        // Salva na "biblioteca escondida" para persistir ao trocar de máquina
         const bibliotecaOculta = document.getElementById('tarefas-data-' + window.maquinaAtivaId);
         if (bibliotecaOculta) {
             const novoSpanOculto = `
@@ -186,14 +186,14 @@ async function deletarTarefa(tarefaId) {
     const response = await fetch(`/tarefa/${tarefaId}/deletar/`, { method: 'POST' });
     
     if (response.ok) {
-        // 1. Remove do painel de visualização (o que você está vendo agora)
+        // Remove do painel de visualização (o que você está vendo agora)
         const elementoVisual = document.getElementById(`tarefa-item-${tarefaId}`);
         if (elementoVisual) {
             elementoVisual.style.opacity = '0';
             setTimeout(() => elementoVisual.remove(), 300);
         }
 
-        // 2. O PULO DO GATO: Remove da div escondida (para não voltar ao trocar de máquina)
+        // Remove da div escondida (para não voltar ao trocar de máquina)
         // Procuramos o span dentro de qualquer div de tarefas que tenha o data-id correto
         const spanOculto = document.querySelector(`span[data-id="${tarefaId}"]`);
         if (spanOculto) {

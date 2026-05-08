@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ufSalva = selectEstado.getAttribute('data-uf-salva');
     const cidadeSalva = selectCidade.getAttribute('data-cidade-salva');
 
-    // 1. Carrega os Estados
+    // Carrega os Estados
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome')
         .then(res => res.json())
         .then(estados => {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-    // 2. Evento ao mudar o estado manualmente
+    // Evento ao mudar o estado manualmente
     selectEstado.addEventListener('change', function() {
         carregarCidades(this.value);
     });

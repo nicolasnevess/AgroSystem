@@ -36,27 +36,27 @@ urlpatterns = [
     path('tarefa/<int:tarefa_id>/alternar/', views.alternar_tarefa, name='alternar_tarefa'),
     path('tarefa/<int:tarefa_id>/deletar/', views.deletar_tarefa, name='deletar_tarefa'),
 
-    # --- Dashboard e Monitoramento ---
+    # Dashboard e Monitoramento
     path('dashboard/', views.dashboard_view, name='dashboard'),
 
-    # --- Plantações ---
+    # Plantações
     path('plantacoes/', views.plantacoes_view, name='plantacoes'),
     path('plantacoes/concluir/<int:plantacao_id>/', views.concluir_plantacao, name='concluir_plantacao'),
     path('plantacoes/deletar/<int:plantacao_id>/', views.deletar_plantacao, name='deletar_plantacao'),
 
-    # --- Máquinas ---
+    # Máquinas
     path('maquinas/', views.maquinas_view, name='maquinas'),
     path('cadastrar-maquina/', views.config_maquinas_view, name='config_maquinas'),
     path('maquinas/editar/<int:maquina_id>/', views.editar_maquina, name='editar_maquina'),
     path('maquinas/deletar/<int:maquina_id>/', views.deletar_maquina, name='deletar_maquina'),
 
-    # --- Animais (Rebanho) ---
+    # Animais
     path('animais/', views.animais_view, name='animais'),
     path('animais/deletar/<int:animal_id>/', views.deletar_animal, name='deletar_animal'),
     path('cadastrar-animal/', views.config_animais_view, name='config_animais'),
     path('animais/editar/<int:animal_id>/', views.editar_animal, name='editar_animal'),
 
-    # --- Configurações de Propriedade ---
+    # Configurações de Propriedade
     path('configurar-propriedade/', views.config_propriedade_view, name='config_propriedade'),
     path('cadastrar-area/', views.config_areas_view, name='config_areas'),
     path('propriedade/editar/<int:propriedade_id>', views.editar_propriedade, name='editar_propriedade'),

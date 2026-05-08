@@ -26,7 +26,7 @@ function abrirModalEdicao(id, ident, nome, peso, especie, raca, sexo, status, fo
     const imgPreview = document.getElementById('edit_foto_preview');
     const imgVazia = document.getElementById('edit_foto_vazia');
     
-    // 1. Preenche os campos do formulário
+    // Preenche os campos do formulário
     document.getElementById('edit_identificacao').value = ident;
     document.getElementById('edit_nome').value = nome;
     document.getElementById('edit_peso').value = peso.replace(',', '.');
@@ -35,10 +35,10 @@ function abrirModalEdicao(id, ident, nome, peso, especie, raca, sexo, status, fo
     document.getElementById('edit_sexo').value = sexo;
     document.getElementById('edit_status').value = status;
     
-    // 2. Define a rota de destino da edição ANTES de abrir
+    // Define a rota de destino da edição ANTES de abrir
     form.action = "/animais/editar/" + id + "/";
     
-    // 3. Lógica da Foto: Esconde um e mostra o outro (Evita sobreposição)
+    // Lógica da Foto: Esconde um e mostra o outro (Evita sobreposição)
     if (fotoUrl && fotoUrl !== "" && fotoUrl !== "None" && fotoUrl !== "undefined" && fotoUrl !== "null") {
         imgPreview.src = fotoUrl;
         imgPreview.style.display = "block"; // Mostra a imagem
@@ -49,10 +49,10 @@ function abrirModalEdicao(id, ident, nome, peso, especie, raca, sexo, status, fo
         imgVazia.style.display = "flex";    // Mostra o ícone centralizado
     }
     
-    // 4. ABRE O MODAL (Usando FLEX para garantir a centralização do CSS)
+    // ABRE O MODAL (Usando FLEX)
     modal.style.display = "flex";
     
-    // 5. TRAVA o scroll da página de baixo
+    // TRAVA o scroll da página de baixo
     document.body.style.overflow = "hidden";
 }
 
@@ -64,7 +64,7 @@ function fecharModal() {
     document.body.style.overflow = "auto";
 }
 
-// Fecha o modal se o usuário clicar na área escura (fora da caixa branca)
+// Fecha o modal se o usuário clicar na área fora da caixa branca
 window.onclick = function(event) {
     const modal = document.getElementById('modalEditarAnimal');
     if (event.target == modal) {

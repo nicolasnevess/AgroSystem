@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectEstado = document.getElementById('estado');
     const selectCidade = document.getElementById('cidade');
 
-    // 1. Busca os Estados no IBGE e preenche o select
+    // Busca os Estados no IBGE e preenche o select
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome')
         .then(response => response.json())
         .then(estados => {
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Erro ao buscar estados:', error));
 
-    // 2. Quando o usuário escolhe um estado, busca as cidades daquela UF
+    // Quando o usuário escolhe um estado, busca as cidades daquela UF
     selectEstado.addEventListener('change', function() {
         const uf = this.value;
         
