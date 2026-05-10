@@ -1,8 +1,27 @@
+# Python
 *.pyc
 *~
 __pycache__/
-db.sqlite3
+
+# Ambientes Virtuais
 myenv/
 .venv/
+venv/
+ENV/
+
+# Bancos de Dados
+db.sqlite3
+
+# Segurança e Configurações
 .env
 .vscode/
+
+# Django Media e Static (Arquivos gerados/subidos)
+media/
+static_root/
+staticfiles/
+
+# Logs e arquivos de sistema
+*.log
+.DS_Store
+Thumbs.db
