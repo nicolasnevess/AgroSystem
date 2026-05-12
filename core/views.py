@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import os
 
 # --- 1. AUTENTICAÇÃO ---
 
@@ -48,11 +49,20 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
+    # Puxa a chave do .env
+    api_key = os.getenv('HG_WEATHER_KEY')
+    
     fazendas = Propriedade.objects.filter(usuario=request.user)
     fazenda_id = request.GET.get('fazenda_id') or request.session.get('fazenda_ativa_id')
     fazenda_ativa = fazendas.filter(id=fazenda_id).first() or fazendas.first()
     
-    context = {'tem_propriedade': fazendas.exists(), 'fazendas': fazendas, 'fazenda_ativa': fazenda_ativa}
+    # Contexto inicial já com a chave da API
+    context = {
+        'tem_propriedade': fazendas.exists(), 
+        'fazendas': fazendas, 
+        'fazenda_ativa': fazenda_ativa,
+        'api_key': api_key  # <--- Chave enviada aqui
+    }
 
     if fazenda_ativa:
         request.session['fazenda_ativa_id'] = fazenda_ativa.id
@@ -75,7 +85,7 @@ def dashboard_view(request):
         context.update({
             'maquinas': fazenda_ativa.maquinas.all(),
             'plantacoes': plantacoes,
-            'lista_colheita': lista_colheita, # Envia a nova lista com os cálculos
+            'lista_colheita': lista_colheita,
             'animais': fazenda_ativa.animais.all(),
         })
         

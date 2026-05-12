@@ -1,12 +1,18 @@
 async function buscarClima() {
-    const key = '804d7b40';
+    // 1. PRIMEIRO: Definimos o wrapper
     const wrapper = document.getElementById('clima-wrapper');
     
+    // Se o wrapper não existir na página, paramos aqui para não dar erro
+    if (!wrapper) return;
+
+    // 2. DEPOIS: Pegamos os atributos dele
+    const key = wrapper.getAttribute('data-key');
     const cidadeBanco = wrapper.getAttribute('data-cidade');
     const ufBanco = wrapper.getAttribute('data-uf');
 
-    if (!cidadeBanco || !ufBanco) {
-        console.log("Nenhuma fazenda ativa para buscar clima.");
+    // Verificamos se temos tudo o que é necessário
+    if (!cidadeBanco || !ufBanco || !key) {
+        console.log("Faltam dados (Cidade, UF ou Key) para buscar o clima.");
         return;
     }
 
@@ -22,7 +28,7 @@ async function buscarClima() {
         const tempElem = document.querySelector('.temp');
         const descElem = document.querySelector('.desc');
         const cityElem = document.querySelector('.city-name');
-        const iconElem = document.getElementById('weather-icon'); // Seleciona o ícone
+        const iconElem = document.getElementById('weather-icon');
 
         if (tempElem) tempElem.innerHTML = `${clima.temp}°C`;
         if (descElem) descElem.innerHTML = clima.description;
@@ -32,10 +38,10 @@ async function buscarClima() {
         if (iconElem) {
             const slug = clima.condition_slug;
             
-            // Resetamos as classes do FontAwesome para garantir que não fiquem ícones duplicados
+            // Resetamos as classes, mantendo apenas a base do FontAwesome
             iconElem.className = 'fas'; 
 
-            // Mapeamento de Slugs da HG Brasil para ícones do FontAwesome
+            // Mapeamento corrigido
             if (slug.includes('storm')) {
                 iconElem.classList.add('fa-bolt');
             } else if (slug.includes('rain')) {
@@ -55,14 +61,15 @@ async function buscarClima() {
             } else if (slug.includes('fog')) {
                 iconElem.classList.add('fa-smog');
             } else {
-                iconElem.classList.add('fa-cloud-sun'); // Ícone padrão caso não encontre
+                iconElem.classList.add('fa-cloud-sun'); 
             }
         }
 
-        console.log("Clima dinâmico carregado com ícone: " + clima.condition_slug);
+        console.log("Clima carregado com sucesso!");
     } catch (error) {
         console.error("Erro na API HG Brasil:", error);
     }
 }
 
+// Chama a função
 buscarClima();
