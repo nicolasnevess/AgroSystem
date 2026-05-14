@@ -61,7 +61,7 @@ def dashboard_view(request):
         'tem_propriedade': fazendas.exists(), 
         'fazendas': fazendas, 
         'fazenda_ativa': fazenda_ativa,
-        'api_key': api_key  # <--- Chave enviada aqui
+        'api_key': api_key  # Chave enviada aqui
     }
 
     if fazenda_ativa:
@@ -116,7 +116,7 @@ def plantacoes_view(request):
         # Redireciona mantendo a mesma fazenda na tela
         return redirect(f'/plantacoes/?fazenda_id={fazenda_ativa.id}')
 
-    # IMPORTANTE: Nomes sincronizados com seu HTML
+    #  Nomes sincronizados com o HTML
     context = {
         'fazendas': fazendas,
         'fazenda_ativa': fazenda_ativa,

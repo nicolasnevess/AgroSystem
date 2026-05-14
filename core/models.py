@@ -3,11 +3,10 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 # --- CLASSE MÃE (PILAR: HERANÇA) ---
-# Esta classe não vira uma tabela, ela serve de molde para as outras.
+# ela serve de molde para as outras.
 class AtivoFazenda(models.Model):
     data_criacao = models.DateTimeField(auto_now_add=True)
-    # Aqui poderíamos colocar 'propriedade', mas para não quebrar seu código
-    # vamos deixar apenas a data de criação como base comum.
+    # Data de criação como base comum.
 
     class Meta:
         abstract = True

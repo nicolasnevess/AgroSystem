@@ -4,7 +4,7 @@ function navegarFazenda(valor) {
     else if (valor) window.location.href = "?fazenda_id=" + valor;
 }
 
-// Preview da foto no cadastro (Topo da página)
+// Preview da foto no cadastro
 function previewImageEdit(input) {
     const preview = document.getElementById('edit_foto_preview');
     const vazia = document.getElementById('edit_foto_vazia');
@@ -19,7 +19,7 @@ function previewImageEdit(input) {
     }
 }
 
-// FUNÇÕES DO MODAL (TELINHA)
+// FUNÇÕES DO MODAL
 function abrirModalEdicao(id, ident, nome, peso, especie, raca, sexo, status, fotoUrl) {
     const modal = document.getElementById('modalEditarAnimal');
     const form = document.getElementById('formEditarAnimal');
@@ -35,10 +35,10 @@ function abrirModalEdicao(id, ident, nome, peso, especie, raca, sexo, status, fo
     document.getElementById('edit_sexo').value = sexo;
     document.getElementById('edit_status').value = status;
     
-    // Define a rota de destino da edição ANTES de abrir
+    // Define a rota de destino da edição antes de abrir
     form.action = "/animais/editar/" + id + "/";
     
-    // Lógica da Foto: Esconde um e mostra o outro (Evita sobreposição)
+    // Lógica da Foto: Esconde um e mostra o outro
     if (fotoUrl && fotoUrl !== "" && fotoUrl !== "None" && fotoUrl !== "undefined" && fotoUrl !== "null") {
         imgPreview.src = fotoUrl;
         imgPreview.style.display = "block"; // Mostra a imagem

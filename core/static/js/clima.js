@@ -10,7 +10,7 @@ async function buscarClima() {
     const cidadeBanco = wrapper.getAttribute('data-cidade');
     const ufBanco = wrapper.getAttribute('data-uf');
 
-    // Verificamos se temos tudo o que é necessário
+    // Verificação
     if (!cidadeBanco || !ufBanco || !key) {
         console.log("Faltam dados (Cidade, UF ou Key) para buscar o clima.");
         return;
@@ -38,7 +38,7 @@ async function buscarClima() {
         if (iconElem) {
             const slug = clima.condition_slug;
             
-            // Resetamos as classes, mantendo apenas a base do FontAwesome
+            // Reseta as classes, mantendo apenas a base do FontAwesome
             iconElem.className = 'fas'; 
 
             // Mapeamento corrigido

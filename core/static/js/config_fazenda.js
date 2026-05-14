@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(estados => {
             estados.forEach(estado => {
                 const option = document.createElement('option');
-                option.value = estado.sigla; // Valor que vai pro banco (SP, MG...)
+                option.value = estado.sigla; // Valor que vai pro banco
                 option.textContent = estado.nome; // Texto que o usuário vê
                 selectEstado.appendChild(option);
             });

@@ -2,9 +2,8 @@
 
 window.maquinaAtivaId = null;
 
-/**
- * Atualiza o painel de detalhes lateral ao clicar em uma máquina da lista
- */
+ // Atualiza o painel de detalhes lateral ao clicar em uma máquina da lista
+ 
 function atualizarDetalhes(elemento, nome, modelo, horimetro, fazenda, identificacao, pk_banco) {
     window.maquinaAtivaId = pk_banco;
     
@@ -30,9 +29,8 @@ function atualizarDetalhes(elemento, nome, modelo, horimetro, fazenda, identific
     renderizarTarefasVisuais(pk_banco);
 }
 
-/**
- * Redireciona para a troca de fazenda ou cadastro de nova
- */
+ // Redireciona para a troca de fazenda ou cadastro de nova
+ 
 function navegarFazenda(valor) {
     if (valor === "NOVA") {
         window.location.href = "/propriedade/configurar/"; 
@@ -42,9 +40,8 @@ function navegarFazenda(valor) {
     }
 }
 
-/**
- * Atualiza os links dos botões de Editar e Deletar máquina
- */
+ // Atualiza os links dos botões de Editar e Deletar máquina
+
 function atualizarLinksAcao(id) {
     const linkEditar = document.getElementById('link-editar-maquina');
     const linkDeletar = document.getElementById('link-deletar-maquina');
@@ -57,9 +54,8 @@ function atualizarLinksAcao(id) {
     }
 }
 
-/**
- * Lê os dados ocultos do HTML e monta a lista de observações no painel lateral
- */
+ // Lê os dados ocultos do HTML e monta a lista de observações no painel lateral
+
 function renderizarTarefasVisuais(maquinaId) {
     const container = document.getElementById('container-tarefas');
     const dadosOcultos = document.getElementById('tarefas-data-' + maquinaId);
@@ -98,9 +94,8 @@ function renderizarTarefasVisuais(maquinaId) {
     }
 }
 
-/**
- * Adiciona uma nova observação sem recarregar a página
- */
+ // Adiciona uma nova observação sem recarregar a página
+
 async function salvarTarefa() {
     const input = document.getElementById('nova-tarefa-input');
     let desc = input.value.trim();
@@ -119,7 +114,7 @@ async function salvarTarefa() {
         const data = await response.json(); 
         const container = document.getElementById('container-tarefas');
         
-        // Atualiza o painel visual (o que você está vendo agora)
+        // Atualiza o painel visual
         if (container.querySelector('p')) container.innerHTML = '';
 
         const novaTarefaHtml = `
@@ -156,45 +151,53 @@ async function salvarTarefa() {
     }
 }
 
-/**
- * Alterna o status de concluído (Riscado) na hora, sem recarregar
- */
+//Alterna o status de concluído na hora, sem recarregar
+
 async function toggleTarefa(tarefaId) {
     const response = await fetch(`/tarefa/${tarefaId}/alternar/`, { method: 'POST' });
+    
     if (response.ok) {
-        const span = document.getElementById(`texto-tarefa-${tarefaId}`);
-        const item = document.getElementById(`tarefa-item-${tarefaId}`);
+        const spanVisual = document.getElementById(`texto-tarefa-${tarefaId}`);
+        const itemVisual = document.getElementById(`tarefa-item-${tarefaId}`);
         
-        if (span.style.textDecoration === 'line-through') {
-            span.style.textDecoration = 'none';
-            span.style.color = '#333';
-            item.style.borderLeftColor = '#4b6630';
+        // ATUALIZA A TELA
+        const estaConcluida = spanVisual.style.textDecoration !== 'line-through';
+
+        if (estaConcluida) {
+            spanVisual.style.textDecoration = 'line-through';
+            spanVisual.style.color = '#888';
+            itemVisual.style.borderLeftColor = '#888';
         } else {
-            span.style.textDecoration = 'line-through';
-            span.style.color = '#888';
-            item.style.borderLeftColor = '#888';
+            spanVisual.style.textDecoration = 'none';
+            spanVisual.style.color = '#333';
+            itemVisual.style.borderLeftColor = '#4b6630';
+        }
+
+        // Ao trocar de máquina e voltar, o estado persista
+        const spanOculto = document.querySelector(`span[data-id="${tarefaId}"]`);
+        if (spanOculto) {
+            spanOculto.setAttribute('data-concluida', estaConcluida ? 'true' : 'false');
         }
     }
 }
 
-/**
- * Deleta a tarefa e remove o elemento da tela na hora
- */
+ // Deleta a tarefa e remove o elemento da tela na hora
+
 async function deletarTarefa(tarefaId) {
     if (!confirm("Excluir esta observação?")) return;
     
     const response = await fetch(`/tarefa/${tarefaId}/deletar/`, { method: 'POST' });
     
     if (response.ok) {
-        // Remove do painel de visualização (o que você está vendo agora)
+        // Remove do painel de visualização
         const elementoVisual = document.getElementById(`tarefa-item-${tarefaId}`);
         if (elementoVisual) {
             elementoVisual.style.opacity = '0';
             setTimeout(() => elementoVisual.remove(), 300);
         }
 
-        // Remove da div escondida (para não voltar ao trocar de máquina)
-        // Procuramos o span dentro de qualquer div de tarefas que tenha o data-id correto
+        // Remove da div escondida
+        // Procura o span dentro de qualquer div de tarefas que tenha o data-id correto
         const spanOculto = document.querySelector(`span[data-id="${tarefaId}"]`);
         if (spanOculto) {
             spanOculto.remove();
@@ -204,9 +207,9 @@ async function deletarTarefa(tarefaId) {
     }
 }
 
-/**
- * Inicialização: abre a última máquina selecionada ou a primeira da lista
- */
+
+ // Abre a última máquina selecionada ou a primeira da lista
+
 function inicializar() {
     const ultimaId = localStorage.getItem('ultimaMaquinaSelecionada');
     let alvo = ultimaId ? document.getElementById('maquina-item-' + ultimaId) : document.querySelector('.machine-item');
